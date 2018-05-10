@@ -1,0 +1,165 @@
+'''
+In our settings file, we configure everything we need to take care of dependencies
+'''
+
+import os
+import _pickle as pickle
+
+from .config import CONFIG, THIS_SYSTEM
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# import all server related information from config.py file
+SECRET_KEY = CONFIG.common.SECRET_KEY
+DB_NAME = CONFIG.common.DB_NAME
+DB_USER = CONFIG.common.DB_USER
+DB_PW = CONFIG.common.DB_PW
+DEBUG = CONFIG.common.DEBUG
+
+ALLOWED_HOSTS = ['127.0.0.1', '127.0.1.1'] # accept local connections as default
+
+if THIS_SYSTEM == 'gateway':
+    # gateway server gets a domain name of: 'minedquants.com'
+    ALLOWED_HOSTS = ALLOWED_HOSTS + ['minedquants.com', 'wwww.minedquants.com', CONFIG.gateway.IP_ADDRESS]
+elif THIS_SYSTEM ==:
+    # web server gets a domain name of: 'buzzz.co.kr'
+    ALLOWED_HOSTS = ALLOWED_HOSTS + ['buzzz.co.kr', 'wwww.buzzz.co.kr', CONFIG.web.IP_ADDRESS]
+
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.humanize',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'django_celery_beat',
+    'django_celery_results',
+    'rest_framework',
+    'rest_framework.authtoken',
+
+    # define arbiter specific app names here
+    'stockapi',
+]
+
+if THIS_SYSTEM == 'gateway':
+    INSTALLED_APPS = INSTALLED_APPS + ['gateway']
+
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+ROOT_URLCONF = 'arbiter.urls'
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+
+WSGI_APPLICATION = 'arbiter.wsgi.application'
+
+# actual production app should say 'if DEBUG == False'
+# only run on PostgreSQL when in production
+if DEBUG == True:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': DB_NAME,
+            'USER': DB_USER,
+            'PASSWORD': DB_PW,
+            'HOST': CONFIG.db.IP_ADDRESS,
+            'PORT': '',
+        }
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
+
+
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+]
+
+LANGUAGE_CODE = 'en-us'
+TIME_ZONE = 'Asia/Seoul'
+USE_I18N = True
+USE_L10N = True
+USE_TZ = False
+
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static-dist/')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static/'),
+]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+if DEBUG == False:
+    REST_FRAMEWORK = {
+        'DEFAULT_RENDERER_CLASSES': (
+            'rest_framework.renderers.JSONRenderer',
+        )
+    }
+
+if THIS_SYSTEM == 'gateway':
+    # worker servers should only be reached by the gateway server
+    worker_user = CONFIG.common.AMQP_USER
+    worker_pw = CONFIG.common.AMQP_PW
+    worker_ip_address = CONFIG.gobble.IP_ADDRESS if THIS_SYSTEM == 'gobble' else CONFIG.mined.worker_ip_address
+    amqp_url = 'amqp://{0}:{1}@{2}:5672//'.format(worker_user,
+                                                  worker_pw,
+                                                  worker_ip_address)
+    # setup Gobble & MINED server with Rabbitmq configuration
+    CELERY_BROKER_URL = amqp_url
+    CELERY_RESULT_BACKEND = amqp_url
+    CELERY_ACCEPT_CONTENT = ['application/json']
+    CELERY_TASK_SERIALIZER = 'json'
+    CELERY_RESULT_SERIALIZER = 'json'
+    CELERY_TIMEZONE = TIME_ZONE
+
+if THIS_SYSTEM == 'web' or THIS_SYSTEM == 'db':
+    # setup DB + Cache Server with Redis as cache
+    # direct other servers to cache server for caches
+    # only web and db servers have access to caches
+    CACHES = {
+        "default": {
+            "BACKEND": "django_redis.cache.RedisCache",
+            "LOCATION": "redis://{}:6379/1".format(CONFIG.db.IP_ADDRESS), # 1번 DB
+            "OPTIONS": {
+                "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            }
+        }
+    }
