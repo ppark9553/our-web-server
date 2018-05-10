@@ -21,7 +21,7 @@ ALLOWED_HOSTS = ['127.0.0.1', '127.0.1.1'] # accept local connections as default
 if THIS_SYSTEM == 'gateway':
     # gateway server gets a domain name of: 'minedquants.com'
     ALLOWED_HOSTS = ALLOWED_HOSTS + ['minedquants.com', 'wwww.minedquants.com', CONFIG.gateway.IP_ADDRESS]
-elif THIS_SYSTEM ==:
+elif THIS_SYSTEM == 'web':
     # web server gets a domain name of: 'buzzz.co.kr'
     ALLOWED_HOSTS = ALLOWED_HOSTS + ['buzzz.co.kr', 'wwww.buzzz.co.kr', CONFIG.web.IP_ADDRESS]
 
