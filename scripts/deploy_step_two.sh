@@ -2,6 +2,7 @@
 
 ### SERVER DEPLOY AUTOMATION PART 2 ###
 
+mkdir /home/arbiter/buzzz
 mv ~/our-web-server/* /home/arbiter/buzzz
 rm -r ~/our-web-server
 cd /home/arbiter/buzzz
