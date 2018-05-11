@@ -2,6 +2,9 @@
 
 ### SERVER DEPLOY AUTOMATION PART 2 ###
 
+mv ~/our-web-server/* /home/arbiter/buzzz
+rm -r ~/our-web-server
+
 # STEP 1: set up python environment for Django app (should be in virtualenv)
 pip install -r ../requirements.txt
 
