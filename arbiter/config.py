@@ -31,7 +31,7 @@ CONFIG = {
         'SECRET_KEY': '%-@*^al8d)z5cbetyfw1=%7h9b#t6=!-084y$@$74jugq3y0#6',
         'DB_NAME': 'arbiter',
         'DB_USER': 'arbiter',
-        'DB_PW': 'projectAR!gogo',
+        'DB_PW': 'makeitpopweAR!1',
         'AMQP_USER': 'arbiterbroker',
         'AMQP_PW': 'projectargogo',
         'DEBUG': 'True'
