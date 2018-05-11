@@ -134,21 +134,21 @@ if DEBUG == False:
         )
     }
 
-if THIS_SYSTEM == 'gateway':
-    # worker servers should only be reached by the gateway server
-    worker_user = CONFIG['common']['AMQP_USER']
-    worker_pw = CONFIG['common']['AMQP_PW']
-    worker_ip_address = CONFIG['gobble']['IP_ADDRESS'] if THIS_SYSTEM == 'gobble' else CONFIG['mined']['IP_ADDRESS']
-    amqp_url = 'amqp://{0}:{1}@{2}:5672//'.format(worker_user,
-                                                  worker_pw,
-                                                  worker_ip_address)
-    # setup Gobble & MINED server with Rabbitmq configuration
-    CELERY_BROKER_URL = amqp_url
-    CELERY_RESULT_BACKEND = amqp_url
-    CELERY_ACCEPT_CONTENT = ['application/json']
-    CELERY_TASK_SERIALIZER = 'json'
-    CELERY_RESULT_SERIALIZER = 'json'
-    CELERY_TIMEZONE = TIME_ZONE
+# if THIS_SYSTEM == 'gateway':
+#     # worker servers should only be reached by the gateway server
+#     worker_user = CONFIG['common']['AMQP_USER']
+#     worker_pw = CONFIG['common']['AMQP_PW']
+#     worker_ip_address = CONFIG['gobble']['IP_ADDRESS'] if THIS_SYSTEM == 'gobble' else CONFIG['mined']['IP_ADDRESS']
+#     amqp_url = 'amqp://{0}:{1}@{2}:5672//'.format(worker_user,
+#                                                   worker_pw,
+#                                                   worker_ip_address)
+#     # setup Gobble & MINED server with Rabbitmq configuration
+#     CELERY_BROKER_URL = amqp_url
+#     CELERY_RESULT_BACKEND = amqp_url
+#     CELERY_ACCEPT_CONTENT = ['application/json']
+#     CELERY_TASK_SERIALIZER = 'json'
+#     CELERY_RESULT_SERIALIZER = 'json'
+#     CELERY_TIMEZONE = TIME_ZONE
 
 if THIS_SYSTEM == 'web' or THIS_SYSTEM == 'db':
     # setup DB + Cache Server with Redis as cache
