@@ -24,6 +24,8 @@ if THIS_SYSTEM == 'gateway':
 elif THIS_SYSTEM == 'web':
     # web server gets a domain name of: 'buzzz.co.kr'
     ALLOWED_HOSTS = ALLOWED_HOSTS + ['buzzz.co.kr', 'wwww.buzzz.co.kr', CONFIG['web']['IP_ADDRESS']]
+elif THIS_SYSTEM == 'db':
+    ALLOWED_HOSTS = ALLOWED_HOSTS + [CONFIG['db']['IP_ADDRESS']]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
