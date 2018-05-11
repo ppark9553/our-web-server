@@ -10,20 +10,20 @@ from .config import CONFIG, THIS_SYSTEM
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # import all server related information from config.py file
-SECRET_KEY = CONFIG.common.SECRET_KEY
-DB_NAME = CONFIG.common.DB_NAME
-DB_USER = CONFIG.common.DB_USER
-DB_PW = CONFIG.common.DB_PW
-DEBUG = CONFIG.common.DEBUG
+SECRET_KEY = CONFIG['common']['SECRET_KEY']
+DB_NAME = CONFIG['common']['DB_NAME']
+DB_USER = CONFIG['common']['DB_USER']
+DB_PW = CONFIG['common']['DB_PW']
+DEBUG = True if CONFIG['common']['DEBUG'] == 'True' else False
 
 ALLOWED_HOSTS = ['127.0.0.1', '127.0.1.1'] # accept local connections as default
 
 if THIS_SYSTEM == 'gateway':
     # gateway server gets a domain name of: 'minedquants.com'
-    ALLOWED_HOSTS = ALLOWED_HOSTS + ['minedquants.com', 'wwww.minedquants.com', CONFIG.gateway.IP_ADDRESS]
+    ALLOWED_HOSTS = ALLOWED_HOSTS + ['minedquants.com', 'wwww.minedquants.com', CONFIG['gateway']['IP_ADDRESS']]
 elif THIS_SYSTEM == 'web':
     # web server gets a domain name of: 'buzzz.co.kr'
-    ALLOWED_HOSTS = ALLOWED_HOSTS + ['buzzz.co.kr', 'wwww.buzzz.co.kr', CONFIG.web.IP_ADDRESS]
+    ALLOWED_HOSTS = ALLOWED_HOSTS + ['buzzz.co.kr', 'wwww.buzzz.co.kr', CONFIG['web']['IP_ADDRESS']]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -84,7 +84,7 @@ if DEBUG == True:
             'NAME': DB_NAME,
             'USER': DB_USER,
             'PASSWORD': DB_PW,
-            'HOST': CONFIG.db.IP_ADDRESS,
+            'HOST': CONFIG['db']['IP_ADDRESS'],
             'PORT': '',
         }
     }
@@ -136,9 +136,9 @@ if DEBUG == False:
 
 if THIS_SYSTEM == 'gateway':
     # worker servers should only be reached by the gateway server
-    worker_user = CONFIG.common.AMQP_USER
-    worker_pw = CONFIG.common.AMQP_PW
-    worker_ip_address = CONFIG.gobble.IP_ADDRESS if THIS_SYSTEM == 'gobble' else CONFIG.mined.worker_ip_address
+    worker_user = CONFIG['common']['AMQP_USER']
+    worker_pw = CONFIG['common']['AMQP_PW']
+    worker_ip_address = CONFIG['gobble']['IP_ADDRESS'] if THIS_SYSTEM == 'gobble' else CONFIG['mined']['IP_ADDRESS']
     amqp_url = 'amqp://{0}:{1}@{2}:5672//'.format(worker_user,
                                                   worker_pw,
                                                   worker_ip_address)
@@ -157,7 +157,7 @@ if THIS_SYSTEM == 'web' or THIS_SYSTEM == 'db':
     CACHES = {
         "default": {
             "BACKEND": "django_redis.cache.RedisCache",
-            "LOCATION": "redis://{}:6379/1".format(CONFIG.db.IP_ADDRESS), # 1번 DB
+            "LOCATION": "redis://{}:6379/".format(CONFIG['db']['IP_ADDRESS']),
             "OPTIONS": {
                 "CLIENT_CLASS": "django_redis.client.DefaultClient",
             }
