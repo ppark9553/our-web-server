@@ -37,7 +37,7 @@ CONFIG = {
 
     'ip-address': {
         'web': '207.148.103.151',
-        'db': '45.77.134.175',
+        'db': '45.77.134.175', # deploy 1st: other servers need the database as dependency
         'gateway': '149.28.25.177',
         'gobble': '149.28.18.34',
         'mined': '45.32.42.30'

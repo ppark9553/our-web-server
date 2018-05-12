@@ -15,7 +15,6 @@ sudo ufw app list
 sudo ufw allow OpenSSH
 su -c "y" | sudo ufw enable
 sudo ufw status
-sudo ufw allow 8000
 
 # STEP 4: download PostgreSQL and tweak settings
 sudo apt-get update # update OS
