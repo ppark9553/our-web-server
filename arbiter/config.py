@@ -7,9 +7,7 @@ we use our project in -> web, crawler, analysis contexts
 This means that our configuration file should keep information on all the server settings
 
 Since each server will hold different dependency issues and data,
-define all such dependencies and data here,
-and differentiate by changing the variable name: THIS_SYSTEM
-THIS_SYSTEM should be set to either: 'web', 'db', 'gateway', 'gobble', 'mined'
+define all such dependencies and data here
 
 The dependency structure of Django is essential here.
 Below are all the connections/dependencies we should take into account:
@@ -37,25 +35,12 @@ CONFIG = {
         'DEBUG': 'True'
     },
 
-    'web': {
-        'IP_ADDRESS': '207.148.103.151'
-    },
-
-    'db': {
-        'IP_ADDRESS': '45.77.134.175'
-    },
-
-    'gateway': {
-        'IP_ADDRESS': '149.28.25.177'
-    },
-
-    'gobble': {
-        'IP_ADDRESS': '149.28.18.34'
-    },
-
-    'mined': {
-        'IP_ADDRESS': '45.32.42.30'
+    'ip-address': {
+        'web': '207.148.103.151',
+        'db': '45.77.134.175',
+        'gateway': '149.28.25.177',
+        'gobble': '149.28.18.34',
+        'mined': '45.32.42.30'
     }
-}
 
-THIS_SYSTEM = 'web'
+}

@@ -1,0 +1,21 @@
+{
+  "name": "js-gobble",
+  "version": "1.0.0",
+  "description": "arbiter web scraper that requires headless chrome",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "peepee",
+  "license": "ISC",
+  "devDependencies": {
+    "yarn": "^1.6.0"
+  },
+  "dependencies": {
+    "babel-core": "^6.26.3",
+    "babel-jest": "^22.4.3",
+    "babel-preset-env": "^1.7.0",
+    "jest": "^22.4.3",
+    "puppeteer": "^1.4.0"
+  }
+}

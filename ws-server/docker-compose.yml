@@ -1,0 +1,18 @@
+version: '2'
+
+services:
+  nginx:
+    container_name: node-nginx-lb
+    build: ./nginx
+    links:
+      - app:app
+    ports:
+      - 3000:80
+    depends_on:
+      - app
+
+  app:
+    container_name: node_nginx
+    image: node-nginx:app
+    ports:
+      - 3000

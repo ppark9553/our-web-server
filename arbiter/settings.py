@@ -2,10 +2,25 @@
 In our settings file, we configure everything we need to take care of dependencies
 '''
 
-import os
+import os, socket
 import _pickle as pickle
 
-from .config import CONFIG, THIS_SYSTEM
+from .config import CONFIG
+
+# get ip address of server
+ip_address_of_system = socket.gethostbyname(socket.gethostname())
+
+# compare ip address to config file and if ip address is found, set THIS_SYSTEM to server name/type
+for server_type, ip_address_of_config in CONFIG['ip-address'].items():
+    if ip_address_of_system == ip_address_of_config:
+        THIS_SYSTEM = server_type
+
+# if ip address was not found simply set an environment variable on your system
+# with the variable name: THIS_DJANGO_SYSTEM
+# you can always override the config setting with environment variablea
+if 'THIS_DJANGO_SYSTEM' in os.environ:
+    THIS_SYSTEM = os.environ['THIS_DJANGO_SYSTEM']
+    print('FOUND "THIS_DJANGO_SYSTEM" ENVIRONMENT VARIABLE ON YOUR SYSTEM, IT IS: {}'.format(THIS_SYSTEM))
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -20,12 +35,12 @@ ALLOWED_HOSTS = ['127.0.0.1', '127.0.1.1'] # accept local connections as default
 
 if THIS_SYSTEM == 'gateway':
     # gateway server gets a domain name of: 'minedquants.com'
-    ALLOWED_HOSTS = ALLOWED_HOSTS + ['minedquants.com', 'wwww.minedquants.com', CONFIG['gateway']['IP_ADDRESS']]
+    ALLOWED_HOSTS = ALLOWED_HOSTS + ['minedquants.com', 'wwww.minedquants.com', CONFIG['ip-address']['gateway']]
 elif THIS_SYSTEM == 'web':
     # web server gets a domain name of: 'buzzz.co.kr'
-    ALLOWED_HOSTS = ALLOWED_HOSTS + ['buzzz.co.kr', 'wwww.buzzz.co.kr', CONFIG['web']['IP_ADDRESS']]
-elif THIS_SYSTEM == 'db':
-    ALLOWED_HOSTS = ALLOWED_HOSTS + [CONFIG['db']['IP_ADDRESS']]
+    ALLOWED_HOSTS = ALLOWED_HOSTS + ['buzzz.co.kr', 'wwww.buzzz.co.kr', CONFIG['ip-address']['web']]
+else:
+    ALLOWED_HOSTS = ALLOWED_HOSTS + [CONFIG['ip-address'][THIS_SYSTEM]]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -46,6 +61,8 @@ INSTALLED_APPS = [
 
 if THIS_SYSTEM == 'gateway':
     INSTALLED_APPS = INSTALLED_APPS + ['gateway']
+if THIS_SYSTEM == 'gobble':
+    INSTALLED_APPS = INSTALLED_APPS + ['gobble']
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -86,7 +103,7 @@ if DEBUG == True:
             'NAME': DB_NAME,
             'USER': DB_USER,
             'PASSWORD': DB_PW,
-            'HOST': CONFIG['db']['IP_ADDRESS'],
+            'HOST': CONFIG['ip-address']['db'],
             'PORT': '',
         }
     }
@@ -136,30 +153,29 @@ if DEBUG == False:
         )
     }
 
-# if THIS_SYSTEM == 'gateway':
-#     # worker servers should only be reached by the gateway server
-#     worker_user = CONFIG['common']['AMQP_USER']
-#     worker_pw = CONFIG['common']['AMQP_PW']
-#     worker_ip_address = CONFIG['gobble']['IP_ADDRESS'] if THIS_SYSTEM == 'gobble' else CONFIG['mined']['IP_ADDRESS']
-#     amqp_url = 'amqp://{0}:{1}@{2}:5672//'.format(worker_user,
-#                                                   worker_pw,
-#                                                   worker_ip_address)
-#     # setup Gobble & MINED server with Rabbitmq configuration
-#     CELERY_BROKER_URL = amqp_url
-#     CELERY_RESULT_BACKEND = amqp_url
-#     CELERY_ACCEPT_CONTENT = ['application/json']
-#     CELERY_TASK_SERIALIZER = 'json'
-#     CELERY_RESULT_SERIALIZER = 'json'
-#     CELERY_TIMEZONE = TIME_ZONE
+worker_user = CONFIG['common']['AMQP_USER']
+worker_pw = CONFIG['common']['AMQP_PW']
+# ACCESS TO::: !!!web server connects to mined server & other servers (db, gateway, mined, gobble) connect to gobble server
+worker_ip_address = CONFIG['ip-address']['mined'] if THIS_SYSTEM == 'web' else CONFIG['ip-address']['gobble']
+amqp_url = 'amqp://{0}:{1}@{2}:5672//'.format(worker_user,
+                                              worker_pw,
+                                              worker_ip_address)
+# setup Gobble & MINED server with Rabbitmq configuration
+CELERY_BROKER_URL = amqp_url
+CELERY_RESULT_BACKEND = amqp_url
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = TIME_ZONE
 
 if THIS_SYSTEM == 'web' or THIS_SYSTEM == 'db':
     # setup DB + Cache Server with Redis as cache
     # direct other servers to cache server for caches
-    # only web and db servers have access to caches
+    # ACCESS TO::: !!!only web and db servers have access to caches!!!
     CACHES = {
         "default": {
             "BACKEND": "django_redis.cache.RedisCache",
-            "LOCATION": "redis://{}:6379/".format(CONFIG['db']['IP_ADDRESS']),
+            "LOCATION": "redis://{}:6379/".format(CONFIG['ip-address']['db']),
             "OPTIONS": {
                 "CLIENT_CLASS": "django_redis.client.DefaultClient",
             }
