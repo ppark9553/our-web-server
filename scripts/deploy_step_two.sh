@@ -5,10 +5,11 @@
 mkdir /home/arbiter/buzzz
 mv ~/our-web-server/* /home/arbiter/buzzz
 rm -r ~/our-web-server
+
 cd /home/arbiter/buzzz
 
 # STEP 1: set up python environment for Django app (should be in virtualenv)
-pip install -r ../requirements.txt
+pip install -r /home/arbiter/buzzz/requirements.txt
 
 # STEP 2: download uwsgi and nginx
 sudo apt-get install build-essential nginx
