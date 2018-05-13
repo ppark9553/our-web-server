@@ -15,6 +15,8 @@ pip install -r /home/arbiter/buzzz/requirements.txt
 sudo apt-get install build-essential nginx
 sudo -H pip3 install uwsgi
 
+sudo usermod -aG www-data arbiter
+
 # STEP 3: copy and paste configuration files for uwsgi and nginx
 sudo mkdir -p /etc/uwsgi/sites
 sudo cp /home/arbiter/buzzz/config/uwsgi/buzzz.ini /etc/uwsgi/sites/buzzz.ini
