@@ -13,7 +13,7 @@ pip install -r /home/arbiter/buzzz/requirements.txt
 
 # STEP 2: download uwsgi and nginx
 sudo apt-get install build-essential nginx
-sudo -H pip3 install uwsgi
+sudo -H pip3 install uwsgi uwsgi-plugin-python3
 
 sudo usermod -aG www-data arbiter
 
