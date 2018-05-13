@@ -44,3 +44,5 @@ CONFIG = {
     }
 
 }
+
+THIS_DJANGO_SYSTEM = 'db'
