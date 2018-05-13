@@ -61,7 +61,7 @@ sudo touch /var/log/celery/arbiter_beat.log
 
 sudo cp /home/arbiter/buzzz/config/supervisor/celery.conf /etc/supervisor/conf.d/celery.conf
 sudo cp /home/arbiter/buzzz/config/supervisor/celerybeat.conf /etc/supervisor/conf.d/celerybeat.conf
-sudo cp /home/arbiter/buzzz/config/supervisor/uwsgi.conf /etc/supervisor/conf.d/uwsgi.conf
+# sudo cp /home/arbiter/buzzz/config/supervisor/uwsgi.conf /etc/supervisor/conf.d/uwsgi.conf
 sudo supervisorctl reread
 sudo supervisorctl update
 sudo service supervisor start
