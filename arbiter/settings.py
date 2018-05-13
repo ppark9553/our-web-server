@@ -10,20 +10,20 @@ from .config import CONFIG, THIS_DJANGO_SYSTEM
 # get ip address of server
 ip_address_of_system = socket.gethostbyname(socket.gethostname())
 
-try:
-    # compare ip address to config file and if ip address is found, set THIS_SYSTEM to server name/type
-    for server_type, ip_address_of_config in CONFIG['ip-address'].items():
-        if ip_address_of_system == ip_address_of_config:
-            THIS_SYSTEM = server_type
-
-    # if ip address was not found simply set an environment variable on your system
-    # with the variable name: THIS_DJANGO_SYSTEM
-    # you can always override the config setting with environment variablea
-    if 'THIS_DJANGO_SYSTEM' in os.environ:
-        THIS_SYSTEM = os.environ['THIS_DJANGO_SYSTEM']
-        print('FOUND "THIS_DJANGO_SYSTEM" ENVIRONMENT VARIABLE ON YOUR SYSTEM, IT IS: {}'.format(THIS_SYSTEM))
-except:
-    THIS_SYSTEM = THIS_DJANGO_SYSTEM
+# try:
+#     # compare ip address to config file and if ip address is found, set THIS_SYSTEM to server name/type
+#     for server_type, ip_address_of_config in CONFIG['ip-address'].items():
+#         if ip_address_of_system == ip_address_of_config:
+#             THIS_SYSTEM = server_type
+#
+#     # if ip address was not found simply set an environment variable on your system
+#     # with the variable name: THIS_DJANGO_SYSTEM
+#     # you can always override the config setting with environment variablea
+#     if 'THIS_DJANGO_SYSTEM' in os.environ:
+#         THIS_SYSTEM = os.environ['THIS_DJANGO_SYSTEM']
+#         print('FOUND "THIS_DJANGO_SYSTEM" ENVIRONMENT VARIABLE ON YOUR SYSTEM, IT IS: {}'.format(THIS_SYSTEM))
+# except:
+#     THIS_SYSTEM = THIS_DJANGO_SYSTEM
 THIS_SYSTEM = THIS_DJANGO_SYSTEM
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
