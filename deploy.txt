@@ -1,0 +1,9 @@
+HOW TO DEPLOY TO SERVER
+
+1. TO to ./scripts then run: sudo bash deploy_step_one.sh
+2. Running the above script will restart your server after it's finished
+3. SSH into your server again and now run from ./scripts: sudo bash deploy_step_two.sh
+4. Running this should have install all your python dependencies, but this doesn't happen within your virtualenv, thus, run:
+  workon buzzz
+  pip install -r /home/arbiter/buzzz/requirements.txt
+5. This will finalize your deployment process
