@@ -45,4 +45,4 @@ CONFIG = {
 
 }
 
-THIS_SYSTEM = 'web'
+THIS_SYSTEM = 'db'
