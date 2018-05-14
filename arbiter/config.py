@@ -45,4 +45,4 @@ CONFIG = {
 
 }
 
-THIS_DJANGO_SYSTEM = 'db'
+THIS_SYSTEM = 'db'
