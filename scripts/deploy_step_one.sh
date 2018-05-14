@@ -35,17 +35,12 @@ vim +":%s/#listen_addresses = 'localhost'/listen_addresses = '*'/g | wq" postgre
 cd /etc/postgresql/9.5/main
 vim +"%s/127.0.0.1\/32/0.0.0.0\/0   /g | %s/::1\/128/::\/0/g | wq" pg_hba.conf
 
-echo starting PostgreSQL
-sudo systemctl start postgresql.service
-echo enabling PostgreSQL
 sudo systemctl enable postgresql.service
-echo restarting PostgreSQL
 sudo systemctl restart postgresql.service
-# /etc/init.d/postgresql restart
-echo done!
+
+sudo ufw allow 5432
 
 # STEP 5: creating python virtual environment for project specific management
-export LC_ALL=C
 sudo -H pip3 install --upgrade pip
 sudo pip3 install setuptools
 sudo -H pip3 install virtualenv virtualenvwrapper
@@ -53,5 +48,3 @@ sudo -H pip3 install virtualenv virtualenvwrapper
 echo "export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3" >> ~/.bashrc
 echo "export WORKON_HOME=/home/arbiter/venv" >> ~/.bashrc
 echo "source /usr/local/bin/virtualenvwrapper.sh" >> ~/.bashrc
-
-reboot
