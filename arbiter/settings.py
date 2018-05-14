@@ -2,10 +2,13 @@
 In our settings file, we configure everything we need to take care of dependencies
 '''
 
-import os, socket
+import os
 import _pickle as pickle
 
 from .config import CONFIG, THIS_SYSTEM
+
+if 'THIS_DJANGO_SYSTEM' in os.environ:
+    THIS_SYSTEM = os.environ['THIS_DJANGO_SYSTEM']
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
