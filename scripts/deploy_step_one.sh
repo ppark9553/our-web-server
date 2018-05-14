@@ -40,6 +40,37 @@ sudo systemctl restart postgresql.service
 
 sudo ufw allow 5432
 
+# PART 2: other dependencies #
+cd /home/arbiter
+mkdir buzzz
+git clone https://github.com/ppark9553/our-web-server.git ./buzzz
+
+# STEP 1: download uwsgi and nginx
+sudo apt-get install build-essential nginx
+sudo apt-get install uwsgi uwsgi-emperor uwsgi-plugin-python3
+sudo -H pip3 install uwsgi
+
+sudo usermod -aG www-data arbiter
+
+# STEP 2: copy and paste configuration files for uwsgi and nginx
+sudo mkdir -p /etc/uwsgi/sites
+sudo cp /home/arbiter/buzzz/config/uwsgi/buzzz.ini /etc/uwsgi/sites/buzzz.ini
+sudo cp /home/arbiter/buzzz/config/uwsgi/uwsgi.service /etc/systemd/system/uwsgi.service
+
+sudo cp /home/arbiter/buzzz/config/nginx/buzzz.conf /etc/nginx/sites-available/buzzz.conf
+sudo ln -s /etc/nginx/sites-available/buzzz.conf /etc/nginx/sites-enabled
+sudo nginx -t
+sudo systemctl restart nginx
+sudo systemctl start uwsgi
+
+# STEP 3: changing firewall options
+sudo ufw allow 'Nginx Full'
+
+# STEP 4: last step configuring uwsgi and nginx
+sudo systemctl enable nginx
+sudo systemctl enable uwsgi
+
+### last step ###
 # STEP 5: creating python virtual environment for project specific management
 sudo -H pip3 install --upgrade pip
 sudo pip3 install setuptools
@@ -48,3 +79,5 @@ sudo -H pip3 install virtualenv virtualenvwrapper
 echo "export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3" >> ~/.bashrc
 echo "export WORKON_HOME=/home/arbiter/venv" >> ~/.bashrc
 echo "source /usr/local/bin/virtualenvwrapper.sh" >> ~/.bashrc
+
+reboot

@@ -1,6 +1,0 @@
-HOW TO DEPLOY TO SERVER
-
-1. CD to ./scripts then run: sudo bash deploy_step_one.sh
-2. Running the above script will restart your server after it's finished
-3. SSH into your server again and create your virtualenv and pip install all the Python dependencies
-4. Then, run: sudo bash deploy_step_two.sh from ./scripts again
