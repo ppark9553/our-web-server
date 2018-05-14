@@ -37,7 +37,7 @@ app.conf.beat_schedule = {
         'args': (16, 16)
     },
     'add-every-30-seconds': {
-        'task': 'tasks.add',
+        'task': 'sum_two_numbers',
         'schedule': 30.0,
         'args': (16, 16)
     },

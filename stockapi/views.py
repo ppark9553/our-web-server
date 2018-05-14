@@ -15,13 +15,13 @@ from stockapi.serializers import (
 from utils.paginations import StandardResultPagination, OHLCVPagination
 
 
-class DateAPIView(generics.ListAPIView):
+class DateAPIView(generics.ListCreateAPIView):
     queryset = Date.objects.all().order_by('-date')
     serializer_class = DateSerializer
     pagination_class = StandardResultPagination
 
 
-class TickerAPIView(generics.ListAPIView):
+class TickerAPIView(generics.ListCreateAPIView):
     queryset = Ticker.objects.all()
     serializer_class = TickerSerializer
     pagination_class = StandardResultPagination
@@ -38,7 +38,7 @@ class TickerAPIView(generics.ListAPIView):
         return queryset
 
 
-class OHLCVAPIView(generics.ListAPIView):
+class OHLCVAPIView(generics.ListCreateAPIView):
     queryset = OHLCV.objects.all()
     serializer_class = OHLCVSerializer
     pagination_class = OHLCVPagination
