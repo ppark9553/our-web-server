@@ -40,6 +40,11 @@ def lazy_commit():
     local('git push')
 
 @task
+def server_reload():
+    local('sudo systemctl restart uwsgi')
+    local('sudo systemctl restart nginx')
+
+@task
 def restart_celery():
     execute(migrate)
     local('sudo supervisorctl restart arbiter_celery')
