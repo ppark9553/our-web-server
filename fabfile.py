@@ -51,19 +51,19 @@ def restart_celery():
     local('sudo supervisorctl restart arbiter_celerybeat')
 
 
-### System Managin Tools ###
-from arbiter.config import CONFIG
-
-env.hosts = []
-for server_type, ip_address in CONFIG['ip-address'].items():
-    env.hosts.append(ip_address)
-
-@task
-def apply_changes():
-    execute(lazy_commit)
-    with cd('/home/arbiter/buzzz'):
-        run('git pull')
-        run('python manage.py makemigrations')
-        run('python manage.py migrate')
-        run('sudo systemctl restart uwsgi')
-        run('sudo systemctl restart nginx')
+# ### System Managin Tools ###
+# from arbiter.config import CONFIG
+#
+# env.hosts = []
+# for server_type, ip_address in CONFIG['ip-address'].items():
+#     env.hosts.append(ip_address)
+#
+# @task
+# def apply_changes():
+#     execute(lazy_commit)
+#     with cd('/home/arbiter/buzzz'):
+#         run('git pull')
+#         run('python manage.py makemigrations')
+#         run('python manage.py migrate')
+#         run('sudo systemctl restart uwsgi')
+#         run('sudo systemctl restart nginx')
