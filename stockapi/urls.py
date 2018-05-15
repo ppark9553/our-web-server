@@ -1,6 +1,6 @@
 from django.conf.urls import url
 
-from gateway.views import (
+from stockapi.views import (
     DateAPIView,
     TickerAPIView,
     OHLCVAPIView,
