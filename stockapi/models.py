@@ -1,5 +1,10 @@
 from django.db import models
 
+STATE_TYPES = (
+    ('P', 'Pass'),
+    ('F', 'Fail'),
+)
+
 SIZE_TYPES = (
     ('L', 'Large Cap'), # large cap stocks
     ('M', 'Middle Cap'), # mid cap stocks
@@ -11,6 +16,18 @@ STYLE_TYPES = (
     ('V', 'Value'), # value stocks
     ('D', 'Dividend'), # high dividend stocks
 )
+
+
+class StockapiState(models.Model):
+    date = models.CharField(max_length=10)
+    table_name = models.CharField(max_length=20)
+    state = models.CharField(max_length=1, choices=STATE_TYPES)
+    log = models.CharField(max_length=50,
+                           blank=True,
+                           null=True)
+
+    def __str__(self):
+        return '{} {}'.format(self.date, self.table_name)
 
 
 class Date(models.Model):

@@ -1,0 +1,14 @@
+The Stockapi model is used on all servers in Buzzz.
+
+Since all states are controlled through the DB,
+and other servers need to have access to these states,
+Stockapi app also contains a table named: StockapiState
+
+A trigger exists to open a channel through PostgreSQL on this table,
+and notifies other apps of any changes to this table.
+
+
+NOTE THAT:
+API's on Stockapi does not let users or even superusers create data
+The creation of data can occur through the gateway server
+All Stockapi API's should only be that of Listing (GET)
