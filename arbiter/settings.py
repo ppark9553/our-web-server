@@ -7,9 +7,6 @@ import _pickle as pickle
 
 from .config import CONFIG, THIS_SYSTEM
 
-if 'THIS_DJANGO_SYSTEM' in os.environ:
-    THIS_SYSTEM = os.environ['THIS_DJANGO_SYSTEM']
-
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # import all server related information from config.py file
