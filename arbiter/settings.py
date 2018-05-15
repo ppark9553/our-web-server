@@ -141,7 +141,7 @@ if DEBUG == False:
 worker_user = CONFIG['common']['AMQP_USER']
 worker_pw = CONFIG['common']['AMQP_PW']
 # ACCESS TO::: !!!web server connects to mined server & other servers (db, gateway, mined, gobble) connect to gobble server
-worker_ip_address = CONFIG['ip-address']['mined'] if THIS_SYSTEM == 'web' else CONFIG['ip-address']['gobble']
+worker_ip_address = CONFIG['ip-address']['mined'] if (THIS_SYSTEM == 'web' or THIS_SYSTEM == 'mined') else CONFIG['ip-address']['gobble']
 amqp_url = 'amqp://{0}:{1}@{2}:5672//'.format(worker_user,
                                               worker_pw,
                                               worker_ip_address)
