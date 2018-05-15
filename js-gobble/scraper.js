@@ -1,4 +1,5 @@
 const puppeteer = require('puppeteer');
+const axios = require('axios');
 
 String.prototype.format = function() {
   // es5 syntax function
@@ -21,6 +22,8 @@ const height = 1080
 
 // define all the api endpoints here
 const LOGIN_PAGE = 'https://www.fnguide.com/home/login'
+const DATE_PAGE = 'http://www.fnguide.com/fgdd/StkIndmByTime#multivalue=CJA005930|CII.001&adjyn=Y&multiname=삼성전자|종합주가지수'
+const MKTCAP_PAGE = 'http://www.fnguide.com/fgdd/StkItemDateCap#tab=D&market=0'
 // user info object here
 const USER = {
   'id': 'flex80',
@@ -36,7 +39,7 @@ const API = {
 }
 
 // create a function for scraping all data from 20000101 to today date
-const scrape_all = async () => {
+const scrape_date = async () => {
   let today_date = new Date().toISOString().slice(0, 10).replace(/-/gi, '')
   console.log(`Today date: ${today_date}`)
 
@@ -44,7 +47,7 @@ const scrape_all = async () => {
 
   browser = await puppeteer.launch({
     headless: false,
-    slowMo: 80,
+    slowMo: 30,
     args: ['--window-size=${width}, ${height}']
   })
   page = await browser.newPage()
@@ -76,14 +79,38 @@ const scrape_all = async () => {
   // user login complete
   // now, scrape whatever data you want on FnGuide
 
+  /// CRAWL DATE ONCE ///
+  await page.setExtraHTTPHeaders({
+    'Referer': 'http://www.fnguide.com/fgdd/StkIndmByTime',
+    'X-Requested-With': 'XMLHttpRequest'
+  })
+  await page.goto(API.date.format(today_date))
+  const date_data = await page.evaluate(() =>  {
+      let data = JSON.parse(document.querySelector('body').innerText);
+      return data
+  })
+  return date_data
+}
+
+const send_date = async (data_obj) => {
+  let date_data = await data_obj.TRD_DT.replace(/\./gi, '').trim()
+  axios.post('http://149.28.25.177/hidden-api/date/', {
+    date: date_data
+  })
+  .then( response => { console.log(TRD_DT + ' data sent') })
+  .catch( error => { console.log(TRD_DT + ' data failed to send') })
   return true
 }
 
 // run program here
-scrape_all().then((status) => {
-  if (status == true) {
-    console.log('scrape complete')
-  } else {
-    console.log('scrape failed')
+scrape_date().then((data) => {
+  for (let obj of data.Data) {
+    for (let json_data of obj) {
+      send_date(json_data).then((response) => {
+        if (response == true) {
+          console.log('sent success')
+        }
+      })
+    }
   }
 })
