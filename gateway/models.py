@@ -1,5 +1,10 @@
 from django.db import models
 
+STATE_TYPES = (
+    ('P', 'Pass'),
+    ('F', 'Fail'),
+)
+
 
 class GatewayState(models.Model):
     date = models.CharField(max_length=10)
