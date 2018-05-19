@@ -1,5 +1,8 @@
 const puppeteer = require('puppeteer');
 const axios = require('axios');
+const redis = require('redis');
+
+const redis_client = redis.createClient(6379, '45.77.134.175') // this creates a new client
 
 String.prototype.format = function() {
   // es5 syntax function
@@ -47,7 +50,7 @@ const scrape_date = async () => {
 
   browser = await puppeteer.launch({
     headless: false,
-    slowMo: 30,
+    slowMo: 80,
     args: ['--window-size=${width}, ${height}']
   })
   page = await browser.newPage()
@@ -92,25 +95,36 @@ const scrape_date = async () => {
   return date_data
 }
 
-const send_date = async (data_obj) => {
-  let date_data = await data_obj.TRD_DT.replace(/\./gi, '').trim()
-  axios.post('http://149.28.25.177/hidden-api/date/', {
-    date: date_data
-  })
-  .then( response => { console.log(TRD_DT + ' data sent') })
-  .catch( error => { console.log(TRD_DT + ' data failed to send') })
-  return true
-}
+redis_client.on('connect', () => {
+    console.log('Redis client connected')
+})
+
+redis_client.on('error', error => {
+    console.log('Something went wrong ' + error)
+})
 
 // run program here
-scrape_date().then((data) => {
+scrape_date()
+.then( data => {
+  let dates_data = ['mass_date']
+
   for (let obj of data.Data) {
     for (let json_data of obj) {
-      send_date(json_data).then((response) => {
-        if (response == true) {
-          console.log('sent success')
-        }
-      })
+      let date_data = json_data.TRD_DT.replace(/\./gi, '').trim()
+      dates_data.push(date_data)
+      console.log(date_data + ' data pushed to list')
     }
   }
+  console.log('dates_data list create complete')
+
+  redis_client.rpush(dates_data, (error, reply) => {
+    if (error) {
+      console.log(error)
+    } else {
+      console.log(reply)
+    }
+  })
+})
+.catch( error => {
+  console.log(error)
 })
