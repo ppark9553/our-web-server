@@ -31,8 +31,8 @@ def mass_date_crawl():
     log_data = {
         'date': today_date,
         'task_name': 'mass_date_crawl',
-        'state': 'pass',
+        'state': 'P',
         'log': 'task: echo hello'
     }
-    r = requests.post(log_url, data=json.dumps(log_data))
+    r = requests.post(log_url, data=log_data)
     return r.json()
