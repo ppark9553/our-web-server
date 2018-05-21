@@ -32,7 +32,7 @@ def mass_date_crawl():
         'date': today_date,
         'task_name': 'mass_date_crawl',
         'state': 'P',
-        'log': 'task: echo hello'
+        'log': 'node /home/arbiter/js-gobble/test_script.js'
     }
     r = requests.post(log_url, data=log_data)
     return r.json()
