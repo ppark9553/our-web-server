@@ -1,7 +1,7 @@
 '''
-The GatewayAction class defines all actions you can throw to your gateway server
+The GatewayAction class defines all actions you throw to your gateway server
 
-This works very much alike to how Javascript Redux library works.
+This works very much like how Javascript Redux library works.
 
 How to use:
 
@@ -10,15 +10,28 @@ How to use:
 3. throw at GatewayStoreView in gateway/views.py --> the store will handle all actions
 '''
 
-class GatewayAction(object):
+class GatewayActionOBJ(object):
 
     def __init__(self, action_type):
 
-        if action_type == 'MASS_DATE_SAVE':
+        if action_type == 'MASS_DATE_CRAWL':
+            self.ACTION = {
+                'type': 'MASS_DATE_CRAWL',
+                'reduce': 'mass_date_crawl',
+                'cached_data': 'False'
+            }
+
+        elif action_type == 'MASS_DATE_SAVE':
             self.ACTION = {
                 'type': 'MASS_DATE_SAVE',
                 'reduce': 'mass_date_save',
+                'cached_data': 'True',
                 'saved-at': 'db',
                 'cache-key': 'mass_date',
                 'parameter-type': type([])
+            }
+
+        else:
+            self.ACTION = {
+                'type': 'None'
             }

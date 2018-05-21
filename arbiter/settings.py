@@ -47,7 +47,7 @@ INSTALLED_APPS = [
 
 if THIS_SYSTEM == 'gateway':
     INSTALLED_APPS = INSTALLED_APPS + ['gateway']
-if THIS_SYSTEM == 'gobble':
+if THIS_SYSTEM == 'gobble' or THIS_SYSTEM == 'gateway':
     INSTALLED_APPS = INSTALLED_APPS + ['gobble']
 
 MIDDLEWARE = [

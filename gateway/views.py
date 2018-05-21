@@ -16,6 +16,8 @@ from stockapi.serializers import (
 )
 from gateway.models import GatewayAction, GatewayState
 from gateway.serializers import GatewayActionSerializer, GatewayStateSerializer
+from gateway.actions import GatewayActionOBJ
+from gateway.reducers import GatewayReducer
 
 from utils.paginations import StandardResultPagination, OHLCVPagination
 
@@ -64,23 +66,37 @@ class OHLCVAPIGatewayView(generics.ListCreateAPIView):
         return queryset
 
 
-class GatewayActionAPIView(generics.ListAPIView):
-    queryset = GatewayAction.objects.all()
+### gateway API's should be ListCreateAPIView because Node.js app
+### should also be able to have access to DB writes regarding its tasks
+class GatewayActionAPIView(generics.ListCreateAPIView):
+    queryset = GatewayAction.objects.all().order_by('-id')
     serializer_class = GatewayActionSerializer
     pagination_class = StandardResultPagination
     filter_backends = [SearchFilter, OrderingFilter]
 
 
-class GatewayStateAPIView(generics.ListAPIView):
-    queryset = GatewayState.objects.all()
+class GatewayStateAPIView(generics.ListCreateAPIView):
+    queryset = GatewayState.objects.all().order_by('-id')
     serializer_class = GatewayStateSerializer
     pagination_class = StandardResultPagination
     filter_backends = [SearchFilter, OrderingFilter]
 
 
 class GatewayStoreView(View):
+    '''
+    The GatewayStore class(object) makes an action and reduces those actions to certain results
+    '''
 
     def get(self,request):
+        # receive a type value through URL
         action_type = request.GET.get('type')
-        print(action_type)
-        return JsonResponse(self.get_data(), json_dumps_params={'ensure_ascii': True})
+        # initialize action class by passing in the action type retrieved from URL
+        action_cls = GatewayActionOBJ(action_type)
+        action_obj = action_cls.ACTION
+        reducer = GatewayReducer(action_obj) # pass in the action object to reducer
+        # the above reducer is a function, run it
+        status = reducer()
+        if status:
+            return JsonResponse({'status': 'DONE'}, json_dumps_params={'ensure_ascii': True})
+        else:
+            return JsonResponse({'status': 'ERROR'}, json_dumps_params={'ensure_ascii': True})

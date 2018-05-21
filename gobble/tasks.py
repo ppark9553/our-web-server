@@ -1,6 +1,9 @@
 from __future__ import absolute_import, unicode_literals
-import random
 from celery.decorators import task
+
+import random
+import requests
+from fabric.api import local
 
 @task(name="sum_two_numbers")
 def add(x, y):
@@ -14,3 +17,7 @@ def mul(x, y):
 @task(name="sum_list_numbers")
 def xsum(numbers):
     return sum(numbers)
+
+@task(name="mass_date_crawl")
+def mass_date_crawl():
+    local('echo hello')

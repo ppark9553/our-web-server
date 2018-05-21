@@ -16,9 +16,10 @@ from django.core.cache.backends.base import DEFAULT_TIMEOUT
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 from arbiter.config import CONFIG
-from gateway.models import Gateway
+from gateway.models import GatewayAction, GatewayState
 from stockapi.models import Date
 
+from gobble.tasks import mass_date_crawl
 
 class GatewayReducer(object):
 
@@ -28,8 +29,10 @@ class GatewayReducer(object):
             # get the reducer function with 'getattr' function
             reducer = getattr(self, action['reducer'])
 
+    def mass_date_crawl(self):
+        mass_date_crawl.delay()
 
-    def mass_date_save(save_at, cached_key):
+    def mass_date_save(self, save_at, cached_key):
         hostname = CONFIG['ip-address'][save_at]
         print('Hostname: {}'.format(hostname))
         r = redis.Redis(host=hostname, port=6379)
