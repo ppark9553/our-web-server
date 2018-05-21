@@ -1,3 +1,6 @@
+from django.http import JsonResponse
+from django.views.generic import View
+
 from rest_framework import generics
 from rest_framework.filters import SearchFilter, OrderingFilter
 
@@ -11,6 +14,8 @@ from stockapi.serializers import (
     TickerSerializer,
     OHLCVSerializer,
 )
+from gateway.models import GatewayAction, GatewayState
+from gateway.serializers import GatewayActionSerializer, GatewayStateSerializer
 
 from utils.paginations import StandardResultPagination, OHLCVPagination
 
@@ -57,3 +62,25 @@ class OHLCVAPIGatewayView(generics.ListCreateAPIView):
         if code_by:
             queryset = queryset.filter(code=code_by)
         return queryset
+
+
+class GatewayActionAPIView(generics.ListAPIView):
+    queryset = GatewayAction.objects.all()
+    serializer_class = GatewayActionSerializer
+    pagination_class = StandardResultPagination
+    filter_backends = [SearchFilter, OrderingFilter]
+
+
+class GatewayStateAPIView(generics.ListAPIView):
+    queryset = GatewayState.objects.all()
+    serializer_class = GatewayStateSerializer
+    pagination_class = StandardResultPagination
+    filter_backends = [SearchFilter, OrderingFilter]
+
+
+class GatewayStoreView(View):
+
+    def get(self,request):
+        action_type = request.GET.get('type')
+        print(action_type)
+        return JsonResponse(self.get_data(), json_dumps_params={'ensure_ascii': True})

@@ -1,0 +1,35 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-size: 100%;
+}
+
+/* Navigation */
+.navigation {
+  display: flex;
+  flex-direction: column;
+}
+
+.navigation > .top-nav {
+  width: 100%;
+  display: flex;
+}
+
+.navigation > .top-nav > .logo {
+  width: 50%;
+  display: flex;
+  justify-content: flex-start;
+  margin-left: 2rem;
+}
+
+.navigation > .top-nav > .user-actions {
+  width: 50%;
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 2rem;
+}
+
+.navigation > .bottom-nav {
+  width: 100%;
+}
