@@ -23,7 +23,7 @@ def xsum(numbers):
 
 @task(name="mass_date_crawl")
 def mass_date_crawl():
-    local('echo hello')
+    local('node /home/arbiter/js-gobble/test_script.js')
 
     gateway_ip = CONFIG['ip-address']['gateway']
     log_url = 'http://{}/hidden-api/gateway-states/'.format(gateway_ip)
