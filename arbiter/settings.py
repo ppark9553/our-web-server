@@ -42,7 +42,7 @@ INSTALLED_APPS = [
 
     # define arbiter specific app names here
     'stockapi',
-    'gateway'
+    # 'gateway'
 ]
 
 if THIS_SYSTEM == 'gateway' or THIS_SYSTEM == 'gobble':
