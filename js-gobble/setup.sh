@@ -13,8 +13,9 @@ sudo apt-get install gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcup
 
 # define the project directory for Gobble.js
 mkdir /home/arbiter/js-gobble
+sudo cp /home/arbiter/buzzz/js-gobble/* /home/arbiter/js-gobble
 sudo chown -R arbiter:arbiter /home/arbiter/js-gobble
 
 # install all Node.js dependencies
-cd /homer/arbiter/js-gobble
+cd /home/arbiter/js-gobble
 npm install
