@@ -10,6 +10,7 @@ class GatewayActionSerializer(serializers.ModelSerializer):
     class Meta:
         model = GatewayAction
         fields = ('created', 'action',)
+        read_only_fields = ('created',)
 
 
 class GatewayStateSerializer(serializers.ModelSerializer):
