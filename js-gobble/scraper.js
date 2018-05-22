@@ -50,7 +50,8 @@ const scrape_date = async () => {
 
   browser = await puppeteer.launch({
     headless: true,
-    // slowMo: 80,
+    args: ['--no-sandbox'],
+    slowMo: 80,
     // args: ['--window-size=${width}, ${height}']
   })
   page = await browser.newPage()
@@ -124,7 +125,12 @@ scrape_date()
       console.log(reply)
     }
   })
+
+  browser.close()
+  redis_client.quit()
 })
 .catch( error => {
   console.log(error)
+  browser.close()
+  redis_client.quit()
 })
