@@ -4,28 +4,102 @@
 
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
         <title>Buzzz</title>
         <link rel="icon" href="{% static 'img/buzzz.ico' %}" type="image/x-icon" />
         <link rel="stylesheet" href="{% static 'css/ms_responsive.css' %}" type="text/css" media="all">
-        <script type="text/javascript" src="{% static 'js/ms_reponsive.js' %}"></script>
+        <link rel="stylesheet" href="{% static 'vendor/fontawesome-free-5.0.13/web-fonts-with-css/css/fontawesome-all.min.css' %}" type="text/css" media="all">
+        <!-- jQuery -->
+        <script type="text/javascript" src="{% static 'vendor/jquery-3.3.1.min.js' %}"></script>
+        <!-- jQuery Sparkline -->
+        <script type="text/javascript" src="{% static 'vendor/jquery.sparkline.min.js' %}"></script>
+        <!-- Custom -->
+        <script type="text/javascript" src="{% static 'js/ms_responsive.js' %}"></script>
+        <!-- Highcharts -->
+        <script src="{% static 'vendor/highstock-6.1.0/code/highstock.js' %}" charset="utf-8"></script>
+        <script src="{% static 'vendor/highstock-6.1.0/code/highcharts-more.js' %}" charset="utf-8"></script>
+
+        <link href="https://fonts.googleapis.com/css?family=Nanum+Gothic|Ubuntu" rel="stylesheet">
     </head>
 
     <body>
 
+      <div id="body-element">
+
         <!-- Navigation -->
         <div class="navigation">
+
           <div class="top-nav">
             <div class="logo">
-              buzzz
+              <div class="logo-text">
+                buzzz
+              </div>
             </div>
             <div class="user-actions">
-              login
+              <div class="login-text">
+                로그인
+              </div>
             </div>
           </div>
+
           <div class="bottom-nav">
-            bottom
+            <div class="search-sec">
+              <div class="search-bar">
+                <div class="search-input">
+                  <input class="search-input-box" type="text" name="code-search" placeholder="코드나 종목명을 검색하세요">
+                </div>
+                <div class="search-btn">
+                  <i class="fas fa-search"></i>
+                </div>
+              </div>
+            </div>
+            <div class="nav-tabs">
+              <div class="nav-tab ms-tab">
+                마켓시그널
+              </div>
+              <div class="nav-tab ss-tab">
+                수급스캐너
+              </div>
+              <div class="nav-tab rms-tab">
+                리스크매니저
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Portfolio Actions Section -->
+        <div class="port-actions">
+          <div class="port-breadcrumb">
+            Portfolio
+          </div>
+          <div class="port-choices">
+            <div id="port-dropdown-menu" class="dropdown">
+              <span>
+                내 포트폴리오
+                <i class="fas fa-sort-down dropdown-icon"></i>
+              </span>
+            </div>
+            <ul id="port-dropdown-section" class="port-dropdown inactive">
+              <li><a href='#'>포트폴리오 1</a></li>
+              <li><a href='#'>포트폴리오 2</a></li>
+              <li><a href='#'>포트폴리오 3</a></li>
+              <li><a href='#'>포트폴리오 4</a></li>
+              <li>더 보기</li>
+            </ul>
           </div>
         </div>
+
+        <!-- Portfolio Info Section -->
+        <div class="port-info">
+
+          <div id="port-chart" class="return-chart-wrap">
+            <div id="return-chart-area" class="return-chart"></div>
+          </div>
+
+        </div>
+
+      </div>
 
     </body>
 
