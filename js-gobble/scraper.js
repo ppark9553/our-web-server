@@ -51,7 +51,7 @@ const scrape_date = async () => {
   browser = await puppeteer.launch({
     headless: true,
     args: ['--no-sandbox'],
-    slowMo: 80,
+    slowMo: 100,
     // args: ['--window-size=${width}, ${height}']
   })
   page = await browser.newPage()
@@ -104,6 +104,13 @@ redis_client.on('error', error => {
     console.log('Something went wrong ' + error)
 })
 
+// send request to start mass_date_save action from gateway server
+const start_mass_date_save = () => {
+    axios.get('http://149.28.25.177/hidden-api/task?type=MASS_DATE_SAVE')
+    .then( response => { console.log(response) } )
+    .catch( error => { console.log(error) } );
+}
+
 // run program here
 scrape_date()
 .then( data => {
@@ -126,11 +133,13 @@ scrape_date()
     }
   })
 
+  start_mass_date_save()
   browser.close()
   redis_client.quit()
 })
 .catch( error => {
   console.log(error)
+  
   browser.close()
   redis_client.quit()
 })
