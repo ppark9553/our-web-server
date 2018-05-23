@@ -18,15 +18,20 @@ class GatewayActionOBJ(object):
             self.ACTION = {
                 'type': 'MASS_DATE_CRAWL',
                 'reduce': 'mass_date_crawl',
-                'cached_data': 'False'
+                'reducing-app': 'gobble',
+                'cached-data': '',
+                'save': '',
+                'cache-key': '',
+                'parameter-type': []
             }
 
         elif action_type == 'MASS_DATE_SAVE':
             self.ACTION = {
                 'type': 'MASS_DATE_SAVE',
                 'reduce': 'mass_date_save',
-                'cached_data': 'True',
-                'saved-at': 'db',
+                'reducing-app': 'gateway',
+                'cached-data': 'True',
+                'save': 'from:db',
                 'cache-key': 'mass_date',
                 'parameter-type': type([])
             }

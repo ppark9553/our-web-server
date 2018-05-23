@@ -27,10 +27,15 @@ class GatewayReducer(object):
 
         if action['type'] == 'MASS_DATE_SAVE':
             # get the reducer function with 'getattr' function
-            reducer = getattr(self, action['reducer'])
+            reducer = getattr(self, action['reduce'])
+            return reducer # return the reducer function
 
     def mass_date_crawl(self):
-        mass_date_crawl.delay()
+        try:
+            mass_date_crawl.delay()
+            return True
+        except:
+            return False
 
     def mass_date_save(self, save_at, cached_key):
         hostname = CONFIG['ip-address'][save_at]
@@ -45,3 +50,4 @@ class GatewayReducer(object):
             inst_list.append(date_inst)
         Date.objects.bulk_create(inst_list)
         print('Date instances bulk created success')
+        return True

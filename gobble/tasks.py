@@ -25,6 +25,7 @@ def xsum(numbers):
 def mass_date_crawl():
     local('node /home/arbiter/js-gobble/test_script.js')
 
+    # log to gateway server
     gateway_ip = CONFIG['ip-address']['gateway']
     log_url = 'http://{}/hidden-api/gateway-states/'.format(gateway_ip)
     today_date = datetime.today().strftime('%Y%m%d')
