@@ -94,9 +94,4 @@ class GatewayStoreView(View):
         action_cls = GatewayActionOBJ(action_type)
         action_obj = action_cls.ACTION
         reducer = GatewayReducer(action_obj) # pass in the action object to reducer
-        # the above reducer is a function, run it
-        status = reducer()
-        if status:
-            return JsonResponse({'status': 'DONE'}, json_dumps_params={'ensure_ascii': True})
-        else:
-            return JsonResponse({'status': 'ERROR'}, json_dumps_params={'ensure_ascii': True})
+        return JsonResponse({'status': 'DONE'}, json_dumps_params={'ensure_ascii': True})

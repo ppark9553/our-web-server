@@ -28,14 +28,10 @@ class GatewayReducer(object):
         if action['type'] == 'MASS_DATE_SAVE':
             # get the reducer function with 'getattr' function
             reducer = getattr(self, action['reduce'])
-            return reducer # return the reducer function
+            reducer() # return the reducer function
 
     def mass_date_crawl(self):
-        try:
-            mass_date_crawl.delay()
-            return True
-        except:
-            return False
+        mass_date_crawl.delay()
 
     def mass_date_save(self, save_at, cached_key):
         hostname = CONFIG['ip-address'][save_at]
