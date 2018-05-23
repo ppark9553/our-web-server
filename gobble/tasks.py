@@ -23,7 +23,7 @@ def xsum(numbers):
 
 @task(name="mass_date_crawl")
 def mass_date_crawl():
-    local('node /home/arbiter/js-gobble/test_script.js')
+    local('node /home/arbiter/js-gobble/scraper.js')
 
     # log to gateway server
     gateway_ip = CONFIG['ip-address']['gateway']

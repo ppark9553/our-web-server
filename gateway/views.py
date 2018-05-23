@@ -1,3 +1,6 @@
+import requests
+from datetime import datetime
+
 from django.http import JsonResponse
 from django.views.generic import View
 
@@ -21,6 +24,7 @@ from gateway.reducers import GatewayReducer
 
 from utils.paginations import StandardResultPagination, OHLCVPagination
 
+from arbiter.config import CONFIG
 
 class DateAPIGatewayView(generics.ListCreateAPIView):
     queryset = Date.objects.all().order_by('-date')
@@ -90,8 +94,21 @@ class GatewayStoreView(View):
     def get(self,request):
         # receive a type value through URL
         action_type = request.GET.get('type')
-        # initialize action class by passing in the action type retrieved from URL
-        action_cls = GatewayActionOBJ(action_type)
-        action_obj = action_cls.ACTION
-        reducer = GatewayReducer(action_obj) # pass in the action object to reducer
+        gateway_ip = CONFIG['ip-address']['gateway']
+        log_url = 'http://{}/hidden-api/gateway-states/'.format(gateway_ip)
+        today_date = datetime.today().strftime('%Y%m%d')
+        log_data = {
+            'date': today_date,
+            'task_name': 'received_action',
+            'state': 'P',
+            'log': 'received action type: {}'.format(action_type)
+        }
+        r = requests.post(log_url, data=log_data)
+        if r.status_code == 201:
+            # initialize action class by passing in the action type retrieved from URL
+            action_cls = GatewayActionOBJ(action_type)
+            action_obj = action_cls.ACTION
+            reducer = GatewayReducer(action_obj) # pass in the action object to reducer
+        else:
+            print('error occurred in loggin')
         return JsonResponse({'status': 'DONE'}, json_dumps_params={'ensure_ascii': True})
