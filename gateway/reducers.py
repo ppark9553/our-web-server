@@ -25,10 +25,10 @@ class GatewayReducer(object):
 
     def __init__(self, action):
 
-        if action['type'] == 'MASS_DATE_SAVE':
+        if action['type'] == 'MASS_DATE_CRAWL':
             # get the reducer function with 'getattr' function
             reducer = getattr(self, action['reduce'])
-            reducer() # return the reducer function
+            reducer() # run the reducer function
 
     def mass_date_crawl(self):
         mass_date_crawl.delay()

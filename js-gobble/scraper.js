@@ -49,10 +49,10 @@ const scrape_date = async () => {
   console.log('Crawling FnGuide starting...')
 
   browser = await puppeteer.launch({
-    headless: true,
+    headless: false,
     args: ['--no-sandbox'],
     slowMo: 100,
-    // args: ['--window-size=${width}, ${height}']
+    args: ['--window-size=${width}, ${height}']
   })
   page = await browser.newPage()
   await page.setViewport({ width, height })
@@ -104,6 +104,18 @@ redis_client.on('error', error => {
     console.log('Something went wrong ' + error)
 })
 
+const log_date_crawled = () => {
+  let date = new Date().toISOString().slice(0, 10).replace(/-/gi, '')
+  axios.post('http://149.28.25.177/hidden-api/gateway-states/', {
+    'date': date,
+    'task_name': 'date_crawled',
+    'state': 'P',
+    'log': 'scraper.js app fired and date all crawled'
+  })
+  .then( response => { console.log(response) })
+  .catch( error => { console.log(error) })
+}
+
 // send request to start mass_date_save action from gateway server
 const start_mass_date_save = () => {
     axios.get('http://149.28.25.177/hidden-api/task?type=MASS_DATE_SAVE')
@@ -133,13 +145,14 @@ scrape_date()
     }
   })
 
-  start_mass_date_save()
+  log_date_crawled()
+  // start_mass_date_save()
   browser.close()
   redis_client.quit()
 })
 .catch( error => {
   console.log(error)
-  
+
   browser.close()
   redis_client.quit()
 })
