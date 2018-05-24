@@ -50,6 +50,11 @@ def restart_celery():
     local('sudo supervisorctl restart arbiter_celery')
     local('sudo supervisorctl restart arbiter_celerybeat')
 
+@task
+def js_gobble_resetup():
+    local('rm -r /home/arbiter/js-gobble')
+    local('sudo bash /home/arbiter/buzzz/js-gobble/setup.sh')
+
 
 # ### System Managin Tools ###
 # from arbiter.config import CONFIG
