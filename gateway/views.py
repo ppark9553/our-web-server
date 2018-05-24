@@ -109,6 +109,8 @@ class GatewayStoreView(View):
             action_cls = GatewayActionOBJ(action_type)
             action_obj = action_cls.ACTION
             reducer = GatewayReducer(action_obj) # pass in the action object to reducer
+            status = reducer.reduce()
+            print(status)
         else:
             print('error occurred in loggin')
         return JsonResponse({'status': 'DONE'}, json_dumps_params={'ensure_ascii': True})
