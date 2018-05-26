@@ -49,10 +49,10 @@ const scrape_date = async () => {
   console.log('Crawling FnGuide starting...')
 
   browser = await puppeteer.launch({
-    headless: false,
+    headless: true,
     args: ['--no-sandbox'],
     slowMo: 100,
-    args: ['--window-size=${width}, ${height}']
+    // args: ['--window-size=${width}, ${height}']
   })
   page = await browser.newPage()
   await page.setViewport({ width, height })
