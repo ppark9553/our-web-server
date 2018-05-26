@@ -14,8 +14,8 @@ from stockapi.serializers import (
     TickerSerializer,
     OHLCVSerializer,
 )
-from gateway.models import GatewayAction, GatewayState
-from gateway.serializers import GatewayActionSerializer, GatewayStateSerializer
+from gateway.models import GatewayState
+from gateway.serializers import GatewayStateSerializer
 from gateway.actions import GatewayActionOBJ
 from gateway.reducers import GatewayReducer
 from gateway.logger import GatewayLogger
@@ -69,13 +69,6 @@ class OHLCVAPIGatewayView(generics.ListCreateAPIView):
 
 ### gateway API's should be ListCreateAPIView because Node.js app
 ### should also be able to have access to DB writes regarding its tasks
-class GatewayActionAPIView(generics.ListCreateAPIView):
-    queryset = GatewayAction.objects.all().order_by('-id')
-    serializer_class = GatewayActionSerializer
-    pagination_class = StandardResultPagination
-    filter_backends = [SearchFilter, OrderingFilter]
-
-
 class GatewayStateAPIView(generics.ListCreateAPIView):
     queryset = GatewayState.objects.all().order_by('-id')
     serializer_class = GatewayStateSerializer

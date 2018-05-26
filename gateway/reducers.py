@@ -16,7 +16,7 @@ from django.core.cache.backends.base import DEFAULT_TIMEOUT
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 from arbiter.config import CONFIG
-from gateway.models import GatewayAction, GatewayState
+from gateway.models import GatewayState
 from stockapi.models import Date
 
 from gobble.tasks import mass_date_crawl

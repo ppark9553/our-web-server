@@ -6,14 +6,6 @@ STATE_TYPES = (
 )
 
 
-class GatewayAction(models.Model):
-    created = models.DateTimeField(auto_now_add=True)
-    action = models.CharField(max_length=20)
-
-    def __str__(self):
-        return '{} {}'.format(self.action, self.created)
-
-
 class GatewayState(models.Model):
     date = models.CharField(max_length=10)
     created = models.DateTimeField(auto_now_add=True)
