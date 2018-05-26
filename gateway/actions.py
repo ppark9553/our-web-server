@@ -14,7 +14,13 @@ class GatewayActionOBJ(object):
 
     def __init__(self, action_type):
 
-        if action_type == 'MASS_DATE_CRAWL':
+        if action_type == 'GET_STATE':
+            self.ACTION = {
+                'type': 'GET_STATE',
+                'reduce': 'get_state'
+            }
+
+        elif action_type == 'MASS_DATE_CRAWL':
             self.ACTION = {
                 'type': 'MASS_DATE_CRAWL',
                 'reduce': 'mass_date_crawl',
@@ -37,6 +43,7 @@ class GatewayActionOBJ(object):
             }
 
         else:
+            # add type 'None' so that StoreView can check for action type availability
             self.ACTION = {
                 'type': 'None'
             }

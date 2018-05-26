@@ -17,6 +17,7 @@ class GatewayStateSerializer(serializers.ModelSerializer):
     class Meta:
         model = GatewayState
         fields = ('date',
+                  'created',
                   'task_name',
                   'state',
                   'log',)
