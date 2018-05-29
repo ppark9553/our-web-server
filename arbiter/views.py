@@ -4,3 +4,7 @@ from django.views import View
 class HomeView(View):
     def get(self, request, *args, **kwargs):
         return render(request, 'ms_responsive.html', {})
+
+class GatewayView(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'gateway.html', {})

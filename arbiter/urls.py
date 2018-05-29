@@ -3,12 +3,13 @@ from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
 
-from .views import HomeView
+from .views import HomeView, GatewayView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
 
     url(r'^$', HomeView.as_view(), name='home'),
+    url(r'^gateway/$', GatewayView.as_view(), name='gateway'),
     url(r'^stock-api/', include('stockapi.urls', namespace='stockapi')),
     url(r'^hidden-api/', include('gateway.urls', namespace='hiddenapi')),
 ]

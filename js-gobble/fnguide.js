@@ -1,27 +1,30 @@
 const puppeteer = require('puppeteer')
 
-String.prototype.format = () => {
+String.prototype.format = function() {
+  // es5 synatax
   // finds '{}' within string values and replaces them with
   // given parameter values in the .format method
-  let formatted = this
-  for (let i = 0; i < arguments.length; i++) {
-      let regexp = new RegExp('\\{'+i+'\\}', 'gi')
+  var formatted = this
+  for (var i = 0; i < arguments.length; i++) {
+      var regexp = new RegExp('\\{'+i+'\\}', 'gi')
       formatted = formatted.replace(regexp, arguments[i])
   }
   return formatted
 }
 
 // define all the api endpoints here
-const LOGIN_PAGE = 'https://www.fnguide.com/home/login'
-const DATE_PAGE = 'http://www.fnguide.com/fgdd/StkIndmByTime#multivalue=CJA005930|CII.001&adjyn=Y&multiname=삼성전자|종합주가지수'
-const MKTCAP_PAGE = 'http://www.fnguide.com/fgdd/StkItemDateCap#tab=D&market=0'
-const API = {
-  'date': 'http://www.fnguide.com/api/Fgdd/StkIndMByTimeGrdData?IN_MULTI_VALUE=CJA005930%2CCII.001&IN_START_DT=20000101&IN_END_DT={0}&IN_DATE_TYPE=D&IN_ADJ_YN=Y&_=1525866864922',
-  'market_cap': 'http://www.fnguide.com/api/Fgdd/StkItemDateCapGrdDataDate?IN_MKT_TYPE=0&IN_SEARCH_DT={0}&_=1525867541072',
-  'sd': 'http://www.fnguide.com/Api/Fgdd/StkJInvTrdTrendGrdDataDate?IN_MKT_TYPE=0&IN_TRD_DT={0}&IN_UNIT_GB=2&_=1525867599123',
-  'short': 'http://www.fnguide.com/Api/Fgdd/StkLendingGrdDataDateC?IN_MKT_GB=0&IN_STD_DT={0}&IN_DATA_GB=D&_=1525867734721',
-  'financial': 'http://www.fnguide.com/api/Fgdd/StkDateShareIndxGrdDataDate?IN_SEARCH_DT={0}&IN_MKT_TYPE=0&IN_CONSOLIDATED=1&_=1525867857090',
-  'etf': 'http://www.fnguide.com/Api/Fgdd/StkEtfGrdDataDate?IN_TRD_DT={0}&IN_MKT_GB=0&_=1525867906347'
+const URL = {
+  'LOGIN_PAGE': 'https://www.fnguide.com/home/login',
+  'DATE_PAGE': 'http://www.fnguide.com/fgdd/StkIndmByTime#multivalue=CJA005930|CII.001&adjyn=Y&multiname=삼성전자|종합주가지수',
+  'MKTCAP_PAGE': 'http://www.fnguide.com/fgdd/StkItemDateCap#tab=D&market=0',
+  'API': {
+    'date': 'http://www.fnguide.com/api/Fgdd/StkIndMByTimeGrdData?IN_MULTI_VALUE=CJA005930%2CCII.001&IN_START_DT=20000101&IN_END_DT={0}&IN_DATE_TYPE=D&IN_ADJ_YN=Y&_=1525866864922',
+    'market_cap': 'http://www.fnguide.com/api/Fgdd/StkItemDateCapGrdDataDate?IN_MKT_TYPE=0&IN_SEARCH_DT={0}&_=1525867541072',
+    'sd': 'http://www.fnguide.com/Api/Fgdd/StkJInvTrdTrendGrdDataDate?IN_MKT_TYPE=0&IN_TRD_DT={0}&IN_UNIT_GB=2&_=1525867599123',
+    'short': 'http://www.fnguide.com/Api/Fgdd/StkLendingGrdDataDateC?IN_MKT_GB=0&IN_STD_DT={0}&IN_DATA_GB=D&_=1525867734721',
+    'financial': 'http://www.fnguide.com/api/Fgdd/StkDateShareIndxGrdDataDate?IN_SEARCH_DT={0}&IN_MKT_TYPE=0&IN_CONSOLIDATED=1&_=1525867857090',
+    'etf': 'http://www.fnguide.com/Api/Fgdd/StkEtfGrdDataDate?IN_TRD_DT={0}&IN_MKT_GB=0&_=1525867906347'
+  }
 }
 
 
@@ -56,12 +59,16 @@ class Puppet {
     this.page = await this.browser.newPage()
 
     await this.page.setViewport({ width, height })
-
-    await this._login()
-    return this.page
   }
 
-  async _login() {
+  async goTo() {
+    let page = this.page
+
+    console.log(URL.LOGIN_PAGE)
+    await page.goto(URL.LOGIN_PAGE)
+  }
+
+  async login() {
     // go to login page and login
     let page = this.page
 
@@ -97,78 +104,3 @@ class Puppet {
 module.exports = {
   Puppet: Puppet
 }
-
-
-//   /// CRAWL DATE ONCE ///
-//   await page.setExtraHTTPHeaders({
-//     'Referer': 'http://www.fnguide.com/fgdd/StkIndmByTime',
-//     'X-Requested-With': 'XMLHttpRequest'
-//   })
-//   await page.goto(API.date.format(today_date))
-//   const date_data = await page.evaluate(() =>  {
-//       let data = JSON.parse(document.querySelector('body').innerText);
-//       return data
-//   })
-//   return date_data
-// }
-//
-// redis_client.on('connect', () => {
-//     console.log('Redis client connected')
-// })
-//
-// redis_client.on('error', error => {
-//     console.log('Something went wrong ' + error)
-// })
-//
-// const log_date_crawled = () => {
-//   let date = new Date().toISOString().slice(0, 10).replace(/-/gi, '')
-//   axios.post('http://149.28.25.177/hidden-api/gateway-states/', {
-//     'date': date,
-//     'task_name': 'date_crawled',
-//     'state': 'P',
-//     'log': 'scraper.js app fired and date all crawled'
-//   })
-//   .then( response => { console.log(response) })
-//   .catch( error => { console.log(error) })
-// }
-//
-// // send request to start mass_date_save action from gateway server
-// const start_mass_date_save = () => {
-//     axios.get('http://149.28.25.177/hidden-api/task?type=MASS_DATE_SAVE')
-//     .then( response => { console.log(response) } )
-//     .catch( error => { console.log(error) } );
-// }
-//
-// // run program here
-// scrape_date()
-// .then( data => {
-//   let dates_data = ['mass_date']
-//
-//   for (let obj of data.Data) {
-//     for (let json_data of obj) {
-//       let date_data = json_data.TRD_DT.replace(/\./gi, '').trim()
-//       dates_data.push(date_data)
-//       console.log(date_data + ' data pushed to list')
-//     }
-//   }
-//   console.log('dates_data list create complete')
-//
-//   redis_client.rpush(dates_data, (error, reply) => {
-//     if (error) {
-//       console.log(error)
-//     } else {
-//       console.log(reply)
-//     }
-//   })
-//
-//   log_date_crawled()
-//   // start_mass_date_save()
-//   browser.close()
-//   redis_client.quit()
-// })
-// .catch( error => {
-//   console.log(error)
-//
-//   browser.close()
-//   redis_client.quit()
-// })

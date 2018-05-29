@@ -2,6 +2,7 @@ const redis = require('redis')
 
 const GOBBLE_IP = '45.77.134.175'
 
+
 class RedisClient {
 
   constructor() {
@@ -19,23 +20,17 @@ class RedisClient {
   }
 
   async keyExists(key) {
-    this.exists = false
-
     await this.redisClient.exists(key, (error, reply) => {
       if (!error) {
         if (reply === 1) {
          console.log('key exists')
-         this.exists = true
         } else {
          console.log('key does not exist')
-         this.exists = false
         }
       } else {
         console.log('there was an error with Redis while checking if key exists')
       }
     })
-
-    console.log(this.exists)
   }
 
   delKey(key) {
