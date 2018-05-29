@@ -1,14 +1,14 @@
-DROP TRIGGER IF EXISTS updated_projectstate_trigger on tracker_projectstate;
-DROP FUNCTION IF EXISTS notify_projectstate();
+DROP TRIGGER IF EXISTS updated_gatewaystate_trigger on gateway_gatewaystate;
+DROP FUNCTION IF EXISTS notify_gatewaystate();
 
-CREATE FUNCTION notify_projectstate() RETURNS trigger
+CREATE FUNCTION notify_gatewaystate() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 BEGIN
-    PERFORM pg_notify('projectstate'::TEXT, NEW.id::TEXT);
+    PERFORM pg_notify('gatewaystate'::TEXT, NEW.id::TEXT);
     RETURN NULL;
 END;
 $$;
 
-CREATE TRIGGER updated_projectstate_trigger AFTER INSERT ON tracker_projectstate
-FOR EACH ROW EXECUTE PROCEDURE notify_projectstate();
+CREATE TRIGGER updated_gatewaystate_trigger AFTER INSERT ON gateway_gatewaystate
+FOR EACH ROW EXECUTE PROCEDURE notify_gatewaystate();
