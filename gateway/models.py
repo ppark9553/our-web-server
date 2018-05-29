@@ -15,4 +15,4 @@ class GatewayState(models.Model):
                            null=True)
 
     def __str__(self):
-        return '{} {}'.format(self.date, self.table_name)
+        return '{} {}'.format(self.date, self.task_name)

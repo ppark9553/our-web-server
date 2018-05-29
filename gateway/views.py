@@ -105,4 +105,5 @@ class GatewayStoreView(View):
                 return JsonResponse({'status': 'FAIL'}, json_dumps_params={'ensure_ascii': True})
 
         elif action_inst.ACTION['type'] == 'None':
+            logger.set_log(action_type, 'F', 'no such action exists error')
             return JsonResponse({'status': 'NO ACTION: {}'.format(action_type)}, json_dumps_params={'ensure_ascii': True})
