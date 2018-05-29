@@ -1,7 +1,7 @@
 const io = require('socket.io').listen(3000)
 const pg = require ('pg')
 
-const con_string = 'tcp://arbiter:makeitpopweAR!1@445.77.134.175/arbiter'
+const con_string = 'tcp://arbiter:makeitpopweAR!1@45.77.134.175/arbiter'
 
 let pg_client = new pg.Client(con_string)
 pg_client.connect()
