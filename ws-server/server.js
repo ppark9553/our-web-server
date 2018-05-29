@@ -1,18 +1,17 @@
-const io = require('socket.io').listen(3000)
-const pg = require ('pg')
+var io = require('socket.io').listen(3000)
+var pg = require ('pg')
 
-// create connection string to DB server
-const con_string = 'tcp://arbiter:makeitpopweAR!1@45.77.134.175/arbiter'
+var con_string = 'tcp://arbiter:makeitpopweAR!1@45.77.134.175/arbiter'
 
-let pg_client = new pg.Client(con_string)
+var pg_client = new pg.Client(con_string)
 pg_client.connect()
-let query = pg_client.query('LISTEN "gatewaystate"')
+var query = pg_client.query('LISTEN "gatewaystate"')
 
-io.sockets.on('connection', socket => {
+io.sockets.on('connection', function (socket) {
     socket.emit('connected', { connected: true })
 
-    socket.on('ready for data', data => {
-        pg_client.on('notification', id => {
+    socket.on('ready for data', function (data) {
+        pg_client.on('notification', function(id) {
             socket.emit('update', { message: id })
         })
     })
