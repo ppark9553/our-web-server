@@ -15,14 +15,9 @@
         <script type="text/javascript" src="{% static 'vendor/jquery.sparkline.min.js' %}"></script>
         <!-- Custom -->
         <link rel="stylesheet" href="{% static 'css/gateway.css' %}" type="text/css" media="all">
-        <script type="text/javascript" src="{% static 'js/gateway.js' %}"></script>
         <!-- Highcharts -->
         <script src="{% static 'vendor/highstock-6.1.0/code/highstock.js' %}" charset="utf-8"></script>
         <script src="{% static 'vendor/highstock-6.1.0/code/highcharts-more.js' %}" charset="utf-8"></script>
-
-        <!-- Websocket with Socket.io -->
-        <script src="{% static 'js/socket.io.js' %}"></script>
-        <script type="text/javascript" src="{% static 'js/gateway.js' %}"></script>
 
         <link href="https://fonts.googleapis.com/css?family=Nanum+Gothic|Ubuntu" rel="stylesheet">
     </head>
@@ -60,6 +55,33 @@
       <div class="footer">
         Footer
       </div>
+
+
+      <!-- Websocket with Socket.io -->
+      <script src="{% static 'js/socket.io.js' %}"></script>
+      <script type="text/javascript" src="{% static 'js/gateway.js' %}"></script>
+      <script>
+        // socket.io code here
+        WEB_SOCKET_SWF_LOCATION = 'inc/WebSocketMain.swf'
+        var socket = io.connect('http://108.61.161.113:3000')
+
+        socket.on('connected', function(data) {
+          if (data.connected == true) {
+            console.log('buzzz webpage ready to load with changes in DB')
+          }
+          socket.emit('ready for data', {})
+        })
+
+        socket.on('update', function(data) {
+          console.log(data.message.payload)
+        })
+
+        // jquery code here
+        $(document).ready(function() {
+          webpageStarting()
+        })
+
+      </script>
     </body>
 
 </html>

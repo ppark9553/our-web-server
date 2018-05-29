@@ -70,10 +70,23 @@ class OHLCVAPIGatewayView(generics.ListCreateAPIView):
 ### gateway API's should be ListCreateAPIView because Node.js app
 ### should also be able to have access to DB writes regarding its tasks
 class GatewayStateAPIView(generics.ListCreateAPIView):
-    queryset = GatewayState.objects.all().order_by('-id')
+    queryset = GatewayState.objects.all()
     serializer_class = GatewayStateSerializer
     pagination_class = StandardResultPagination
     filter_backends = [SearchFilter, OrderingFilter]
+
+    def get_queryset(self, *args, **kwargs):
+        queryset = GatewayState.objects.all().order_by('id')
+        date_by = self.request.GET.get('date')
+        task_by = self.request.GET.get('start')
+        status_by = self.request.GET.get('status')
+        if date_by:
+            queryset = queryset.filter(date=date_by)
+        if task_by:
+            queryset = queryset.filter(task_name=task_by)
+        if status_by:
+            queryset = queryset.filter(status=status_by)
+        return queryset
 
 
 class GatewayStoreView(View):
