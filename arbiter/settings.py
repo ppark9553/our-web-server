@@ -45,8 +45,8 @@ INSTALLED_APPS = [
     'gateway'
 ]
 
-if THIS_SYSTEM == 'gateway' or THIS_SYSTEM == 'gobble':
-    INSTALLED_APPS = INSTALLED_APPS + ['gateway', 'gobble']
+if THIS_SYSTEM == 'gobble':
+    INSTALLED_APPS = INSTALLED_APPS + ['gobble']
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
