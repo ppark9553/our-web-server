@@ -12,14 +12,14 @@ define all such dependencies and data here
 The dependency structure of Django is essential here.
 Below are all the connections/dependencies we should take into account:
 
-web <--> db
+web <--> db/cache
 db <--> gateway
 gateway <--> gobble
 gateway <--> mined
 
 To visualize it more clearly:
 
-web <--> db <--> gateway <--> gobble
+web <--> db/cache <--> gateway <--> gobble
                          <--> mined
 '''
 
@@ -38,6 +38,7 @@ CONFIG = {
     'ip-address': {
         'web': '207.148.103.151',
         'db': '45.77.134.175', # deploy 1st: other servers need the database as dependency
+        'cache': '45.77.251.66',
         'gateway': '149.28.25.177',
         'gobble': '149.28.18.34',
         'mined': '45.32.42.30'

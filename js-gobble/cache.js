@@ -1,4 +1,5 @@
 const redis = require('redis')
+const Logger = require('./logger.js')
 
 const GOBBLE_IP = '45.77.134.175'
 
@@ -6,6 +7,8 @@ const GOBBLE_IP = '45.77.134.175'
 class RedisClient {
 
   constructor() {
+    this.logger = new Logger.Logger()
+
     console.log('Connecting to cache server (Redis) on Gobble server')
     this.redisClient = redis.createClient(6379, GOBBLE_IP)
 
@@ -20,7 +23,7 @@ class RedisClient {
   }
 
   async keyExists(key) {
-    await this.redisClient.exists(key, (error, reply) => {
+    this.redisClient.exists(key, (error, reply) => {
       if (!error) {
         if (reply === 1) {
          console.log('key exists')
@@ -33,7 +36,7 @@ class RedisClient {
     })
   }
 
-  delKey(key) {
+  async delKey(key) {
     this.redisClient.del(key, (error, reply) => {
       if (!error) {
         if (reply === 1) {
@@ -47,7 +50,7 @@ class RedisClient {
     })
   }
 
-  saveList(data) {
+  async saveList(data) {
     console.log('Saving list/array data to Redis')
     this.redisClient.rpush(data, (error, reply) => {
       if (error) {
@@ -58,7 +61,7 @@ class RedisClient {
     })
   }
 
-  end() {
+  async end() {
     console.log('Disconnecting Redis client')
     this.redisClient.quit()
   }

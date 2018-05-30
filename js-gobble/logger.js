@@ -5,27 +5,31 @@ class Logger {
 
   constructor() {
     // do not forget the trailing slash (/) at the end of the url
-    this.log_url = 'http://149.28.25.177/hidden-api/gateway-states/'
+    this.logURL = 'http://149.28.25.177/hidden-api/gateway-states/'
     this.date = new Date().toISOString().slice(0, 10).replace(/-/gi, '')
   }
 
-  set_log(task_name, state, log) {
-    this.task_name = task_name
+  async setLog(taskName, state, log) {
+    this.taskName = taskName
     this.state = state
     this.log = log
+    console.log('setting log data')
 
-    this._save_log()
+    await this._saveLog()
+    .then( response => { console.log(this.log) } )
+    .catch( error => { console.log('set log failed') } )
   }
 
-  _save_log() {
-    axios.post(this.log_url, {
+  async _saveLog() {
+    console.log('creating axios inst')
+    let postData = await axios.post(this.logURL, {
       'date': this.date,
-      'task_name': this.task_name,
+      'task_name': this.taskName,
       'state': this.state,
       'log': this.log
     })
-    .then( response => { console.log('set log complete') } )
-    .catch( error => { console.log('set log failed') } )
+    console.log('returning axios promise')
+    return postData
   }
 
 }

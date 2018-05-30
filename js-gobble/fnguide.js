@@ -1,4 +1,5 @@
 const puppeteer = require('puppeteer')
+const Logger = require('./logger.js')
 
 String.prototype.format = function() {
   // es5 synatax
@@ -30,7 +31,12 @@ const URL = {
 
 class Puppet {
 
-  constructor() {
+  constructor(taskName) {
+    // always start the logger first
+    // log every process you do so you can check it from the gateway webpage
+    this.logger = new Logger.Logger()
+    this.taskName = taskName
+
     // user id and pw
     this.id = 'flex80'
     this.pw = '80_sangbum'
@@ -39,13 +45,17 @@ class Puppet {
     this.width = 1920
     this.height = 1080
 
-    let today_date = new Date().toISOString().slice(0, 10).replace(/-/gi, '')
-    console.log(`Today date: ${today_date}`)
-
-    console.log('FnGuide puppet starting...')
+    this.todayDate = new Date().toISOString().slice(0, 10).replace(/-/gi, '')
   }
 
-  async start_browser(headless_bool=true, slowMo_time=100) {
+  async logInitialized() {
+    // log that you have successfully started Puppeteer
+    await this.logger.setLog(this.taskName, 'P', 'Today date: ' + this.todayDate)
+    await this.logger.setLog(this.taskName, 'P', 'FnGuide puppet starting...')
+  }
+
+  async startBrowser(headless_bool=true, slowMo_time=100) {
+    // set attribute values to local variables for ease of use
     let width = this.width
     let height = this.height
 
@@ -59,44 +69,66 @@ class Puppet {
     this.page = await this.browser.newPage()
 
     await this.page.setViewport({ width, height })
-  }
-
-  async goTo() {
-    let page = this.page
-
-    console.log(URL.LOGIN_PAGE)
-    await page.goto(URL.LOGIN_PAGE)
+    await this.logger.setLog(this.taskName, 'P', 'Puppeteer browser ready to gobble data')
   }
 
   async login() {
     // go to login page and login
     let page = this.page
 
-    const id_input_selector = '#txtID'
-    const pw_input_selector = '#txtPW'
-    const login_btn_selector = '#container > div > div > div.log--wrap > div.log--area > form > div > fieldset > button'
-    const logout_other_ip_user_btn_selector = '#divLogin > div.lay--popFooter > form > button.btn--back'
-    const user_id_selector = 'body > div.header > div > div.util > p > span:nth-child(1)'
-    await page.goto(LOGIN_PAGE)
-    await page.waitForSelector(id_input_selector)
-    await page.click(id_input_selector)
-    await page.type(id_input_selector, this.id)
-    await page.click(pw_input_selector)
-    await page.type(pw_input_selector, this.pw)
-    await page.click(login_btn_selector)
+    const IDInputSelector = '#txtID'
+    const PWInputSelector = '#txtPW'
+    const loginBtnSelector = '#container > div > div > div.log--wrap > div.log--area > form > div > fieldset > button'
+    const logoutOtherIPUserBtnSelector = '#divLogin > div.lay--popFooter > form > button.btn--back'
+    const FnguideLogoSelector = 'body > div.header > div > h1 > a'
+    // const userIDSelector = 'body > div.header > div > div.util > p > span:nth-child(1)'
+    await page.goto(URL.LOGIN_PAGE)
+    await page.waitForSelector(IDInputSelector)
+    await page.click(IDInputSelector)
+    await page.type(IDInputSelector, this.id)
+    await page.click(PWInputSelector)
+    await page.type(PWInputSelector, this.pw)
+    await page.click(loginBtnSelector)
 
-    const logout_other_ip_user_btn_exists = await page.$eval(
-      logout_other_ip_user_btn_selector,
+    const logoutOtherIPUserBtnExists = await page.$eval(
+      logoutOtherIPUserBtnSelector,
       el => (el ? true : false)
     )
-    if (logout_other_ip_user_btn_exists) {
-      await page.click(logout_other_ip_user_btn_selector)
-      await page.waitForSelector(user_id_selector)
-    } else {
-      await page.waitForSelector(user_id_selector)
+    if (logoutOtherIPUserBtnExists) {
+      await page.click(logoutOtherIPUserBtnSelector)
     }
 
-    console.log('user logged in, ready to scrape data')
+    // issues with waitForSelector
+    // force wait for 5 seconds before waitForSelector
+    // initially waited for userIDSelector but didn't work
+    // so now waiting for FnguideLogoSelector
+    await page.waitForSelector(FnguideLogoSelector)
+    // await page.waitForSelector(userIDSelector)
+
+    await this.logger.setLog(this.taskName, 'P', 'User logged in, ready to gobble')
+  }
+
+  async massDateCrawl() {
+    let page = this.page
+
+    // set headers to fool Fnguide
+    await page.setExtraHTTPHeaders({
+      'Referer': 'http://www.fnguide.com/fgdd/StkIndmByTime',
+      'X-Requested-With': 'XMLHttpRequest'
+    })
+    let dateURL = URL.API.date.format(this.todayDate)
+    await page.goto(dateURL)
+    const dateData = await page.evaluate(() => {
+        let data = JSON.parse(document.querySelector('body').innerText)
+        return data
+    })
+    
+    return dateData
+  }
+
+  async done() {
+    await this.browser.close()
+    await this.logger.setLog(this.taskName, 'P', 'Gobbling complete, Puppeteer browser closed')
   }
 
 }

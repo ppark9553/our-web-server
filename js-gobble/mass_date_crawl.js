@@ -8,16 +8,17 @@ const main = async () => {
   let logger = new Logger.Logger()
 
   // log start process
-  await logger.set_log(task_name, 'P', 'starting mass_date_crawl.js script')
+  await logger.setLog(task_name, 'P', 'starting mass_date_crawl.js script')
 
   // process
   console.log('mass_date_crawl starting')
-  let fn = new Fnguide.Puppet()
-  await fn.start_browser(false, 100)
-  await fn.goTo()
+  let fn = new Fnguide.Puppet(task_name)
+  fn.start_browser(false, 100)
+    .then( status => { console.log(status) })
+    .catch( error => { console.log(error) })
 
   // log end process
-  await logger.set_log(task_name, 'P', 'ran mass_date_crawl.js successfully')
+  await logger.setLog(task_name, 'P', 'ran mass_date_crawl.js successfully')
 
 }
 

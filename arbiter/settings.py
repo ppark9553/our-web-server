@@ -152,14 +152,14 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
 
-if THIS_SYSTEM == 'web' or THIS_SYSTEM == 'db':
+if THIS_SYSTEM == 'web' or THIS_SYSTEM == 'db' or THIS_SYSTEM == 'cache':
     # setup DB + Cache Server with Redis as cache
     # direct other servers to cache server for caches
     # ACCESS TO::: !!!only web and db servers have access to caches!!!
     CACHES = {
         "default": {
             "BACKEND": "django_redis.cache.RedisCache",
-            "LOCATION": "redis://{}:6379/".format(CONFIG['ip-address']['db']),
+            "LOCATION": "redis://{}:6379/".format(CONFIG['ip-address']['cache']),
             "OPTIONS": {
                 "CLIENT_CLASS": "django_redis.client.DefaultClient",
             }
