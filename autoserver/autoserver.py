@@ -1,6 +1,8 @@
 from fabric.api import cd, env, local, run, sudo, settings, put, open_shell
 from fabric.contrib.files import exists
 
+from arbiter.config import CONFIG
+
 class Autoserver(object):
     '''
     Autoserver wraps up basic commands needed for deploying and managing Ubuntu (Debian based) servers.

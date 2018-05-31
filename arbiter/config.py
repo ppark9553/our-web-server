@@ -38,7 +38,18 @@ CONFIG = {
         # general server variables
         'ROOT_PW': '6bf11c214d3481c681a83a948983e79233cac39150a64bdbc0a043f2d36d362f',
         'USER_PW': 'bc1504e8a4067f798fb1caed16ecf06716d37d883894e4df8709b7863f3c4368',
-        'CACHE_PW': 'da56038fa453c22d2c46e83179126e97d4d272d02ece83eb83a97357e842d065'
+        'CACHE_PW': 'da56038fa453c22d2c46e83179126e97d4d272d02ece83eb83a97357e842d065',
+
+        # variables for deployment
+        'PROJECT_NAME': 'buzzz',
+        'GITHUB_REPO': 'https://github.com/ppark9553/our-web-server.git',
+        'USER_ID': 'arbiter',
+        'UWSGI_INI': 'buzzz.ini',
+        'UWSGI_SERVICE': 'uwsgi.service',
+        'NGINX_CONF': 'buzzz.conf',
+        'SUPERVISOR_CELERY': 'celery.conf',
+        'SUPERVISOR_CELERYBEAT': 'celerybeat.conf',
+        'REDIS_CONF': 'redis.conf'
     },
 
     'ip-address': {
@@ -52,12 +63,12 @@ CONFIG = {
     },
 
     'initial-deploy-pw': {
-        'web': '',
-        'db': '',
-        'cache': '',
-        'gateway': '',
-        'gobble': '',
-        'mined': ''
+        'web': '9hJ@ax}b2[$f.6!R',
+        'db': '6Q]oCM*VsH46EA-%',
+        'cache': 'mG,3=.7+vyZs]--w',
+        'gateway': '+8HjS?3KXmKN6raW',
+        'gobble': '1a_H)4,(1D-Jfg75',
+        'mined': 'Jf9,SKAgJ7Y}6DWB'
     }
 
 }

@@ -20,12 +20,20 @@ js_gobble_reinstall
 
 ###### OPEN SHELL TASKS ######
 ==> opens up shell as user: arbiter, in this case
+root_web_shell
+root_db_shell
+root_cache_shell
+root_gateway_shell
+root_gobble_shell
+root_mined_shell
 web_shell
 db_shell
 cache_shell
 gateway_shell
 gobble_shell
 mined_shell
+
+###### INITIAL DEPLOY TASKS ######
 '''
 
 from fabric.api import *
@@ -50,6 +58,7 @@ env.hosts = [
 
 # set passwords for each hosts defined above
 env.passwords = {
+    local_ip: '',
     root_web: web_pw,
     root_db: db_pw,
     root_cache: cache_pw,
@@ -140,6 +149,42 @@ def js_gobble_reinstall():
 
 ###### OPEN SHELL TASKS ######
 @task
+@hosts(root_web)
+def root_web_shell():
+    env.password = web_pw
+    open_shell()
+
+@task
+@hosts(root_db)
+def root_db_shell():
+    env.password = db_pw
+    open_shell()
+
+@task
+@hosts(root_cache)
+def root_cache_shell():
+    env.password = cache_pw
+    open_shell()
+
+@task
+@hosts(root_gateway)
+def root_gateway_shell():
+    env.password = gateway_pw
+    open_shell()
+
+@task
+@hosts(root_gobble)
+def root_gobble_shell():
+    env.password = gobble_pw
+    open_shell()
+
+@task
+@hosts(root_mined)
+def root_mined_shell():
+    env.password = mined_pw
+    open_shell()
+
+@task
 @hosts(arbiter_web)
 def web_shell():
     open_shell()
@@ -168,3 +213,6 @@ def gobble_shell():
 @hosts(arbiter_mined)
 def mined_shell():
     open_shell()
+
+
+###### INITIAL DEPLOY TASKS ######

@@ -3,11 +3,11 @@ from arbiter.config import CONFIG
 # define IP addresses to use in fabfile
 local_ip = CONFIG['ip-address']['local']
 web_ip = CONFIG['ip-address']['web']
-db_ip = CONFIG['ip-address']['web']
-cache_ip = CONFIG['ip-address']['web']
-gateway_ip = CONFIG['ip-address']['web']
-gobble_ip = CONFIG['ip-address']['web']
-mined_ip = CONFIG['ip-address']['web']
+db_ip = CONFIG['ip-address']['db']
+cache_ip = CONFIG['ip-address']['cache']
+gateway_ip = CONFIG['ip-address']['gateway']
+gobble_ip = CONFIG['ip-address']['gobble']
+mined_ip = CONFIG['ip-address']['mined']
 
 # define initial root password for initial server deploy
 web_pw = CONFIG['initial-deploy-pw']['web']
