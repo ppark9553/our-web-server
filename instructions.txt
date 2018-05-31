@@ -1,0 +1,21 @@
+***** HOW TO MANUALLY INSTALL SERVERS *****
+
+(check ./arbiter/config.py or ./js-gobble/config.js for server IP info)
+
+### manually deploying servers are tedious,
+### it is recommended to use the 'autoserver' tool
+### however, for testing purposes,
+### manually deploying servers will help understand your servers
+
+1. web:
+
+
+2. db:
+
+3. cache:
+
+4. gateway:
+
+5. gobble:
+
+6. mined:

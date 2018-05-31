@@ -14,5 +14,9 @@ sudo ufw allow 6379 # open port 6379 for remote access
 
 sudo systemctl restart redis-server
 
-# ensure background save
-redis-cli bgsave
+# # ensure background save
+# redis-cli bgsave
+
+# disable rdb and enable aof
+redis-cli config set appendonly yes
+redis-cli config set save ""

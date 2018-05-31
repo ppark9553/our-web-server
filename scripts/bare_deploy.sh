@@ -16,3 +16,10 @@ su -c "y" | sudo ufw enable
 
 # STEP 4: update
 sudo apt-get update # update OS
+
+# moving around code base
+cd /home/arbiter
+mkdir buzzz
+git clone https://github.com/ppark9553/our-web-server.git ./buzzz
+# remove the initially pulled repo now
+rm -r ~/our-web-server
