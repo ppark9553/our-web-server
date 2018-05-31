@@ -1,14 +1,33 @@
-WEB_SOCKET_SWF_LOCATION = 'inc/WebSocketMain.swf'
+// ajax call functions for gateway page
 
-// connect to socket.io server (gateway server)
-var socket = io.connect('http://108.61.161.113:3000')
-socket.on('connected', function (data) {
-    if (data.connected == true) {
-      console.log('webpage ready to load with changes in DB')
-    }
-    socket.emit('ready for data', {})
-})
-socket.on('update', function (data) {
-    console.log('project state updated')
-    console.log(data.message.payload)
-})
+function webpageStarting() {
+  console.log('buzzz gateway page starting')
+}
+
+function getDataByDate(date) {
+  // pass
+}
+
+// $.ajax({
+//   method: "POST",
+//   url: '/login/',
+//   data: {
+//       'email': email,
+//       'password': passwd
+//   },
+//   success: function(data){
+//     if (data == 200) {
+//       location.href = '/marketsignal'
+//     } else if (data == 400) {
+//       var msg = '아이디/비밀번호를 다시 확인해주세요'
+//       $('#msg-area').text(msg)
+//       $('#login_email').val('')
+//       $('#login_password').val('')
+//       $('#login_email').focus()
+//     }
+//
+//   },
+//   error: function(data){
+//     console.log(data.status)
+//   }
+// })
