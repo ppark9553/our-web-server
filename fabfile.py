@@ -156,6 +156,13 @@ def js_gobble_reinstall():
     local('rm -r /home/arbiter/js-gobble')
     local('sudo bash /home/arbiter/buzzz/js-gobble/setup.sh')
 
+@task
+@hosts(local_ip)
+def clean_known_hosts():
+    # for mac users
+    # delete all known host records
+    local('echo "" > /Users/abc/.ssh/known_hosts')
+
 
 ###### OPEN SHELL TASKS ######
 @task

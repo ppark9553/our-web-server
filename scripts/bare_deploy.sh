@@ -3,10 +3,10 @@
 ### SERVER DEPLOY AUTOMATION ###
 
 # STEP 1: change root user password
-echo -e "makeitpopwear!1\nmakeitpopwear!1" | passwd root
+echo -e "makeitpopwe123ARbiter;;\nmakeitpopwe123ARbiter;;" | passwd root
 
 # STEP 2: create new user and set password
-echo -e "projectargogo!\nprojectargogo!" | adduser arbiter
+echo -e "projectargogo123alright;;\nprojectargogo123alright;;" | adduser arbiter
 usermod -aG sudo arbiter
 
 # STEP 3: deploy firewall and allow ports 8000 and OpenSSH

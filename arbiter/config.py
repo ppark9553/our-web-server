@@ -65,7 +65,7 @@ CONFIG = {
     'initial-deploy-pw': {
         'web': '9hJ@ax}b2[$f.6!R',
         'db': '6Q]oCM*VsH46EA-%',
-        'cache': '?5Wk2V78GtoUnK1D',
+        'cache': '3Y#faMd91)@)w%LK',
         'gateway': '+8HjS?3KXmKN6raW',
         'gobble': '1a_H)4,(1D-Jfg75',
         'mined': 'Jf9,SKAgJ7Y}6DWB'
