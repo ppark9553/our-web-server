@@ -13,6 +13,9 @@
 2. db:
 
 3. cache:
+git clone https://github.com/ppark9553/our-web-server.git
+sudo bash ./our-web-server/scripts/bare_deploy.sh
+sudo bash /home/arbiter/buzzz/scripts/deploy_redis.sh
 
 4. gateway:
 
