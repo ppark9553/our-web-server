@@ -17,6 +17,7 @@ lazy_commit
 server_reload
 restart_celery
 js_gobble_reinstall
+clean_known_hosts
 
 ###### OPEN SHELL TASKS ######
 ==> opens up shell as user: arbiter, in this case
@@ -41,6 +42,9 @@ mined_shell
 
 ###### INITIAL DEPLOY TASKS ######
 init_servers
+
+###### SERVER SPECIFIC TASKS ######
+monitor_redis
 '''
 
 from fabric.api import *
@@ -204,31 +208,37 @@ def init_mined_shell():
 @task
 @hosts(root_web)
 def root_web_shell():
+    env.password = root_pw
     open_shell()
 
 @task
 @hosts(root_db)
 def root_db_shell():
+    env.password = root_pw
     open_shell()
 
 @task
 @hosts(root_cache)
 def root_cache_shell():
+    env.password = root_pw
     open_shell()
 
 @task
 @hosts(root_gateway)
 def root_gateway_shell():
+    env.password = root_pw
     open_shell()
 
 @task
 @hosts(root_gobble)
 def root_gobble_shell():
+    env.password = root_pw
     open_shell()
 
 @task
 @hosts(root_mined)
 def root_mined_shell():
+    env.password = root_pw
     open_shell()
 
 @task
@@ -273,3 +283,11 @@ def mined_shell():
 @hosts(env.hosts[1:7])
 def init_servers():
     server_init()
+
+
+###### SERVER SPECIFIC TASKS ######
+@task
+@hosts(root_cache)
+def monitor_redis():
+    env.password = root_pw
+    run('redis-cli -a da56038fa453c22d2c46e83179126e97d4d272d02ece83eb83a97357e842d065 monitor')

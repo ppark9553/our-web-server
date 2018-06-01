@@ -11,7 +11,7 @@ usermod -aG sudo arbiter
 
 # STEP 3: deploy firewall and allow ports 8000 and OpenSSH
 sudo ufw app list
-sudo ufw allow OpenSSHfab
+sudo ufw allow OpenSSH
 su -c "y" | sudo ufw enable
 
 # STEP 4: update

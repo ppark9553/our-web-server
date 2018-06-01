@@ -16,6 +16,7 @@ cache_pw = CONFIG['initial-deploy-pw']['cache']
 gateway_pw = CONFIG['initial-deploy-pw']['gateway']
 gobble_pw = CONFIG['initial-deploy-pw']['gobble']
 mined_pw = CONFIG['initial-deploy-pw']['mined']
+root_pw = CONFIG['common']['ROOT_PW']
 arbiter_pw = CONFIG['common']['USER_PW']
 
 # define SSH connection destinations with users in front

@@ -20,7 +20,7 @@ sudo apt-get install python3-pip python3-dev libpq-dev postgresql postgresql-con
 
 # DB settings
 su -c "psql -c \"CREATE DATABASE arbiter;\"" postgres
-su -c "psql -c \"CREATE USER arbiter WITH PASSWORD 'makeitpopweAR!1';\"" postgres
+su -c "psql -c \"CREATE USER arbiter WITH PASSWORD 'makeitpopwe123arBITER!1';\"" postgres
 su -c "psql -c \"ALTER ROLE arbiter SET client_encoding TO 'utf8';\"" postgres
 su -c "psql -c \"ALTER ROLE arbiter SET default_transaction_isolation TO 'read committed';\"" postgres
 su -c "psql -c \"ALTER ROLE arbiter SET timezone TO 'UTC';\"" postgres

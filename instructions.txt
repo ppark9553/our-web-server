@@ -7,20 +7,20 @@
 ### however, for testing purposes,
 ### manually deploying servers will help understand your servers
 
-1. web:
+1. web: (DOWN)
 
 
-2. db:
+2. db: (DOWN)
 
-3. cache:
+3. cache: (UP)
 git clone https://github.com/ppark9553/our-web-server.git
 cd our-web-server/scripts
 sudo bash bare_deploy.sh
 cd /home/arbiter/buzzz/scripts
 sudo bash deploy_redis.sh
 
-4. gateway:
+4. gateway: (DOWN)
 
-5. gobble:
+5. gobble: (DOWN)
 
-6. mined:
+6. mined: (DOWN)
