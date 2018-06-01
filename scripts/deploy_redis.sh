@@ -18,6 +18,5 @@ sudo systemctl restart redis-server
 # redis-cli bgsave
 
 # disable rdb and enable aof
-redis-cli auth da56038fa453c22d2c46e83179126e97d4d272d02ece83eb83a97357e842d065
-redis-cli config set appendonly yes
-redis-cli config set save ""
+redis-cli -a da56038fa453c22d2c46e83179126e97d4d272d02ece83eb83a97357e842d065 config_peepee set appendonly yes
+redis-cli -a da56038fa453c22d2c46e83179126e97d4d272d02ece83eb83a97357e842d065 config_peepee set save ""
