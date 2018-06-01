@@ -12,7 +12,7 @@ usermod -aG sudo arbiter
 # STEP 3: deploy firewall and allow ports 8000 and OpenSSH
 sudo ufw app list
 sudo ufw allow OpenSSH
-su -c "y" | sudo ufw enable
+sudo ufw enable
 
 # STEP 4: download PostgreSQL and tweak settings
 sudo apt-get update # update OS

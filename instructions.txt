@@ -10,7 +10,7 @@
 1. web: (DOWN)
 
 
-2. db: (DOWN)
+2. db: (UP)
 git clone https://github.com/ppark9553/our-web-server.git
 cd our-web-server/scripts
 sudo bash deploy_step_one.sh
