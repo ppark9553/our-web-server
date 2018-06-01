@@ -9,7 +9,7 @@ from accounts.api.views import (
     ProfileDetailsAPIView,
 )
 
-accounts_api_urlpatterns = [
+urlpatterns = [
     # token maker
     url(r'^get-token/', obtain_auth_token),
 
