@@ -102,4 +102,22 @@ def testCache():
     print(res[0])
     print('==========')
 
+### testing for django specific cache ###
+from django.core.cache import cache
+from django.conf import settings
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
+
+CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
+
+def testDjangoCache():
+    print('Test cache can set value')
+    cache.set('django_test', 'hello hello')
+    print('==========')
+
+    print('Test cache can get value')
+    val = cache.get('django_test')
+    print(val)
+    print('==========')
+
 testCache()
+testDjangoCache()
