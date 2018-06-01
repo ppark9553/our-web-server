@@ -1,35 +1,58 @@
 from fabric.api import cd, env, local, run, sudo, settings, put, open_shell
 from fabric.contrib.files import exists
 
-from arbiter.config import CONFIG
+from .config import CONFIG
+
+
+class BuzzzConfig(object):
+
+    def __init__(self, this_system):
+        self.config = {
+            'project_name': CONFIG['common']['PROJECT_NAME'],
+            'github_repo': CONFIG['common']['GITHUB_REPO'],
+            'ip_address': CONFIG['ip-address'][this_system],
+            'root_pw': CONFIG['common']['ROOT_PW'],
+            'user_id': CONFIG['common']['USER_ID'],
+            'user_pw': CONFIG['common']['USER_PW'],
+            'db_id': CONFIG['common']['DB_USER'],
+            'db_pw': CONFIG['common']['DB_PW'],
+            'uwsgi_ini': CONFIG['common']['UWSGI_INI'],
+            'uwsgi_service': CONFIG['common']['UWSGI_SERVICE'],
+            'nginx_conf': CONFIG['common']['NGINX_CONF'],
+            'supervisor_celery': CONFIG['common']['SUPERVISOR_CELERY'],
+            'supervisor_celerybeat': CONFIG['common']['SUPERVISOR_CELERYBEAT'],
+            'redis_conf': CONFIG['common']['REDIS_CONF']
+        }
+
+    def get_conf(self):
+        return self.config
+
 
 class Autoserver(object):
     '''
     Autoserver wraps up basic commands needed for deploying and managing Ubuntu (Debian based) servers.
     '''
 
-    def __init__(self, project_name='', github_repo='', ip_address='', \
-                 root_pw='', user_id='', user_pw='', db_id='', db_pw='', \
-                 uwsgi_ini='', uwsgi_service='', nginx_conf='', \
-                 supervisor_celery='', supervisor_celerybeat=''):
-        # initialize Autoserver instance with github_repo, ip_address, root_pw, user_id, user_pw, db_id, and db_pw
-        # uwsgi_ini, uwsgi_service, nginx_conf, supervisor_celery, supervisor_celerybeat data
+    def __init__(self, config_obj):
+        # initialize Autoserver instance with a config object
+        # in this case we will use the BuzzzConfig object after instantiating it
         # you are most likely to get these data from config.py file
-        self.PROJECT_NAME = project_name
-        self.GITHUB_REPO = github_repo
-        self.IP_ADDRESS = ip_address
-        self.ROOT_PW = root_pw
-        self.USER_ID = user_id
-        self.USER_PW = user_pw
-        self.DB_ID = db_id
-        self.DB_PW = db_pw
+        self.PROJECT_NAME = config_obj['project_name']
+        self.GITHUB_REPO = config_obj['github_repo']
+        self.IP_ADDRESS = config_obj['ip_address']
+        self.ROOT_PW = config_obj['root_pw']
+        self.USER_ID = config_obj['user_id']
+        self.USER_PW = config_obj['user_pw']
+        self.DB_ID = config_obj['db_id']
+        self.DB_PW = config_obj['db_pw']
 
         # configuration file names
-        self.UWSGI_INI = uwsgi_ini
-        self.UWSGI_SERVICE = uwsgi_service
-        self.NGINX_CONF = nginx_conf
-        self.SUPERVISOR_CELERY = supervisor_celery
-        self.SUPERVISOR_CELERYBEAT = supervisor_celerybeat
+        self.UWSGI_INI = config_obj['uwsgi_ini']
+        self.UWSGI_SERVICE = config_obj['uwsgi_service']
+        self.NGINX_CONF = config_obj['nginx_conf']
+        self.SUPERVISOR_CELERY = config_obj['supervisor_celery']
+        self.SUPERVISOR_CELERYBEAT = config_obj['supervisor_celerybeat']
+        self.REDIS_CONF = config_obj['redis_conf']
 
         print(
         '''
@@ -47,6 +70,7 @@ class Autoserver(object):
         NGINX configuration file: {10}
         Supervisor celery file: {11}
         Supervisor celerybeat file: {12}
+        Redis configuaration file: {13}
         '''.format(self.PROJECT_NAME,
                    self.GITHUB_REPO,
                    self.IP_ADDRESS,
@@ -59,9 +83,14 @@ class Autoserver(object):
                    self.UWSGI_SERVICE,
                    self.NGINX_CONF,
                    self.SUPERVISOR_CELERY,
-                   self.SUPERVISOR_CELERYBEAT
+                   self.SUPERVISOR_CELERYBEAT,
+                   self.REDIS_CONF
                    )
         )
+
+    def update(self):
+        run('sudo apt-get update')
+        return True
 
     ### TEST PASSED ###
     def set_root_password(self):
@@ -82,6 +111,22 @@ class Autoserver(object):
         run('sudo ufw app list')
         run('sudo ufw allow OpenSSH')
         run('echo -e "y" | sudo ufw enable')
+        return True
+
+    ### TEST PASSED ###
+    def pull_github_code(self):
+        # create project folder to move your github code into
+        with settings(warn_only=True):
+            run('mkdir /home/{0}/{1}'.format(self.USER_ID, self.PROJECT_NAME))
+        with cd('/home/{0}/{1}'.format(self.USER_ID, self.PROJECT_NAME)):
+            run('git clone {}'.format(self.GITHUB_REPO)) # clone your github code
+            repo_name = self.GITHUB_REPO.split('/')[-1].split('.')[0] # get your github repo name
+            with settings(warn_only=True):
+                # move your github repo code into your specified directory
+                run('mv ./{0}/* /home/{1}/{2}'.format(repo_name,
+                                                      self.USER_ID,
+                                                      self.PROJECT_NAME))
+                run('rm -r {}'.format(repo_name))
         return True
 
     ### TEST PASSED ###
@@ -126,22 +171,6 @@ class Autoserver(object):
         run('echo "source /usr/local/bin/virtualenvwrapper.sh" >> ~/.bashrc')
         # final step of this is to reboot server
         run('source ~/.bashrc')
-        return True
-
-    ### TEST PASSED ###
-    def pull_github_code(self):
-        # create project folder to move your github code into
-        with settings(warn_only=True):
-            run('mkdir /home/{0}/{1}'.format(self.USER_ID, self.PROJECT_NAME))
-        with cd('/home/{0}/{1}'.format(self.USER_ID, self.PROJECT_NAME)):
-            run('git clone {}'.format(self.GITHUB_REPO)) # clone your github code
-            repo_name = self.GITHUB_REPO.split('/')[-1].split('.')[0] # get your github repo name
-            with settings(warn_only=True):
-                # move your github repo code into your specified directory
-                run('mv ./{0}/* /home/{1}/{2}'.format(repo_name,
-                                                      self.USER_ID,
-                                                      self.PROJECT_NAME))
-                run('rm -r {}'.format(repo_name))
         return True
 
     def setup_nginx_uwsgi(self):

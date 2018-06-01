@@ -20,6 +20,12 @@ js_gobble_reinstall
 
 ###### OPEN SHELL TASKS ######
 ==> opens up shell as user: arbiter, in this case
+init_web_shell
+init_db_shell
+init_cache_shell
+init_gateway_shell
+init_gobble_shell
+init_mined_shell
 root_web_shell
 root_db_shell
 root_cache_shell
@@ -34,10 +40,14 @@ gobble_shell
 mined_shell
 
 ###### INITIAL DEPLOY TASKS ######
+init_servers
 '''
 
 from fabric.api import *
 from fab_settings import *
+
+from autoserver.common import server_init
+from autoserver.web import deploy_web
 
 # variables here are defined in fab_settings.py
 env.hosts = [
@@ -150,69 +160,109 @@ def js_gobble_reinstall():
 ###### OPEN SHELL TASKS ######
 @task
 @hosts(root_web)
-def root_web_shell():
+def init_web_shell():
     env.password = web_pw
     open_shell()
 
 @task
 @hosts(root_db)
-def root_db_shell():
+def init_db_shell():
     env.password = db_pw
     open_shell()
 
 @task
 @hosts(root_cache)
-def root_cache_shell():
+def init_cache_shell():
     env.password = cache_pw
     open_shell()
 
 @task
 @hosts(root_gateway)
-def root_gateway_shell():
+def init_gateway_shell():
     env.password = gateway_pw
     open_shell()
 
 @task
 @hosts(root_gobble)
-def root_gobble_shell():
+def init_gobble_shell():
     env.password = gobble_pw
     open_shell()
 
 @task
 @hosts(root_mined)
-def root_mined_shell():
+def init_mined_shell():
     env.password = mined_pw
+    open_shell()
+
+@task
+@hosts(root_web)
+def root_web_shell():
+    open_shell()
+
+@task
+@hosts(root_db)
+def root_db_shell():
+    open_shell()
+
+@task
+@hosts(root_cache)
+def root_cache_shell():
+    open_shell()
+
+@task
+@hosts(root_gateway)
+def root_gateway_shell():
+    open_shell()
+
+@task
+@hosts(root_gobble)
+def root_gobble_shell():
+    open_shell()
+
+@task
+@hosts(root_mined)
+def root_mined_shell():
     open_shell()
 
 @task
 @hosts(arbiter_web)
 def web_shell():
+    env.password = arbiter_pw
     open_shell()
 
 @task
 @hosts(arbiter_db)
 def db_shell():
+    env.password = arbiter_pw
     open_shell()
 
 @task
 @hosts(arbiter_cache)
 def cache_shell():
+    env.password = arbiter_pw
     open_shell()
 
 @task
 @hosts(arbiter_gateway)
 def gateway_shell():
+    env.password = arbiter_pw
     open_shell()
 
 @task
 @hosts(arbiter_gobble)
 def gobble_shell():
+    env.password = arbiter_pw
     open_shell()
 
 @task
 @hosts(arbiter_mined)
 def mined_shell():
+    env.password = arbiter_pw
     open_shell()
 
 
 ###### INITIAL DEPLOY TASKS ######
+@task
+@hosts(env.hosts[1:7])
+def init_servers():
+    server_init()
