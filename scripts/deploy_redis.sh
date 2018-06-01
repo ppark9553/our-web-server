@@ -7,7 +7,7 @@ echo "vm.overcommit_memory=1" >> /etc/sysctl.conf
 sudo sysctl -p /etc/sysctl.conf
 
 # install and setup firewall for Redis
-su -c "y" | sudo apt-get install redis-server
+sudo apt-get install redis-server
 rm /etc/redis/redis.conf # remove the original redis.conf file
 sudo cp /home/arbiter/buzzz/config/redis/redis.conf /etc/redis/redis.conf # replace the redis.conf file
 sudo ufw allow 6379 # open port 6379 for remote access
