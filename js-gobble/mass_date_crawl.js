@@ -4,11 +4,11 @@ const Fnguide = require('./fnguide.js')
 
 const main = async () => {
 
-  let task_name = 'mass_date_crawl'
+  let task_name = 'MASS_DATE_CRAWL'
   let logger = new Logger.Logger()
 
   // log start process
-  await logger.setLog(task_name, 'P', 'starting mass_date_crawl.js script')
+  await logger.setLog(task_name, 'P', 'starting MASS_DATE_CRAWL.js script')
 
   // process
   console.log('mass_date_crawl starting')
@@ -18,7 +18,7 @@ const main = async () => {
     .catch( error => { console.log(error) })
 
   // log end process
-  await logger.setLog(task_name, 'P', 'ran mass_date_crawl.js successfully')
+  await logger.setLog(task_name, 'P', 'ran MASS_DATE_CRAWL.js successfully')
 
 }
 

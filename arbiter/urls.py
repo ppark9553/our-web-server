@@ -10,6 +10,7 @@ urlpatterns = [
 
     url(r'^$', HomeView.as_view(), name='home'),
     url(r'^gateway/$', GatewayView.as_view(), name='gateway'),
+    url(r'^auth-api/', include('accounts.api.urls', namespace='authapi')),
     url(r'^stock-api/', include('stockapi.urls', namespace='stockapi')),
     url(r'^hidden-api/', include('gateway.urls', namespace='hiddenapi')),
 ]

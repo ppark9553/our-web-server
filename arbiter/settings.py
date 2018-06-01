@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
 
     # define arbiter specific app names here
+    'accounts',
     'stockapi',
     'gateway'
 ]

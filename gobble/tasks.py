@@ -24,10 +24,10 @@ from gateway.logger import GatewayLogger
 
 @task(name="mass_date_crawl")
 def mass_date_crawl():
-    task_name = 'mass_date_crawl'
+    task_name = 'MASS_DATE_CRAWL'
     # log to gateway server
     logger = GatewayLogger() # initialize logger
-    logger.set_log(task_name, 'P', 'gobble server received task: mass_date_crawl')
+    logger.set_log(task_name, 'P', 'gobble server received task: {}'.format(task_name))
     local('node /home/arbiter/js-gobble/{}.js'.format(task_name))
     logger.set_log(task_name, 'P', 'running "node /home/arbiter/js-gobble/{}.js"'.format(task_name))
     return True

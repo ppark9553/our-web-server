@@ -42,6 +42,7 @@ class GatewayReducer(object):
         print('get state')
 
     def mass_date_crawl(self):
+        # send to js-gobble because crawling needs to use javascript
         mass_date_crawl.delay()
 
     def mass_date_save(self, save_at, cached_key):
