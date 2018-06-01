@@ -56,6 +56,11 @@ async function testCache() {
 
   let key = 'testcache'
 
+  console.log('Test cache can authenticate user')
+  let auth = await c.auth()
+  console.log(auth)
+  console.log('==========')
+
   console.log('Test cache can set key')
   let status = await c.setKey(key, 'testing cache set key')
   console.log(status == true)

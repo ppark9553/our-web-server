@@ -6,6 +6,7 @@ const Logger = require('./logger.js')
 const CONFIG = require('./config.js')
 
 const GOBBLE_IP = CONFIG.ip.cache
+const PW = CONFIG.common.CACHE_PW
 
 
 class RedisClient {
@@ -25,6 +26,12 @@ class RedisClient {
     // this.redisClient.on('error', error => {
     //   console.log(`Something went wrong: ${error}`)
     // })
+  }
+
+  async auth() {
+    // user login for Redis server (security purposes)
+    let response = await this.redisClient.auth(PW)
+    return response
   }
 
   // regular set, get of single values
