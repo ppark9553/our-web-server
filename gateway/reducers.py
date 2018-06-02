@@ -17,6 +17,7 @@ CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 from arbiter.config import CONFIG
 from gateway.models import GatewayState
+from gateway.logger import GatewayLogger
 from stockapi.models import Date
 
 from gobble.tasks import mass_date_crawl
@@ -24,8 +25,17 @@ from gobble.tasks import mass_date_crawl
 class GatewayReducer(object):
 
     def __init__(self, action):
+        self.logger = GatewayLogger()
 
         if action['type'] == 'GET_STATE':
+            reducer = getattr(self, action['reduce'])
+            self.reducer = reducer
+
+        elif action['type'] == 'TEST':
+            reducer = getattr(self, action['reduce'])
+            self.reducer = reducer
+
+        elif action['type'] == 'RESTART_TEST':
             reducer = getattr(self, action['reduce'])
             self.reducer = reducer
 
@@ -40,6 +50,12 @@ class GatewayReducer(object):
 
     def get_state(self):
         print('get state')
+
+    def test(self):
+        print('testing')
+
+    def restart_test(self):
+        print('restarting test')
 
     def mass_date_crawl(self):
         # send to js-gobble because crawling needs to use javascript

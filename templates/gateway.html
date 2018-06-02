@@ -63,7 +63,8 @@
       <script>
         // socket.io code here
         WEB_SOCKET_SWF_LOCATION = 'inc/WebSocketMain.swf'
-        var socket = io.connect('http://108.61.161.113:3000')
+        // ip address should be that of gateway server
+        var socket = io.connect('http://149.28.25.177:3000')
 
         socket.on('connected', function(data) {
           if (data.connected == true) {
