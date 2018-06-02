@@ -294,7 +294,22 @@ def monitor_redis():
     run('redis-cli -a da56038fa453c22d2c46e83179126e97d4d272d02ece83eb83a97357e842d065 monitor')
 
 @task
-@hosts(env.hosts[1:4])
+@hosts(root_web)
+def apply_change_to_web():
+    env.user = 'root'
+    env.password = root_pw
+    virtualenv = '/home/arbiter/venv/buzzz/bin/python'
+    with cd('/home/arbiter/buzzz/'):
+        run('git pull')
+        run('{} manage.py makemigrations'.format(virtualenv))
+        run('{} manage.py migrate'.format(virtualenv))
+        run('rm -r static-dist')
+        run('mkdir static-dist')
+        run('{} manage.py collectstatic'.format(virtualenv))
+        run('sudo systemctl restart uwsgi')
+        run('sudo systemctl restart nginx')
+
+@task
 def apply_changes(commit_msg):
     env.user = 'root'
     env.password = root_pw
@@ -304,10 +319,4 @@ def apply_changes(commit_msg):
         local('git add -A')
         local('git commit -m "{}"'.format(commit_msg))
     local('git push')
-    with cd('/home/arbiter/buzzz/'):
-        run('git pull')
-        run('{} manage.py makemigrations'.format(virtualenv))
-        run('{} manage.py migrate'.format(virtualenv))
-        run('rm -r static-dist')
-        run('mkdir static-dist')
-        run('{} manage.py collectstatic'.format(virtualenv))
+    execute(apply_changes_to_web)
