@@ -22,6 +22,7 @@ from stockapi.models import Date
 
 from gobble.tasks import (
     test,
+    restart_test,
     mass_date_crawl,
 )
 
@@ -59,7 +60,7 @@ class GatewayReducer(object):
         test.delay()
 
     def restart_test(self):
-        print('restarting test')
+        restart_test.delay()
 
     def mass_date_crawl(self):
         # send to js-gobble because crawling needs to use javascript
