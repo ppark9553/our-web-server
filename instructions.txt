@@ -25,7 +25,7 @@ sudo bash deploy_step_one.sh
 mkvirtualenv buzzz
 cd /home/arbiter/buzzz
 pip install -r requirements.txt
-vim +\":%s/THIS_SYSTEM = 'web'/THIS_SYSTEM = 'db'/g | wq\" ./arbiter/config.py
+vim +":%s/THIS_SYSTEM = 'web'/THIS_SYSTEM = 'db'/g | wq" ./arbiter/config.py
 cd scripts
 sudo bash deploy_bare_redis.sh
 vim +":%s/server_name 127.0.0.1/server_name 45.77.134.175/g | wq" /etc/nginx/sites-available/buzzz.conf
@@ -39,14 +39,14 @@ cd /home/arbiter/buzzz/scripts
 sudo bash deploy_redis.sh
 
 
-4. gateway: (DOWN)
+4. gateway: (UP)
 git clone https://github.com/ppark9553/our-web-server.git
 cd our-web-server/scripts
 sudo bash deploy_web.sh
 mkvirtualenv buzzz
 cd /home/arbiter/buzzz
 pip install -r requirements.txt
-vim +\":%s/THIS_SYSTEM = 'web'/THIS_SYSTEM = 'gateway'/g | wq\" ./arbiter/config.py
+vim +":%s/THIS_SYSTEM = 'web'/THIS_SYSTEM = 'gateway'/g | wq" ./arbiter/config.py
 vim +":%s/server_name 127.0.0.1/server_name 149.28.25.177/g | wq" /etc/nginx/sites-available/buzzz.conf
 cd ws-server
 sudo bash setup.sh
@@ -58,7 +58,7 @@ sudo bash deploy_web.sh
 mkvirtualenv buzzz
 cd /home/arbiter/buzzz
 pip install -r requirements.txt
-vim +\":%s/THIS_SYSTEM = 'web'/THIS_SYSTEM = 'gobble'/g | wq\" ./arbiter/config.py
+vim +":%s/THIS_SYSTEM = 'web'/THIS_SYSTEM = 'gobble'/g | wq" ./arbiter/config.py
 vim +":%s/server_name 127.0.0.1/server_name 149.28.18.34/g | wq" /etc/nginx/sites-available/buzzz.conf
 cd scripts
 sudo bash deploy_workers.sh
@@ -75,7 +75,7 @@ sudo bash deploy_web.sh
 mkvirtualenv buzzz
 cd /home/arbiter/buzzz
 pip install -r requirements.txt
-vim +\":%s/THIS_SYSTEM = 'web'/THIS_SYSTEM = 'mined'/g | wq\" ./arbiter/config.py
+vim +":%s/THIS_SYSTEM = 'web'/THIS_SYSTEM = 'mined'/g | wq" ./arbiter/config.py
 vim +":%s/server_name 127.0.0.1/server_name 45.32.42.30/g | wq" /etc/nginx/sites-available/buzzz.conf
 cd scripts
 sudo bash deploy_workers.sh

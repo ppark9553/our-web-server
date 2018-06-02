@@ -32,7 +32,7 @@ CONFIG = {
         'DB_USER': 'arbiter',
         'DB_PW': 'makeitpopwe123arBITER!1',
         'AMQP_USER': 'arbiterbroker',
-        'AMQP_PW': 'dnqkrTJDRHD123ghkdlxld;;', # 우박성공123화이팅;;
+        'AMQP_PW': 'projectARgogo',
         'DEBUG': 'True',
 
         # general server variables
@@ -67,7 +67,7 @@ CONFIG = {
         'db': '4@Rb=ERy(},?UjD#',
         'cache': '3Y#faMd91)@)w%LK',
         'gateway': '(8tLXaZB]U+5@9=H',
-        'gobble': '1a_H)4,(1D-Jfg75',
+        'gobble': 'C=9a{ZUm5UU8NPx[',
         'mined': 'Jf9,SKAgJ7Y}6DWB'
     }
 
