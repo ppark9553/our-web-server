@@ -320,12 +320,13 @@ def apply_changes_to_db():
         run('sudo systemctl restart nginx')
 
 @task
+@hosts(local_ip)
 def apply_changes(commit_msg):
     env.user = 'root'
     env.password = root_pw
     virtualenv = '/home/arbiter/venv/buzzz/bin/python'
     # git add . > git commit then git pushes changes lazily
-    execute(new_static)
+    execute(static)
     with settings(warn_only=True):
         local('git add -A')
         local('git commit -m "{}"'.format(commit_msg))
