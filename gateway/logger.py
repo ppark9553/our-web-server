@@ -7,7 +7,7 @@ from arbiter.config import CONFIG
 class GatewayLogger(object):
 
     def __init__(self):
-        self.IP = socket.gethostbyname(socket.gethostname())
+        # self.IP = socket.gethostbyname(socket.gethostname())
         # loggin destination: gateway url
         self.gateway_ip = CONFIG['ip-address']['gateway']
         self.log_url = 'http://{}/hidden-api/gateway-states/'.format(self.gateway_ip)
