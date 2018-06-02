@@ -45,7 +45,12 @@ init_servers
 
 ###### SERVER SPECIFIC TASKS ######
 monitor_redis
-apply_changes
+apply_changes:commit_msg
+apply_ws_changes:commit_msg
+ws_reinstall
+apply_gobblejs_changes:commit_msg
+gobblejs_reinstall
+apply_all_changes:commit_msg
 '''
 
 from fabric.api import *
@@ -410,3 +415,61 @@ def apply_ws_changes(commit_msg):
     # reinstall ws-server on gateway server
     with cd('/home/arbiter/buzzz/ws-server/'):
         run('sudo bash reinstall.sh')
+
+@task
+@hosts(root_gateway)
+def ws_reinstall():
+    env.user = 'root'
+    env.password = root_pw
+    # reinstall ws-server on gateway server
+    with cd('/home/arbiter/buzzz/ws-server/'):
+        run('sudo bash reinstall.sh')
+
+@task
+@hosts(root_gobble)
+def apply_gobblejs_changes(commit_msg):
+    # git pushes all the changes on your devlepment machines
+    # and applies those changes to your other servers
+    env.user = 'root'
+    env.password = root_pw
+    # git add . > git commit then git pushes changes lazily
+    execute(static)
+    with settings(warn_only=True):
+        local('git add -A')
+        local('git commit -m "{}"'.format(commit_msg))
+    local('git push')
+    # reinstall js-gobble on gateway server
+    with cd('/home/arbiter/buzzz/js-gobble/'):
+        run('sudo bash reinstall.sh')
+
+@task
+@hosts(root_gobble)
+def gobblejs_reinstall():
+    env.user = 'root'
+    env.password = root_pw
+    # reinstall js-gobble on gateway server
+    with cd('/home/arbiter/buzzz/js-gobble/'):
+        run('sudo bash reinstall.sh')
+
+@task
+@hosts(local_ip)
+def apply_all_changes(commit_msg):
+    # git pushes all the changes on your devlepment machines
+    # and applies those changes to your other servers
+    env.user = 'root'
+    env.password = root_pw
+    virtualenv = '/home/arbiter/venv/buzzz/bin/python'
+    # git add . > git commit then git pushes changes lazily
+    execute(static)
+    with settings(warn_only=True):
+        local('git add -A')
+        local('git commit -m "{}"'.format(commit_msg))
+    local('git push')
+    execute(apply_changes_to_web)
+    execute(apply_changes_to_db)
+    execute(apply_changes_to_gateway)
+    execute(apply_changes_to_gobble)
+    execute(apply_changes_to_mined)
+
+    execute(ws_reinstall)
+    execute(gobblejs_reinstall)
