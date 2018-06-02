@@ -393,3 +393,19 @@ def apply_changes(commit_msg):
     execute(apply_changes_to_gateway)
     execute(apply_changes_to_gobble)
     execute(apply_changes_to_mined)
+
+@task
+@hosts(root_gateway)
+def apply_ws_changes(commit_msg):
+    # git pushes all the changes on your devlepment machines
+    # and applies those changes to your other servers
+    env.user = 'root'
+    env.password = root_pw
+    # git add . > git commit then git pushes changes lazily
+    execute(static)
+    with settings(warn_only=True):
+        local('git add -A')
+        local('git commit -m "{}"'.format(commit_msg))
+    local('git push')
+    # reinstall ws-server on gateway server
+    run('sudo bash /home/arbiter/buzzz/ws-server/reinstall.sh')
