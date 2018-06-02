@@ -303,9 +303,19 @@ def apply_changes_to_web():
         run('git pull')
         run('{} manage.py makemigrations'.format(virtualenv))
         run('{} manage.py migrate'.format(virtualenv))
-        run('rm -r static-dist')
-        run('mkdir static-dist')
-        run('{} manage.py collectstatic'.format(virtualenv))
+        run('sudo systemctl restart uwsgi')
+        run('sudo systemctl restart nginx')
+
+@task
+@hosts(root_db)
+def apply_changes_to_db():
+    env.user = 'root'
+    env.password = root_pw
+    virtualenv = '/home/arbiter/venv/buzzz/bin/python'
+    with cd('/home/arbiter/buzzz/'):
+        run('git pull')
+        run('{} manage.py makemigrations'.format(virtualenv))
+        run('{} manage.py migrate'.format(virtualenv))
         run('sudo systemctl restart uwsgi')
         run('sudo systemctl restart nginx')
 
@@ -315,8 +325,10 @@ def apply_changes(commit_msg):
     env.password = root_pw
     virtualenv = '/home/arbiter/venv/buzzz/bin/python'
     # git add . > git commit then git pushes changes lazily
+    execute(new_static)
     with settings(warn_only=True):
         local('git add -A')
         local('git commit -m "{}"'.format(commit_msg))
     local('git push')
     execute(apply_changes_to_web)
+    execute(apply_changes_to_db)
