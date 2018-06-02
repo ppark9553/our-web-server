@@ -67,8 +67,8 @@ CONFIG = {
         'db': '4@Rb=ERy(},?UjD#',
         'cache': '3Y#faMd91)@)w%LK',
         'gateway': '(8tLXaZB]U+5@9=H',
-        'gobble': 'C=9a{ZUm5UU8NPx[',
-        'mined': 'Jf9,SKAgJ7Y}6DWB'
+        'gobble': 'Qt(5tTwsDD7raEAj',
+        'mined': '{fR92qVn]drQb8hg'
     }
 
 }

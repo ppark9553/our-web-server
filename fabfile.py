@@ -322,6 +322,63 @@ def apply_changes_to_db():
         run('sudo systemctl restart nginx')
 
 @task
+@hosts(root_gateway)
+def apply_changes_to_gateway():
+    env.user = 'root'
+    env.password = root_pw
+    virtualenv = '/home/arbiter/venv/buzzz/bin/python'
+    with cd('/home/arbiter/buzzz/'):
+        run("vim +\":%s/THIS_SYSTEM = 'gateway'/THIS_SYSTEM = 'web'/g | wq\" ./arbiter/config.py")
+        run('git pull')
+        run("vim +\":%s/THIS_SYSTEM = 'web'/THIS_SYSTEM = 'gateway'/g | wq\" ./arbiter/config.py")
+        run('{} manage.py makemigrations'.format(virtualenv))
+        run('{} manage.py migrate'.format(virtualenv))
+        # gateway server needs to reinstall the websocket server (Node.js server)
+        run('sudo bash /home/arbiter/buzzz/ws-server/reinstall.sh')
+        run('sudo systemctl restart uwsgi')
+        run('sudo systemctl restart nginx')
+
+@task
+@hosts(root_gobble)
+def apply_changes_to_gobble():
+    env.user = 'root'
+    env.password = root_pw
+    virtualenv = '/home/arbiter/venv/buzzz/bin/python'
+    with cd('/home/arbiter/buzzz/'):
+        run("vim +\":%s/THIS_SYSTEM = 'gobble'/THIS_SYSTEM = 'web'/g | wq\" ./arbiter/config.py")
+        run('git pull')
+        run("vim +\":%s/THIS_SYSTEM = 'web'/THIS_SYSTEM = 'gobble'/g | wq\" ./arbiter/config.py")
+        run('{} manage.py makemigrations'.format(virtualenv))
+        run('{} manage.py migrate'.format(virtualenv))
+        # restart Rabbitmq task queue and Celery/Celerybeat then server
+        run('sudo systemctl restart rabbitmq-server')
+        run('sudo supervisorctl restart arbiter_celery')
+        run('sudo supervisorctl restart arbiter_celerybeat')
+        # gobble server needs to reinstall js-gobble
+        run('sudo bash /home/arbiter/buzzz/js-gobble/reinstall.sh')
+        run('sudo systemctl restart uwsgi')
+        run('sudo systemctl restart nginx')
+
+@task
+@hosts(root_mined)
+def apply_changes_to_mined():
+    env.user = 'root'
+    env.password = root_pw
+    virtualenv = '/home/arbiter/venv/buzzz/bin/python'
+    with cd('/home/arbiter/buzzz/'):
+        run("vim +\":%s/THIS_SYSTEM = 'mined'/THIS_SYSTEM = 'web'/g | wq\" ./arbiter/config.py")
+        run('git pull')
+        run("vim +\":%s/THIS_SYSTEM = 'web'/THIS_SYSTEM = 'mined'/g | wq\" ./arbiter/config.py")
+        run('{} manage.py makemigrations'.format(virtualenv))
+        run('{} manage.py migrate'.format(virtualenv))
+        # restart Rabbitmq task queue and Celery/Celerybeat then server
+        run('sudo systemctl restart rabbitmq-server')
+        run('sudo supervisorctl restart arbiter_celery')
+        run('sudo supervisorctl restart arbiter_celerybeat')
+        run('sudo systemctl restart uwsgi')
+        run('sudo systemctl restart nginx')
+
+@task
 @hosts(local_ip)
 def apply_changes(commit_msg):
     # git pushes all the changes on your devlepment machines
@@ -337,3 +394,6 @@ def apply_changes(commit_msg):
     local('git push')
     execute(apply_changes_to_web)
     execute(apply_changes_to_db)
+    # execute(apply_changes_to_gateway)
+    # execute(apply_changes_to_gobble)
+    # execute(apply_changes_to_mined)

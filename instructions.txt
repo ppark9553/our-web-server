@@ -63,6 +63,7 @@ vim +":%s/server_name 127.0.0.1/server_name 149.28.18.34/g | wq" /etc/nginx/site
 cd scripts
 sudo bash deploy_workers.sh
 /home/arbiter/venv/buzzz/bin/celery -A arbiter beat -l info
+sudo chown arbiter:arbiter celerybeat-schedule
 sudo supervisorctl restart arbiter_celery
 sudo supervisorctl restart arbiter_celerybeat
 cd ../js-gobble
@@ -80,5 +81,6 @@ vim +":%s/server_name 127.0.0.1/server_name 45.32.42.30/g | wq" /etc/nginx/sites
 cd scripts
 sudo bash deploy_workers.sh
 /home/arbiter/venv/buzzz/bin/celery -A arbiter beat -l info
+sudo chown arbiter:arbiter celerybeat-schedule
 sudo supervisorctl restart arbiter_celery
 sudo supervisorctl restart arbiter_celerybeat
