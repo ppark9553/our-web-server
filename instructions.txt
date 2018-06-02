@@ -8,7 +8,13 @@
 ### manually deploying servers will help understand your servers
 
 1. web: (DOWN)
-
+git clone https://github.com/ppark9553/our-web-server.git
+cd our-web-server/scripts
+sudo bash deploy_web.sh
+mkvirtualenv buzzz
+cd /home/arbiter/buzzz
+pip install -r requirements.txt
+vim +":%s/server_name 127.0.0.1/server_name 207.148.103.151/g | wq" /etc/nginx/sites-available/buzzz.conf
 
 2. db: (UP)
 git clone https://github.com/ppark9553/our-web-server.git

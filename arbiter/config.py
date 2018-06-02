@@ -63,7 +63,7 @@ CONFIG = {
     },
 
     'initial-deploy-pw': {
-        'web': '9hJ@ax}b2[$f.6!R',
+        'web': '4?BjP,TN]Gz.fGf,',
         'db': '4@Rb=ERy(},?UjD#',
         'cache': '3Y#faMd91)@)w%LK',
         'gateway': '+8HjS?3KXmKN6raW',
