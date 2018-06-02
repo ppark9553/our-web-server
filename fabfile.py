@@ -295,7 +295,7 @@ def monitor_redis():
 
 @task
 @hosts(root_web)
-def apply_change_to_web():
+def apply_changes_to_web():
     env.user = 'root'
     env.password = root_pw
     virtualenv = '/home/arbiter/venv/buzzz/bin/python'
