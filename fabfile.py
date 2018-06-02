@@ -408,4 +408,5 @@ def apply_ws_changes(commit_msg):
         local('git commit -m "{}"'.format(commit_msg))
     local('git push')
     # reinstall ws-server on gateway server
-    run('sudo bash /home/arbiter/buzzz/ws-server/reinstall.sh')
+    with cd('/home/arbiter/buzzz/ws-server/'):
+        run('sudo bash reinstall.sh')
