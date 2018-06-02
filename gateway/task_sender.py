@@ -18,7 +18,7 @@ class TaskSender(object):
         # needs current_task for loggin purposes
         self.current_task = current_task
 
-    def send_task(next_task):
+    def send_task(self, next_task):
         # define API endpoint with new task name
         task_url = self.task_url + next_task
         # make API get request
