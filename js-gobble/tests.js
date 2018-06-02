@@ -48,6 +48,7 @@ async function testFnguide() {
   testPassed += 1
 }
 
+// cache tests
 async function testCache() {
   totalTests += 1
   let c = new Cache.RedisClient()

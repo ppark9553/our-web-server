@@ -3,6 +3,7 @@ var pg = require ('pg')
 
 // connect to DB server PostgresSQL database
 // DB server IP: 45.77.134.175
+// ALWAYS! CHECK! IF! THE! IP-ADDRESS! AND! THE! PASSWORD! IS! CORRET!!!!
 var con_string = 'tcp://arbiter:makeitpopwe123arBITER!1@45.77.134.175/arbiter'
 
 var pg_client = new pg.Client(con_string)

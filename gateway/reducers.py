@@ -20,7 +20,11 @@ from gateway.models import GatewayState
 from gateway.logger import GatewayLogger
 from stockapi.models import Date
 
-from gobble.tasks import mass_date_crawl
+from gobble.tasks import (
+    test,
+    mass_date_crawl,
+)
+
 
 class GatewayReducer(object):
 
@@ -52,7 +56,7 @@ class GatewayReducer(object):
         print('get state')
 
     def test(self):
-        print('testing')
+        test.delay()
 
     def restart_test(self):
         print('restarting test')

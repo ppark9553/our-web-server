@@ -104,7 +104,7 @@ class GatewayStoreView(View):
         action_inst = GatewayActionOBJ(action_type)
 
         if action_inst.ACTION['type'] != 'None':
-            logger.set_log(action_type, 'P', 'received action type')
+            logger.set_log(action_type, 'P', 'store received action type')
 
             # initialize action class by passing in the action type retrieved from URL
             action_obj = action_inst.ACTION

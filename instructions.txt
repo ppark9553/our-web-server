@@ -29,6 +29,7 @@ vim +":%s/THIS_SYSTEM = 'web'/THIS_SYSTEM = 'db'/g | wq" ./arbiter/config.py
 cd scripts
 sudo bash deploy_bare_redis.sh
 vim +":%s/server_name 127.0.0.1/server_name 45.77.134.175/g | wq" /etc/nginx/sites-available/buzzz.conf
+sudo bash create_gateway_trigger.sh
 
 
 3. cache: (UP)
