@@ -25,8 +25,8 @@ class TaskSender(object):
         r = requests.get(task_url)
         reply = r.json()['status'] # status can return either of: DONE, FAIL, NO ACTION: ...
         if reply == 'DONE':
-            this.logger.set_log(this.current_task, 'P', 'new task sent: {}'.format(next_task))
+            self.logger.set_log(self.current_task, 'P', 'new task sent: {}'.format(next_task))
         elif reply == 'FAIL':
-            this.logger.set_log(this.current_task, 'F', 'failed to send new task: {}'.format(next_task))
+            self.logger.set_log(self.current_task, 'F', 'failed to send new task: {}'.format(next_task))
         elif 'NO ACTION' in reply:
-            this.logger.set_log(this.current_task, 'F', 'no action called: {}'.format(next_task))
+            self.logger.set_log(self.current_task, 'F', 'no action called: {}'.format(next_task))
