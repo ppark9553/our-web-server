@@ -313,7 +313,9 @@ def apply_changes_to_db():
     env.password = root_pw
     virtualenv = '/home/arbiter/venv/buzzz/bin/python'
     with cd('/home/arbiter/buzzz/'):
+        run("vim +\":%s/THIS_SYSTEM = 'db'/THIS_SYSTEM = 'web'/g | wq\" ./arbiter/config.py")
         run('git pull')
+        run("vim +\":%s/THIS_SYSTEM = 'web'/THIS_SYSTEM = 'db'/g | wq\" ./arbiter/config.py")
         run('{} manage.py makemigrations'.format(virtualenv))
         run('{} manage.py migrate'.format(virtualenv))
         run('sudo systemctl restart uwsgi')
