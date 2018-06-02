@@ -20,6 +20,7 @@ class GatewayActionOBJ(object):
                 'reduce': 'get_state'
             }
 
+        ###### TEST ACTIONS #######
         elif action_type == 'TEST':
             self.ACTION = {
                 'type': 'TEST',
@@ -31,6 +32,13 @@ class GatewayActionOBJ(object):
                 'type': 'RESTART_TEST',
                 'reduce': 'restart_test'
             }
+
+        elif action_type == 'ERROR_TEST':
+            self.ACTION = {
+                'type': 'ERROR_TEST',
+                'reduce': 'error_test'
+            }
+        ###### END TEST ACTIONS ######
 
         elif action_type == 'MASS_DATE_CRAWL':
             self.ACTION = {

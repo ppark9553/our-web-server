@@ -3,6 +3,7 @@ In our settings file, we configure everything we need to take care of dependenci
 '''
 
 import os
+import raven
 import _pickle as pickle
 
 from .config import CONFIG, THIS_SYSTEM
@@ -48,6 +49,16 @@ INSTALLED_APPS = [
 
 if THIS_SYSTEM == 'gobble':
     INSTALLED_APPS = INSTALLED_APPS + ['gobble']
+
+### add Sentry to Django app for error logging ###
+INSTALLED_APPS = INSTALLED_APPS + ['raven.contrib.django.raven_compat']
+
+RAVEN_CONFIG = {
+    'dsn': 'https://3f326c3cb431414786e1fdda145a0e27:b39968af865641d6b2098b26a932ee9b@sentry.io/1218310',
+    # If you are using git, you can also automatically configure the
+    # release based on the git info.
+        'release': raven.fetch_git_sha(BASE_DIR),
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

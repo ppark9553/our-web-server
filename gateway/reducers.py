@@ -8,6 +8,7 @@ should function to reduce the data received as parameters.
 Normally this would require saving the data to a Django DB server.
 '''
 import redis, requests
+from raven.contrib.django.raven_compat.models import client
 
 from django.core.cache import cache
 from django.conf import settings
@@ -44,6 +45,10 @@ class GatewayReducer(object):
             reducer = getattr(self, action['reduce'])
             self.reducer = reducer
 
+        elif action['type'] == 'ERROR_TEST':
+            reducer = getattr(self, action['reduce'])
+            self.reducer = reducer
+
         elif action['type'] == 'MASS_DATE_CRAWL':
             # get the reducer function with 'getattr' function
             reducer = getattr(self, action['reduce'])
@@ -61,6 +66,13 @@ class GatewayReducer(object):
 
     def restart_test(self):
         restart_test.delay()
+
+    def error_test(self):
+        # tests Sentry capture error
+        try:
+            2 / 0
+        except ZeroDivisionError:
+            client.captureException()
 
     def mass_date_crawl(self):
         # send to js-gobble because crawling needs to use javascript
