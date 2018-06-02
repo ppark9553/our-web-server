@@ -333,8 +333,6 @@ def apply_changes_to_gateway():
         run("vim +\":%s/THIS_SYSTEM = 'web'/THIS_SYSTEM = 'gateway'/g | wq\" ./arbiter/config.py")
         run('{} manage.py makemigrations'.format(virtualenv))
         run('{} manage.py migrate'.format(virtualenv))
-        # gateway server needs to reinstall the websocket server (Node.js server)
-        run('sudo bash /home/arbiter/buzzz/ws-server/reinstall.sh')
         run('sudo systemctl restart uwsgi')
         run('sudo systemctl restart nginx')
 
@@ -354,8 +352,6 @@ def apply_changes_to_gobble():
         run('sudo systemctl restart rabbitmq-server')
         run('sudo supervisorctl restart arbiter_celery')
         run('sudo supervisorctl restart arbiter_celerybeat')
-        # gobble server needs to reinstall js-gobble
-        run('sudo bash /home/arbiter/buzzz/js-gobble/reinstall.sh')
         run('sudo systemctl restart uwsgi')
         run('sudo systemctl restart nginx')
 
