@@ -51,7 +51,7 @@ vim +":%s/server_name 127.0.0.1/server_name 149.28.25.177/g | wq" /etc/nginx/sit
 cd ws-server
 sudo bash setup.sh
 
-5. gobble: (DOWN)
+5. gobble: (UP)
 git clone https://github.com/ppark9553/our-web-server.git
 cd our-web-server/scripts
 sudo bash deploy_web.sh
@@ -62,14 +62,15 @@ vim +":%s/THIS_SYSTEM = 'web'/THIS_SYSTEM = 'gobble'/g | wq" ./arbiter/config.py
 vim +":%s/server_name 127.0.0.1/server_name 149.28.18.34/g | wq" /etc/nginx/sites-available/buzzz.conf
 cd scripts
 sudo bash deploy_workers.sh
+cd ../
 /home/arbiter/venv/buzzz/bin/celery -A arbiter beat -l info
 sudo chown arbiter:arbiter celerybeat-schedule
 sudo supervisorctl restart arbiter_celery
 sudo supervisorctl restart arbiter_celerybeat
-cd ../js-gobble
+cd js-gobble
 sudo bash setup.sh
 
-6. mined: (DOWN)
+6. mined: (UP)
 git clone https://github.com/ppark9553/our-web-server.git
 cd our-web-server/scripts
 sudo bash deploy_web.sh
@@ -80,6 +81,7 @@ vim +":%s/THIS_SYSTEM = 'web'/THIS_SYSTEM = 'mined'/g | wq" ./arbiter/config.py
 vim +":%s/server_name 127.0.0.1/server_name 45.32.42.30/g | wq" /etc/nginx/sites-available/buzzz.conf
 cd scripts
 sudo bash deploy_workers.sh
+cd ../
 /home/arbiter/venv/buzzz/bin/celery -A arbiter beat -l info
 sudo chown arbiter:arbiter celerybeat-schedule
 sudo supervisorctl restart arbiter_celery
