@@ -4,7 +4,7 @@
 
 # STEP 1: install and configure RabbitMQ
 sudo apt-get install rabbitmq-server
-sudo rabbitmqctl add_user arbiterbroker 'projectargogo'
+sudo rabbitmqctl add_user arbiterbroker 'dnqkrTJDRHD123ghkdlxld;;'
 sudo rabbitmqctl set_user_tags arbiterbroker administrator
 sudo rabbitmqctl set_permissions arbiterbroker ".*" ".*" ".*"
 sudo systemctl restart rabbitmq-server

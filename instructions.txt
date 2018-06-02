@@ -7,6 +7,7 @@
 ### however, for testing purposes,
 ### manually deploying servers will help understand your servers
 
+
 1. web: (UP)
 git clone https://github.com/ppark9553/our-web-server.git
 cd our-web-server/scripts
@@ -16,6 +17,7 @@ cd /home/arbiter/buzzz
 pip install -r requirements.txt
 vim +":%s/server_name 127.0.0.1/server_name 207.148.103.151/g | wq" /etc/nginx/sites-available/buzzz.conf
 
+
 2. db: (UP)
 git clone https://github.com/ppark9553/our-web-server.git
 cd our-web-server/scripts
@@ -23,9 +25,11 @@ sudo bash deploy_step_one.sh
 mkvirtualenv buzzz
 cd /home/arbiter/buzzz
 pip install -r requirements.txt
+vim +\":%s/THIS_SYSTEM = 'web'/THIS_SYSTEM = 'db'/g | wq\" ./arbiter/config.py
 cd scripts
 sudo bash deploy_bare_redis.sh
 vim +":%s/server_name 127.0.0.1/server_name 45.77.134.175/g | wq" /etc/nginx/sites-available/buzzz.conf
+
 
 3. cache: (UP)
 git clone https://github.com/ppark9553/our-web-server.git
@@ -34,8 +38,47 @@ sudo bash bare_deploy.sh
 cd /home/arbiter/buzzz/scripts
 sudo bash deploy_redis.sh
 
+
 4. gateway: (DOWN)
+git clone https://github.com/ppark9553/our-web-server.git
+cd our-web-server/scripts
+sudo bash deploy_web.sh
+mkvirtualenv buzzz
+cd /home/arbiter/buzzz
+pip install -r requirements.txt
+vim +\":%s/THIS_SYSTEM = 'web'/THIS_SYSTEM = 'gateway'/g | wq\" ./arbiter/config.py
+vim +":%s/server_name 127.0.0.1/server_name 149.28.25.177/g | wq" /etc/nginx/sites-available/buzzz.conf
+cd ws-server
+sudo bash setup.sh
 
 5. gobble: (DOWN)
+git clone https://github.com/ppark9553/our-web-server.git
+cd our-web-server/scripts
+sudo bash deploy_web.sh
+mkvirtualenv buzzz
+cd /home/arbiter/buzzz
+pip install -r requirements.txt
+vim +\":%s/THIS_SYSTEM = 'web'/THIS_SYSTEM = 'gobble'/g | wq\" ./arbiter/config.py
+vim +":%s/server_name 127.0.0.1/server_name 149.28.18.34/g | wq" /etc/nginx/sites-available/buzzz.conf
+cd scripts
+sudo bash deploy_workers.sh
+/home/arbiter/venv/buzzz/bin/celery -A arbiter beat -l info
+sudo supervisorctl restart arbiter_celery
+sudo supervisorctl restart arbiter_celerybeat
+cd ../js-gobble
+sudo bash setup.sh
 
 6. mined: (DOWN)
+git clone https://github.com/ppark9553/our-web-server.git
+cd our-web-server/scripts
+sudo bash deploy_web.sh
+mkvirtualenv buzzz
+cd /home/arbiter/buzzz
+pip install -r requirements.txt
+vim +\":%s/THIS_SYSTEM = 'web'/THIS_SYSTEM = 'mined'/g | wq\" ./arbiter/config.py
+vim +":%s/server_name 127.0.0.1/server_name 45.32.42.30/g | wq" /etc/nginx/sites-available/buzzz.conf
+cd scripts
+sudo bash deploy_workers.sh
+/home/arbiter/venv/buzzz/bin/celery -A arbiter beat -l info
+sudo supervisorctl restart arbiter_celery
+sudo supervisorctl restart arbiter_celerybeat

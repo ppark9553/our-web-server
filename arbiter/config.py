@@ -66,7 +66,7 @@ CONFIG = {
         'web': '4?BjP,TN]Gz.fGf,',
         'db': '4@Rb=ERy(},?UjD#',
         'cache': '3Y#faMd91)@)w%LK',
-        'gateway': '+8HjS?3KXmKN6raW',
+        'gateway': '(8tLXaZB]U+5@9=H',
         'gobble': '1a_H)4,(1D-Jfg75',
         'mined': 'Jf9,SKAgJ7Y}6DWB'
     }

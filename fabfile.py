@@ -324,6 +324,8 @@ def apply_changes_to_db():
 @task
 @hosts(local_ip)
 def apply_changes(commit_msg):
+    # git pushes all the changes on your devlepment machines
+    # and applies those changes to your other servers
     env.user = 'root'
     env.password = root_pw
     virtualenv = '/home/arbiter/venv/buzzz/bin/python'
