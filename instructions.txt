@@ -7,7 +7,7 @@
 ### however, for testing purposes,
 ### manually deploying servers will help understand your servers
 
-1. web: (DOWN)
+1. web: (UP)
 git clone https://github.com/ppark9553/our-web-server.git
 cd our-web-server/scripts
 sudo bash deploy_web.sh

@@ -45,6 +45,7 @@ init_servers
 
 ###### SERVER SPECIFIC TASKS ######
 monitor_redis
+apply_changes
 '''
 
 from fabric.api import *
@@ -291,3 +292,22 @@ def init_servers():
 def monitor_redis():
     env.password = root_pw
     run('redis-cli -a da56038fa453c22d2c46e83179126e97d4d272d02ece83eb83a97357e842d065 monitor')
+
+@task
+@hosts(env.hosts[1:4])
+def apply_changes(commit_msg):
+    env.user = 'root'
+    env.password = root_pw
+    virtualenv = '/home/arbiter/venv/buzzz/bin/python'
+    # git add . > git commit then git pushes changes lazily
+    with settings(warn_only=True):
+        local('git add -A')
+        local('git commit -m "{}"'.format(commit_msg))
+    local('git push')
+    with cd('/home/arbiter/buzzz/'):
+        run('git pull')
+        run('{} manage.py makemigrations'.format(virtualenv))
+        run('{} manage.py migrate'.format(virtualenv))
+        run('rm -r static-dist')
+        run('mkdir static-dist')
+        run('{} manage.py collectstatic'.format(virtualenv))
