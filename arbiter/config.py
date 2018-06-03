@@ -49,7 +49,9 @@ CONFIG = {
         'NGINX_CONF': 'buzzz.conf',
         'SUPERVISOR_CELERY': 'celery.conf',
         'SUPERVISOR_CELERYBEAT': 'celerybeat.conf',
-        'REDIS_CONF': 'redis.conf'
+        'REDIS_CONF': 'redis.conf',
+
+        'SENTRY_URL': 'https://3f326c3cb431414786e1fdda145a0e27:b39968af865641d6b2098b26a932ee9b@sentry.io/1218310'
     },
 
     'ip-address': {
