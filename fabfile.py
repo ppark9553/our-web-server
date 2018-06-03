@@ -304,8 +304,10 @@ def apply_changes_to_web():
     env.user = 'root'
     env.password = root_pw
     virtualenv = '/home/arbiter/venv/buzzz/bin/python'
+    pip = '/home/arbiter/venv/buzzz/bin/pip'
     with cd('/home/arbiter/buzzz/'):
         run('git pull')
+        run('{} install -r requirements.txt'.format(pip))
         run('{} manage.py makemigrations'.format(virtualenv))
         run('{} manage.py migrate'.format(virtualenv))
         run('sudo systemctl restart uwsgi')
@@ -317,9 +319,11 @@ def apply_changes_to_db():
     env.user = 'root'
     env.password = root_pw
     virtualenv = '/home/arbiter/venv/buzzz/bin/python'
+    pip = '/home/arbiter/venv/buzzz/bin/pip'
     with cd('/home/arbiter/buzzz/'):
         run("vim +\":%s/THIS_SYSTEM = 'db'/THIS_SYSTEM = 'web'/g | wq\" ./arbiter/config.py")
         run('git pull')
+        run('{} install -r requirements.txt'.format(pip))
         run("vim +\":%s/THIS_SYSTEM = 'web'/THIS_SYSTEM = 'db'/g | wq\" ./arbiter/config.py")
         run('{} manage.py makemigrations'.format(virtualenv))
         run('{} manage.py migrate'.format(virtualenv))
@@ -332,9 +336,11 @@ def apply_changes_to_gateway():
     env.user = 'root'
     env.password = root_pw
     virtualenv = '/home/arbiter/venv/buzzz/bin/python'
+    pip = '/home/arbiter/venv/buzzz/bin/pip'
     with cd('/home/arbiter/buzzz/'):
         run("vim +\":%s/THIS_SYSTEM = 'gateway'/THIS_SYSTEM = 'web'/g | wq\" ./arbiter/config.py")
         run('git pull')
+        run('{} install -r requirements.txt'.format(pip))
         run("vim +\":%s/THIS_SYSTEM = 'web'/THIS_SYSTEM = 'gateway'/g | wq\" ./arbiter/config.py")
         run('{} manage.py makemigrations'.format(virtualenv))
         run('{} manage.py migrate'.format(virtualenv))
@@ -347,9 +353,11 @@ def apply_changes_to_gobble():
     env.user = 'root'
     env.password = root_pw
     virtualenv = '/home/arbiter/venv/buzzz/bin/python'
+    pip = '/home/arbiter/venv/buzzz/bin/pip'
     with cd('/home/arbiter/buzzz/'):
         run("vim +\":%s/THIS_SYSTEM = 'gobble'/THIS_SYSTEM = 'web'/g | wq\" ./arbiter/config.py")
         run('git pull')
+        run('{} install -r requirements.txt'.format(pip))
         run("vim +\":%s/THIS_SYSTEM = 'web'/THIS_SYSTEM = 'gobble'/g | wq\" ./arbiter/config.py")
         run('{} manage.py makemigrations'.format(virtualenv))
         run('{} manage.py migrate'.format(virtualenv))
@@ -366,9 +374,11 @@ def apply_changes_to_mined():
     env.user = 'root'
     env.password = root_pw
     virtualenv = '/home/arbiter/venv/buzzz/bin/python'
+    pip = '/home/arbiter/venv/buzzz/bin/pip'
     with cd('/home/arbiter/buzzz/'):
         run("vim +\":%s/THIS_SYSTEM = 'mined'/THIS_SYSTEM = 'web'/g | wq\" ./arbiter/config.py")
         run('git pull')
+        run('{} install -r requirements.txt'.format(pip))
         run("vim +\":%s/THIS_SYSTEM = 'web'/THIS_SYSTEM = 'mined'/g | wq\" ./arbiter/config.py")
         run('{} manage.py makemigrations'.format(virtualenv))
         run('{} manage.py migrate'.format(virtualenv))
