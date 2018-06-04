@@ -29,8 +29,8 @@ class GatewayActionOBJ(object):
 
         elif action_type == 'GET_WONSEOK_TEST':
             self.ACTION = {
-                'type': 'WONSEOK_TEST',
-                'reduce': 'wonseok_test',
+                'type': 'GET_WONSEOK_TEST',
+                'reduce': 'get_wonseok_test',
                 'cache-key': 'wonseok_test_from_local',
                 'to': 'cache'
             }

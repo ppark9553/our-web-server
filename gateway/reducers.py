@@ -33,39 +33,11 @@ from gobble.tasks import (
 class GatewayReducer(object):
 
     def __init__(self, action):
-        self.logger = GatewayLogger()
-
-        if action['type'] == 'GET_STATE':
-            reducer = getattr(self, action['reduce'])
-            self.reducer = reducer
-
-        elif action['type'] == 'TEST':
-            reducer = getattr(self, action['reduce'])
-            self.reducer = reducer
-
-        elif action['type'] == 'GET_WONSEOK_TEST':
-            reducer = getattr(self, action['reduce'])
-            self.reducer = reducer
-
-        elif action['type'] == 'SAVE_WONSEOK_TEST':
-            reducer = getattr(self, action['reduce'])
-            self.reducer = reducer
-
-        elif action['type'] == 'RESTART_TEST':
-            reducer = getattr(self, action['reduce'])
-            self.reducer = reducer
-
-        elif action['type'] == 'ERROR_TEST':
-            reducer = getattr(self, action['reduce'])
-            self.reducer = reducer
-
-        elif action['type'] == 'MASS_DATE_CRAWL':
-            # get the reducer function with 'getattr' function
-            reducer = getattr(self, action['reduce'])
-            self.reducer = reducer
+        self.action = action
 
     def reduce(self):
-        self.reducer()
+        reducer = getattr(self, self.action['reduce'])
+        reducer()
         return True
 
     def get_state(self):
