@@ -54,6 +54,7 @@ if THIS_SYSTEM == 'gobble':
 ### add Sentry to Django app for error logging ###
 INSTALLED_APPS = INSTALLED_APPS + ['raven.contrib.django.raven_compat']
 
+# adding Sentry: error logging and mailing service
 RAVEN_CONFIG = {
     'dsn': CONFIG['common']['SENTRY_URL'],
     # If you are using git, you can also automatically configure the

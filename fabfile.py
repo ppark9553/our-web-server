@@ -306,6 +306,7 @@ def apply_changes_to_web():
     virtualenv = '/home/arbiter/venv/buzzz/bin/python'
     pip = '/home/arbiter/venv/buzzz/bin/pip'
     with cd('/home/arbiter/buzzz/'):
+        run('{} tools.py cleanmigrations'.format(virtualenv))
         run('git pull')
         run('{} install -r requirements.txt'.format(pip))
         run('{} manage.py makemigrations'.format(virtualenv))
@@ -322,6 +323,7 @@ def apply_changes_to_db():
     pip = '/home/arbiter/venv/buzzz/bin/pip'
     with cd('/home/arbiter/buzzz/'):
         run("vim +\":%s/THIS_SYSTEM = 'db'/THIS_SYSTEM = 'web'/g | wq\" ./arbiter/config.py")
+        run('{} tools.py cleanmigrations'.format(virtualenv))
         run('git pull')
         run('{} install -r requirements.txt'.format(pip))
         run("vim +\":%s/THIS_SYSTEM = 'web'/THIS_SYSTEM = 'db'/g | wq\" ./arbiter/config.py")
@@ -339,6 +341,7 @@ def apply_changes_to_gateway():
     pip = '/home/arbiter/venv/buzzz/bin/pip'
     with cd('/home/arbiter/buzzz/'):
         run("vim +\":%s/THIS_SYSTEM = 'gateway'/THIS_SYSTEM = 'web'/g | wq\" ./arbiter/config.py")
+        run('{} tools.py cleanmigrations'.format(virtualenv))
         run('git pull')
         run('{} install -r requirements.txt'.format(pip))
         run("vim +\":%s/THIS_SYSTEM = 'web'/THIS_SYSTEM = 'gateway'/g | wq\" ./arbiter/config.py")
@@ -356,6 +359,7 @@ def apply_changes_to_gobble():
     pip = '/home/arbiter/venv/buzzz/bin/pip'
     with cd('/home/arbiter/buzzz/'):
         run("vim +\":%s/THIS_SYSTEM = 'gobble'/THIS_SYSTEM = 'web'/g | wq\" ./arbiter/config.py")
+        run('{} tools.py cleanmigrations'.format(virtualenv))
         run('git pull')
         run('{} install -r requirements.txt'.format(pip))
         run("vim +\":%s/THIS_SYSTEM = 'web'/THIS_SYSTEM = 'gobble'/g | wq\" ./arbiter/config.py")
@@ -377,6 +381,7 @@ def apply_changes_to_mined():
     pip = '/home/arbiter/venv/buzzz/bin/pip'
     with cd('/home/arbiter/buzzz/'):
         run("vim +\":%s/THIS_SYSTEM = 'mined'/THIS_SYSTEM = 'web'/g | wq\" ./arbiter/config.py")
+        run('{} tools.py cleanmigrations'.format(virtualenv))
         run('git pull')
         run('{} install -r requirements.txt'.format(pip))
         run("vim +\":%s/THIS_SYSTEM = 'web'/THIS_SYSTEM = 'mined'/g | wq\" ./arbiter/config.py")

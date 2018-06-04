@@ -42,9 +42,23 @@ let getURL = async (testURL) => {
   return getData
 }
 
+let handleLogs = (logData) => {
+  let taskName = logData.task_name
+  let log = logData.log
+  let newListItemHTML = `<strong>${taskName}</strong> ${log}`
+  let newListItem = document.createElement('li')
+  newListItem.classList.add("list-item")
+  newListItem.innerHTML = newListItemHTML
+  document.getElementById("test-list").appendChild(newListItem)
+}
+
 let getData = async () => {
   await getURL(testURL, { crossdomain: true })
-  .then( response => { console.log(response) })
+  .then( response => {
+    for (let data of response.data.results) {
+      handleLogs(data)
+    }
+  })
   .catch( error => { console.log(error) })
 }
 
