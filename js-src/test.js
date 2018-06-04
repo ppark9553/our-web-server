@@ -33,3 +33,23 @@ let bodyText = document.getElementsByClassName("test-body")[0].innerText
 asyncPrint(bodyText)
 
 // TEST 5: test axios import and API fetching
+let testURL = 'http://149.28.25.177/hidden-api/gateway-states/'
+
+let getURL = async (testURL) => {
+  console.log('creating axios inst')
+  let getData = await axios.get(testURL)
+  console.log('returning axios promise')
+  return getData
+}
+
+let getData = async () => {
+  await getURL(testURL, { crossdomain: true })
+  .then( response => { console.log(response) })
+  .catch( error => { console.log(error) })
+}
+
+document.addEventListener("click", e => {
+    if (e.target.id == "get-btn") {
+        getData()
+    }
+})
