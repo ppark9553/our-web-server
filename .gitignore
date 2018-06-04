@@ -3,3 +3,4 @@ __pycache__/
 db.sqlite3
 ws-server/node_modules/
 js-gobble/node_modules/
+node_modules

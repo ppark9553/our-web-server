@@ -1,0 +1,40 @@
+{% load static %}
+<!doctype html>
+<html lang="kr">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+        <title>Buzzz Test</title>
+        <link rel="icon" href="{% static 'img/buzzz.ico' %}" type="image/x-icon" />
+        <!-- Custom -->
+        <link rel="stylesheet" href="{% static 'css/gateway.css' %}" type="text/css" media="all">
+        <style media="screen">
+          body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+          }
+
+          .test-body {
+            margin-bottom: 2rem;
+          }
+        </style>
+    </head>
+
+    <body>
+      <div class="test-body">
+        <h1>This is the test body section</h1>
+        <p>BODY SECTION TEXT</p>
+      </div>
+
+      <div class="test-list">
+        <h1>This is the test list section</h1>
+        <li class="list-item"><strong>task name:</strong> log of task</li>
+      </div>
+    </body>
+
+    <script type="text/javascript" src="{% static 'dist/test.js' %}"></script>
+
+</html>
