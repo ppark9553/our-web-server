@@ -12,7 +12,7 @@ class Logger {
   async setLog(taskName, state, log) {
     this.taskName = taskName
     this.state = state
-    this.log = log
+    this.log = 'js-gobble: ' + log
     console.log('setting log data')
 
     await this._saveLog()

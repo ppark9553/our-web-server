@@ -27,6 +27,22 @@ class GatewayActionOBJ(object):
                 'reduce': 'test'
             }
 
+        elif action_type == 'GET_WONSEOK_TEST':
+            self.ACTION = {
+                'type': 'WONSEOK_TEST',
+                'reduce': 'wonseok_test',
+                'cache-key': 'wonseok_test_from_local',
+                'to': 'cache'
+            }
+
+        elif action_type == 'SAVE_WONSEOK_TEST':
+            self.ACTION = {
+                'type': 'SAVE_WONSEOK_TEST',
+                'reduce': 'save_wonseok_test',
+                'cache-key': 'wonseok_test_from_local',
+                'from': 'cache'
+            }
+
         elif action_type == 'RESTART_TEST':
             self.ACTION = {
                 'type': 'RESTART_TEST',

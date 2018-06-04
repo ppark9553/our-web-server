@@ -16,3 +16,11 @@ class GatewayState(models.Model):
 
     def __str__(self):
         return '{} {}'.format(self.date, self.task_name)
+
+
+class SoulLog(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    log = models.TextField()
+
+    def __str__(self):
+        return '{}'.format(self.log)

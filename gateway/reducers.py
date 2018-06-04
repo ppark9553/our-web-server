@@ -24,6 +24,8 @@ from stockapi.models import Date
 from gobble.tasks import (
     test,
     restart_test,
+    get_wonseok_test,
+    save_wonseok_test,
     mass_date_crawl,
 )
 
@@ -38,6 +40,14 @@ class GatewayReducer(object):
             self.reducer = reducer
 
         elif action['type'] == 'TEST':
+            reducer = getattr(self, action['reduce'])
+            self.reducer = reducer
+
+        elif action['type'] == 'GET_WONSEOK_TEST':
+            reducer = getattr(self, action['reduce'])
+            self.reducer = reducer
+
+        elif action['type'] == 'SAVE_WONSEOK_TEST':
             reducer = getattr(self, action['reduce'])
             self.reducer = reducer
 
@@ -63,6 +73,12 @@ class GatewayReducer(object):
 
     def test(self):
         test.delay()
+
+    def get_wonseok_test(self):
+        get_wonseok_test.delay()
+
+    def save_wonseok_test(self):
+        save_wonseok_test.delay()
 
     def restart_test(self):
         restart_test.delay()
