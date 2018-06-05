@@ -8,7 +8,7 @@ CONFIG = {
         'DB_USER': 'arbiter',
         'DB_PW': 'makeitpopwe123arBITER!1',
         'AMQP_USER': 'arbiterbroker',
-        'AMQP_PW': 'dnqkrTJDRHD123ghkdlxld;;',
+        'AMQP_PW': 'projectARgogo',
         'DEBUG': 'True',
 
         'ROOT_PW': 'makeitpopwe123ARbiter;;',
@@ -23,7 +23,9 @@ CONFIG = {
         'NGINX_CONF': 'buzzz.conf',
         'SUPERVISOR_CELERY': 'celery.conf',
         'SUPERVISOR_CELERYBEAT': 'celerybeat.conf',
-        'REDIS_CONF': 'redis.conf'
+        'REDIS_CONF': 'redis.conf',
+
+        'SENTRY_URL': 'https://3f326c3cb431414786e1fdda145a0e27:b39968af865641d6b2098b26a932ee9b@sentry.io/1218310'
     },
 
     'ip': {
@@ -36,13 +38,13 @@ CONFIG = {
         'mined': '45.32.42.30'
     },
 
-    'initial-deploy-pw': {
-        'web': '9hJ@ax}b2[$f.6!R',
-        'db': '6Q]oCM*VsH46EA-%',
+    'initial_deploy_pw': {
+        'web': '4?BjP,TN]Gz.fGf,',
+        'db': '4@Rb=ERy(},?UjD#',
         'cache': '3Y#faMd91)@)w%LK',
-        'gateway': '+8HjS?3KXmKN6raW',
-        'gobble': '1a_H)4,(1D-Jfg75',
-        'mined': 'Jf9,SKAgJ7Y}6DWB'
+        'gateway': '(8tLXaZB]U+5@9=H',
+        'gobble': 'Qt(5tTwsDD7raEAj',
+        'mined': '{fR92qVn]drQb8hg'
     }
 
 }

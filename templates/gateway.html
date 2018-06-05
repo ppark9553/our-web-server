@@ -34,55 +34,41 @@
         </div>
       </div>
 
+      <!-- Log Section -->
+      <div class="log-section">
+        <div id="log"></div>
+      </div>
+
       <!-- Content Body -->
       <div class="content-body">
 
-        <div class="section date-selector">
-          date
+        <div class="content-title"><strong>Tasks List</strong></div>
+
+        <div class="task-body">
+
+          <div class="task-row">
+            <div class="task-name">MASS_DATE_CRAWL</div>
+            <div class="task-actions">
+              <div id="run" class="task-btn">RUN</div>
+              <div id="task-log" class="task-btn">LOG</div>
+            </div>
+          </div>
+
+          <div class="task-row">
+            <div class="task-name">MASS_DATE_SAVE</div>
+            <div class="task-actions">
+              <div id="run" class="task-btn">RUN</div>
+              <div id="task-log" class="task-btn">LOG</div>
+            </div>
+          </div>
+
         </div>
 
-        <div class="section task-list">
-          task
-        </div>
-
-        <div class="section task-actions">
-          actions
-        </div>
-
-      </div>
-
-      <!-- Footer -->
-      <div class="footer">
-        Footer
       </div>
 
 
       <!-- Websocket with Socket.io -->
-      <script src="{% static 'js/socket.io.js' %}"></script>
-      <script type="text/javascript" src="{% static 'js/gateway.js' %}"></script>
-      <script>
-        // socket.io code here
-        WEB_SOCKET_SWF_LOCATION = 'inc/WebSocketMain.swf'
-        // ip address should be that of gateway server
-        var socket = io.connect('http://149.28.25.177:3000')
-
-        socket.on('connected', function(data) {
-          if (data.connected == true) {
-            console.log('buzzz webpage ready to load with changes in DB')
-          }
-          socket.emit('ready for data', {})
-        })
-
-        socket.on('update', function(data) {
-          console.log(data.message.payload)
-        })
-
-        // jquery code here
-        $(document).ready(function() {
-          webpageStarting()
-        })
-
-      </script>
+      <script type="text/javascript" src="{% static 'dist/gateway.js' %}"></script>
     </body>
 
 </html>

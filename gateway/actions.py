@@ -62,8 +62,8 @@ class GatewayActionOBJ(object):
                 'reduce': 'mass_date_crawl',
                 'reducing-app': 'gobble',
                 'cached-data': '',
-                'save': '',
-                'cache-key': '',
+                'save': 'to:cache',
+                'cache-key': 'mass_date',
                 'parameter-type': []
             }
 

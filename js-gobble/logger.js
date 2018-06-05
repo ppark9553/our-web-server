@@ -13,7 +13,6 @@ class Logger {
     this.taskName = taskName
     this.state = state
     this.log = 'js-gobble: ' + log
-    console.log('setting log data')
 
     await this._saveLog()
     .then( response => { console.log(this.log) } )
@@ -21,14 +20,12 @@ class Logger {
   }
 
   async _saveLog() {
-    console.log('creating axios inst')
     let postData = await axios.post(this.logURL, {
       'date': this.date,
       'task_name': this.taskName,
       'state': this.state,
       'log': this.log
     })
-    console.log('returning axios promise')
     return postData
   }
 

@@ -5,6 +5,7 @@ module.exports = {
 
   entry: {
     test: ["babel-polyfill", __dirname + "/js-src/test.js"],
+    gateway: ["babel-polyfill", __dirname + "/js-src/gateway.js"],
   },
 
   output: {

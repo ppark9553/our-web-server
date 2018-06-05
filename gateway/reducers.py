@@ -43,6 +43,7 @@ class GatewayReducer(object):
     def get_state(self):
         print('get state')
 
+    ##### TEST REDUCERS #####
     def test(self):
         test.delay()
 
@@ -61,10 +62,14 @@ class GatewayReducer(object):
             2 / 0
         except ZeroDivisionError:
             client.captureException()
+    ##### END TEST REDUCERS #####
 
     def mass_date_crawl(self):
         # send to js-gobble because crawling needs to use javascript
-        mass_date_crawl.delay()
+        try:
+            mass_date_crawl.delay()
+        except:
+            client.captureException()
 
     def mass_date_save(self, save_at, cached_key):
         hostname = CONFIG['ip-address'][save_at]

@@ -4,6 +4,7 @@ from django.views.generic import View
 from rest_framework import generics
 from rest_framework.filters import SearchFilter, OrderingFilter
 
+from arbiter.config import THIS_SYSTEM
 from stockapi.models import (
     Date,
     Ticker,
@@ -19,6 +20,7 @@ from gateway.serializers import GatewayStateSerializer
 from gateway.actions import GatewayActionOBJ
 from gateway.reducers import GatewayReducer
 from gateway.logger import GatewayLogger
+from gateway.task_sender import TaskSender
 
 from utils.paginations import StandardResultPagination, OHLCVPagination
 
@@ -95,28 +97,36 @@ class GatewayStoreView(View):
     '''
 
     def get(self,request):
+        # receive a type value through URL
+        action_type = request.GET.get('type')
+
         # create the logger
         logger = GatewayLogger()
 
-        # receive a type value through URL
-        action_type = request.GET.get('type')
-        # check for action_type availability
-        action_inst = GatewayActionOBJ(action_type)
+        # forward to gateway server when requested to a different server
+        if THIS_SYSTEM != 'gateway':
+            logger.set_log(action_type, 'P', 'requested task server not gateway, forwarding request to gateway server')
+            task_sender = TaskSender(action_type)
+            task_sender = send_task(action_type)
+            return JsonResponse({'status': 'FORWARDED'}, json_dumps_params={'ensure_ascii': True})
+        else:
+            # check for action_type availability
+            action_inst = GatewayActionOBJ(action_type)
 
-        if action_inst.ACTION['type'] != 'None':
-            logger.set_log(action_type, 'P', 'store received action type')
+            if action_inst.ACTION['type'] != 'None':
+                logger.set_log(action_type, 'P', 'store received action type')
 
-            # initialize action class by passing in the action type retrieved from URL
-            action_obj = action_inst.ACTION
-            reducer_inst = GatewayReducer(action_obj) # pass in the action object to reducer
-            reducer_status = reducer_inst.reduce()
-            if reducer_status == True:
-                logger.set_log(action_type, 'P', 'action successfully reduced')
-                return JsonResponse({'status': 'DONE'}, json_dumps_params={'ensure_ascii': True})
-            else:
-                logger.set_log(action_type, 'F', 'action failed to reduce')
-                return JsonResponse({'status': 'FAIL'}, json_dumps_params={'ensure_ascii': True})
+                # initialize action class by passing in the action type retrieved from URL
+                action_obj = action_inst.ACTION
+                reducer_inst = GatewayReducer(action_obj) # pass in the action object to reducer
+                reducer_status = reducer_inst.reduce()
+                if reducer_status == True:
+                    logger.set_log(action_type, 'P', 'action successfully reduced')
+                    return JsonResponse({'status': 'DONE'}, json_dumps_params={'ensure_ascii': True})
+                else:
+                    logger.set_log(action_type, 'F', 'action failed to reduce')
+                    return JsonResponse({'status': 'FAIL'}, json_dumps_params={'ensure_ascii': True})
 
-        elif action_inst.ACTION['type'] == 'None':
-            logger.set_log(action_type, 'F', 'no such action exists error')
-            return JsonResponse({'status': 'NO ACTION: {}'.format(action_type)}, json_dumps_params={'ensure_ascii': True})
+            elif action_inst.ACTION['type'] == 'None':
+                logger.set_log(action_type, 'F', 'no such action exists error')
+                return JsonResponse({'status': 'NO ACTION: {}'.format(action_type)}, json_dumps_params={'ensure_ascii': True})

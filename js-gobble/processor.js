@@ -11,7 +11,6 @@ class Processor {
       for (let jsonData of obj) {
         let dateData = jsonData.TRD_DT.replace(/\./gi, '').trim()
         datesData.push(dateData)
-        console.log(dateData + ' data pushed to list')
       }
     }
 

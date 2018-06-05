@@ -108,6 +108,7 @@ def save_wonseok_test():
     except:
         client.captureException()
 
+##### REAL TASKS START HERE ######
 @task(name="mass_date_crawl")
 def mass_date_crawl():
     try: # always capture exceptions with Sentry
