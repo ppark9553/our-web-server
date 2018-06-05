@@ -7,6 +7,7 @@
 }
 
 body {
+  font-family: 'Ubuntu', sans-serif;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -99,6 +100,7 @@ body {
 
 .task-row > .task-actions > .task-btn {
   margin: 0 1rem;
+  color: #888888;
   border: solid 1px #888888;
   border-radius: 4px;
   padding: 0.5rem;
@@ -116,6 +118,91 @@ body {
   background-color: #888888;
   color: white;
 }
+
+
+/* Log Area */
+.content-body > .back-btn-section {
+  width: 70%;
+  height: 2rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.back-btn {
+  color: #888888;
+  border: solid 1px #888888;
+  border-radius: 3px;
+  padding: 0.5rem;
+  cursor: pointer;
+  -webkit-transition: all 0.1s ease-in-out 0s;
+  transition: all 0.1s ease-in-out 0s;
+}
+
+.back-btn:visited,
+.back-btn:hover,
+.back-btn:active,
+.back-btn:focus {
+  background-color: #888888;
+  color: white;
+}
+
+.content-body > .task-tags {
+  width: 70%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.task-tags > .task-tag {
+  font-family: 'Ubuntu', sans-serif;
+  width: 5rem;
+  border-radius: 9px;
+  padding: 0.1rem;
+  margin: 0.2rem 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.task-tag.black {
+  border: solid 1px #2C2C2C;
+  color: #2C2C2C;
+}
+
+.task-tag.gray {
+  border: solid 1px #939598;
+  color: #939598;
+}
+
+.task-tag.red {
+  border: solid 1px #ef5b71;
+  color: #ef5b71;
+}
+
+.task-tag.green {
+  border: solid 1px #5eed82;
+  color: #5eed82;
+}
+
+.task-tag.blue {
+  border: solid 1px #189cf9;
+  color: #189cf9;
+}
+
+.task-tag.purple {
+  border: solid 1px #6d2afc;
+  color: #6d2afc;
+}
+
+.task-tag.brown {
+  border: solid 1px #c68671;
+  color: #c68671;
+}
+
 
 /* Mobile Styles */
 @media only screen and (max-width: 400px) {

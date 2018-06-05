@@ -1,4 +1,5 @@
 import io from 'socket.io-client'
+import axios from 'axios'
 
 String.prototype.format = function() {
   // es5 synatax
@@ -28,7 +29,7 @@ let taskListHTML = `
 // plugin task name
 let taskRowHTML = `
 <div class="task-row">
-  <div class="task-name">{0}L</div>
+  <div class="task-name">{0}</div>
   <div class="task-actions">
     <div id="run" class="task-btn">RUN</div>
     <div id="task-log" class="task-btn">LOG</div>
@@ -37,11 +38,23 @@ let taskRowHTML = `
 `
 
 let logAreaHTML = `
-<div class="log-area">
-  <div class="content-title"><strong>{0}</strong></div>
-  <div class="log-body">
-    {1}
+<div class="back-btn-section">
+  <div class="back-btn">
+    << BACK
   </div>
+</div>
+<div class="content-title"><strong>{0}</strong></div>
+<div class="task-tags">
+  <div class="task-tag black">web</div>
+  <div class="task-tag gray">db</div>
+  <div class="task-tag red">cache</div>
+  <div class="task-tag green">gateway</div>
+  <div class="task-tag blue">gobble</div>
+  <div class="task-tag purple">js-gobble</div>
+  <div class="task-tag brown">mined</div>
+</div>
+<div class="log-body">
+  {1}
 </div>
 `
 
@@ -77,5 +90,7 @@ document.addEventListener("click", e => {
       updateLog(taskName + ' log check clicked')
 
       // get content-body section and switch to logAreaHTML
+      let contentBody = document.getElementsByClassName('content-body')[0]
+      contentBody.innerHTML = logAreaHTML.format('logging logging')
     }
 })
