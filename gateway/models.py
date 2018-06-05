@@ -1,9 +1,19 @@
 from django.db import models
+from django.contrib.postgres.fields import JSONField
 
 STATE_TYPES = (
     ('P', 'Pass'),
     ('F', 'Fail'),
 )
+
+
+class GatewayAction(models.Model):
+    type = models.CharField(max_length=100)
+    reduce = models.CharField(max_length=100)
+    other = JSONField()
+
+    def __str__(self):
+        return self.type
 
 
 class GatewayState(models.Model):
