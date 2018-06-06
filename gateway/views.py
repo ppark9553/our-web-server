@@ -88,7 +88,7 @@ class GatewayActionAPIView(generics.ListCreateAPIView):
     def get_queryset(self, *args, **kwargs):
         queryset = GatewayAction.objects.all().order_by('id')
         date_by = self.request.GET.get('date')
-        task_by = self.request.GET.get('start')
+        task_by = self.request.GET.get('task_name')
         status_by = self.request.GET.get('status')
         if date_by:
             queryset = queryset.filter(date=date_by)
@@ -108,7 +108,7 @@ class GatewayStateAPIView(generics.ListCreateAPIView):
     def get_queryset(self, *args, **kwargs):
         queryset = GatewayState.objects.all().order_by('id')
         date_by = self.request.GET.get('date')
-        task_by = self.request.GET.get('start')
+        task_by = self.request.GET.get('task_name')
         status_by = self.request.GET.get('status')
         if date_by:
             queryset = queryset.filter(date=date_by)
