@@ -123,3 +123,18 @@ def mass_date_crawl():
         return True
     except:
         client.captureException()
+
+@task(name="mass_date_save")
+def mass_date_save():
+    try: # always capture exceptions with Sentry
+        task_name = 'MASS_DATE_SAVE'
+        logger = GatewayLogger()
+        task_sender = TaskSender(task_name)
+
+        # log to gateway server
+        logger.set_log(task_name, 'P', 'gobble server received task: {}'.format(task_name))
+        local('node /home/arbiter/js-gobble/{}.js'.format(task_name))
+        logger.set_log(task_name, 'P', 'running "node /home/arbiter/js-gobble/{}.js"'.format(task_name))
+        return True
+    except:
+        client.captureException()

@@ -22,15 +22,15 @@ class TaskSender {
     await this._getTask(taskURL)
     .then( response => {
       if (response.data.status == 'DONE') {
-        await this.logger.setLog(this.currentTask, 'P', 'new task sent: ' + nextTask)
+        this.logger.setLog(this.currentTask, 'P', 'new task sent: ' + nextTask)
       } else if (response.data.staus == 'FAIL') {
-        await this.logger.setLog(this.currentTask, 'F', 'failed to send new task: ' + nextTask)
+        this.logger.setLog(this.currentTask, 'F', 'failed to send new task: ' + nextTask)
       } else if (response.data.status == ('NO ACTION: ' + nextTask)) {
-        await this.logger.setLog(this.currentTask, 'F', 'no action called: ' + nextTask)
+        this.logger.setLog(this.currentTask, 'F', 'no action called: ' + nextTask)
       }
     })
     .catch( error => {
-      await this.logger.setLog(this.currentTask, 'F', 'js-gobble error')
+      this.logger.setLog(this.currentTask, 'F', 'js-gobble error')
     })
   }
 
@@ -40,4 +40,8 @@ class TaskSender {
     return getData
   }
 
+}
+
+module.exports = {
+  TaskSender: TaskSender
 }
