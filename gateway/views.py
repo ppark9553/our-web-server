@@ -30,7 +30,11 @@ from gateway.reducers import GatewayReducer
 from gateway.logger import GatewayLogger
 from gateway.task_sender import TaskSender
 
-from utils.paginations import StandardResultPagination, OHLCVPagination
+from utils.paginations import (
+    GatewayResultPagination,
+    StandardResultPagination,
+    OHLCVPagination,
+)
 
 
 class DateAPIGatewayView(generics.ListCreateAPIView):
@@ -82,7 +86,7 @@ class OHLCVAPIGatewayView(generics.ListCreateAPIView):
 class GatewayActionAPIView(generics.ListCreateAPIView):
     queryset = GatewayAction.objects.all()
     serializer_class = GatewayActionSerializer
-    pagination_class = StandardResultPagination
+    pagination_class = GatewayResultPagination
     filter_backends = [SearchFilter, OrderingFilter]
 
     def get_queryset(self, *args, **kwargs):
@@ -102,7 +106,7 @@ class GatewayActionAPIView(generics.ListCreateAPIView):
 class GatewayStateAPIView(generics.ListCreateAPIView):
     queryset = GatewayState.objects.all()
     serializer_class = GatewayStateSerializer
-    pagination_class = StandardResultPagination
+    pagination_class = GatewayResultPagination
     filter_backends = [SearchFilter, OrderingFilter]
 
     def get_queryset(self, *args, **kwargs):
@@ -122,7 +126,7 @@ class GatewayStateAPIView(generics.ListCreateAPIView):
 class SoulLogAPIView(generics.ListCreateAPIView):
     queryset = SoulLog.objects.all().order_by('-id')
     serializer_class = SoulLogSerializer
-    pagination_class = StandardResultPagination
+    pagination_class = GatewayResultPagination
     filter_backends = [SearchFilter, OrderingFilter]
 
 
