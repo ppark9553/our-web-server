@@ -30,7 +30,7 @@ const main = async () => {
     // pass
   })
   .catch( error => {
-    console.log('error finding element with ID value, retrying...')
+    await logger.setLog(taskName, 'F', 'user login failed, retrying login')
     fn.login()
   })
   let dateData = await fn.massDateCrawl()
