@@ -61,13 +61,13 @@ class Puppet {
 
     // sets the browser attribute
     if (headless_bool == true) {
-      let puppeteerConfig = {
+      var puppeteerConfig = {
         headless: headless_bool,
         args: ['--no-sandbox'],
         slowMo: slowMo_time,
       }
     } else if (headless_bool = false) {
-      let puppeteerConfig = {
+      var puppeteerConfig = {
         headless: headless_bool,
         args: ['--no-sandbox'],
         slowMo: slowMo_time,
