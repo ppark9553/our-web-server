@@ -18,6 +18,7 @@ server_reload
 restart_celery
 js_gobble_reinstall
 clean_known_hosts
+start_browser
 
 ###### OPEN SHELL TASKS ######
 ==> opens up shell as user: arbiter, in this case
@@ -172,6 +173,11 @@ def clean_known_hosts():
     # for mac users
     # delete all known host records
     local('echo "" > /Users/abc/.ssh/known_hosts')
+
+@task
+@hosts(local_ip)
+def start_browser():
+    local('node ./js-gobble/START_BROWSER.js')
 
 
 ###### OPEN SHELL TASKS ######

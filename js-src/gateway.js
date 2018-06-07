@@ -13,8 +13,10 @@ String.prototype.format = function() {
   return formatted
 }
 
-// constants here
+// constants/URLs here
 const actionsURL = 'http://149.28.25.177/hidden-api/gateway-actions/'
+let gatewayLogsURL = 'http://149.28.25.177/hidden-api/gateway-states/?ordering=created&date={0}&task_name={1}'
+const taskURL = 'http://149.28.25.177/hidden-api/task/?type='
 
 ///////////////////////////
 // define functions here //
@@ -39,8 +41,60 @@ let createTasksList = (tasksListHTML) => {
   contentBody.innerHTML = tasksListHTML
 }
 
-let loadLogs = (taskName) => {
+let runTask = (taskName) => {
+  let fullTaskURL = taskURL + taskName
+  return axios.get(fullTaskURL)
+}
 
+let loadLogs = (taskName) => {
+  let date = new Date().toISOString().slice(0, 10).replace(/-/gi, '')
+  let reqURL = gatewayLogsURL.format(date, taskName)
+  return axios.get(reqURL)
+}
+
+let createLogsListHTML = (dataList, runServerFilter) => {
+  let taskName = ''
+  var color = ''
+  let logRowsHTML = ''
+  for (let data of dataList.data.results) {
+    taskName = data.task_name
+    let runServer = data.log.split(':')[0]
+    if ((runServer == runServerFilter) || (runServerFilter == 'all')) {
+      switch (runServer) {
+        case 'web':
+          color = 'black'
+          break
+        case 'db':
+          color = 'gray'
+          break
+        case 'cache':
+          color = 'red'
+          break
+        case 'gateway':
+          color = 'green'
+          break
+        case 'gobble':
+          color = 'blue'
+          break
+        case 'js-gobble':
+          color = 'purple'
+          break
+        case 'mined':
+          color = 'brown'
+          break
+      }
+      logRowsHTML = logRowsHTML + logRowHTML.format(data.created, color, data.log)
+    } else {
+      // pass
+    }
+  }
+  return logAreaHTML.format(taskName, logRowsHTML)
+}
+
+let createLogsList = (logsListHTML) => {
+  // get content-body section and switch to logsListHTML
+  let contentBody = document.getElementsByClassName('content-body')[0]
+  contentBody.innerHTML = logsListHTML
 }
 
 
@@ -73,18 +127,31 @@ let logAreaHTML = `
     << BACK
   </div>
 </div>
-<div class="content-title"><strong>{0}</strong></div>
+<div class="content-title">
+  <strong>{0}</strong>
+  <div class="enabled check-db-btn">
+    Check DB
+  </div>
+</div>
 <div class="task-tags">
-  <div class="task-tag black">web</div>
-  <div class="task-tag gray">db</div>
-  <div class="task-tag red">cache</div>
-  <div class="task-tag green">gateway</div>
-  <div class="task-tag blue">gobble</div>
-  <div class="task-tag purple">js-gobble</div>
-  <div class="task-tag brown">mined</div>
+  <div id="task-tag" class="all task-tag black" name="all">ALL</div>
+  <div id="task-tag" class="task-tag black" name="web">web</div>
+  <div id="task-tag" class="task-tag gray" name="db">db</div>
+  <div id="task-tag" class="task-tag red" name="cache">cache</div>
+  <div id="task-tag" class="task-tag green" name="gateway">gateway</div>
+  <div id="task-tag" class="task-tag blue" name="gobble">gobble</div>
+  <div id="task-tag" class="task-tag purple" name="js-gobble">js-gobble</div>
+  <div id="task-tag" class="task-tag brown" name="mined">mined</div>
 </div>
 <div class="log-body">
   {1}
+</div>
+`
+
+let logRowHTML = `
+<div class="log-row">
+  <div class="log-created">{0}</div>
+  <div class="{1} log-content">{2}</div>
 </div>
 `
 
@@ -111,24 +178,43 @@ document.addEventListener("DOMContentLoaded", event => {
   .then( reply => createTasksList(reply) )
 })
 
+var applyTaskLogFilter = false // when loading logs for the first time, this should be false
 document.addEventListener("click", e => {
 
     if (e.target.id == 'run') {
       let taskRowText = e.target.parentNode.parentNode.innerText
       let textList = taskRowText.split(/(\s+)/)
       let taskName = textList[0]
-      updateLog(taskName + ' clicked')
+      updateLog(taskName + ' clicked, task running (check logs)')
+
+      runTask(taskName)
+      .then( reply => { console.log(reply) })
+      .catch( error => { console.log(error) })
     }
 
-    else if (e.target.id == 'task-log') {
+    // only run this event when applyTaskLogFilter is false, meaning page is loading logs for the first time
+    else if ((e.target.id == 'task-log') && (applyTaskLogFilter == false)) {
       let taskRowText = e.target.parentNode.parentNode.innerText
       let textList = taskRowText.split(/(\s+)/)
       let taskName = textList[0]
       updateLog(taskName + ' log check clicked')
 
-      // get content-body section and switch to logAreaHTML
-      let contentBody = document.getElementsByClassName('content-body')[0]
-      contentBody.innerHTML = logAreaHTML.format('logging logging')
+      loadLogs(taskName)
+      .then( reply => createLogsListHTML(reply, 'all') )
+      .then( reply => createLogsList(reply) )
+
+      applyTaskLogFilter = true // switch to true once first log load has been done
+    }
+
+    else if (e.target.id == 'task-tag') {
+      let taskName = document.getElementsByClassName('content-title')[0]
+      taskName = taskName.innerText.split(/(\s+)/)[0]
+
+      let runServerFilter = e.target.getAttribute('name')
+      updateLog('Filter: ' + runServerFilter + ' applied')
+      loadLogs(taskName)
+      .then( reply => createLogsListHTML(reply, runServerFilter) )
+      .then( reply => createLogsList(reply) )
     }
 
     else if (e.target.id == 'back-btn') {
@@ -137,5 +223,7 @@ document.addEventListener("click", e => {
       .then( reply => createTasksListHTML(reply) )
       .then( reply => createTasksList(reply) )
       updateLog('Tasks list loaded')
+
+      applyTaskLogFilter = false // this should be false, because user will have to set logs for the first time again
     }
 })

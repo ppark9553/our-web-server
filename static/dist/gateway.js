@@ -122,8 +122,10 @@ String.prototype.format = function () {
   return formatted;
 };
 
-// constants here
+// constants/URLs here
 var actionsURL = 'http://149.28.25.177/hidden-api/gateway-actions/';
+var gatewayLogsURL = 'http://149.28.25.177/hidden-api/gateway-states/?ordering=created&date={0}&task_name={1}';
+var taskURL = 'http://149.28.25.177/hidden-api/task/?type=';
 
 ///////////////////////////
 // define functions here //
@@ -170,7 +172,83 @@ var createTasksList = function createTasksList(tasksListHTML) {
   contentBody.innerHTML = tasksListHTML;
 };
 
-var loadLogs = function loadLogs(taskName) {};
+var runTask = function runTask(taskName) {
+  var fullTaskURL = taskURL + taskName;
+  return _axios2.default.get(fullTaskURL);
+};
+
+var loadLogs = function loadLogs(taskName) {
+  var date = new Date().toISOString().slice(0, 10).replace(/-/gi, '');
+  var reqURL = gatewayLogsURL.format(date, taskName);
+  return _axios2.default.get(reqURL);
+};
+
+var createLogsListHTML = function createLogsListHTML(dataList, runServerFilter) {
+  var taskName = '';
+  var color = '';
+  var logRowsHTML = '';
+  var _iteratorNormalCompletion2 = true;
+  var _didIteratorError2 = false;
+  var _iteratorError2 = undefined;
+
+  try {
+    for (var _iterator2 = (0, _getIterator3.default)(dataList.data.results), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+      var data = _step2.value;
+
+      taskName = data.task_name;
+      var runServer = data.log.split(':')[0];
+      if (runServer == runServerFilter || runServerFilter == 'all') {
+        switch (runServer) {
+          case 'web':
+            color = 'black';
+            break;
+          case 'db':
+            color = 'gray';
+            break;
+          case 'cache':
+            color = 'red';
+            break;
+          case 'gateway':
+            color = 'green';
+            break;
+          case 'gobble':
+            color = 'blue';
+            break;
+          case 'js-gobble':
+            color = 'purple';
+            break;
+          case 'mined':
+            color = 'brown';
+            break;
+        }
+        logRowsHTML = logRowsHTML + logRowHTML.format(data.created, color, data.log);
+      } else {
+        // pass
+      }
+    }
+  } catch (err) {
+    _didIteratorError2 = true;
+    _iteratorError2 = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion2 && _iterator2.return) {
+        _iterator2.return();
+      }
+    } finally {
+      if (_didIteratorError2) {
+        throw _iteratorError2;
+      }
+    }
+  }
+
+  return logAreaHTML.format(taskName, logRowsHTML);
+};
+
+var createLogsList = function createLogsList(logsListHTML) {
+  // get content-body section and switch to logsListHTML
+  var contentBody = document.getElementsByClassName('content-body')[0];
+  contentBody.innerHTML = logsListHTML;
+};
 
 var updateLog = function updateLog(log) {
   var logEl = document.getElementById('log');
@@ -183,7 +261,9 @@ var taskListHTML = '\n<div class="content-title"><strong>Tasks List</strong></di
 // plugin task name
 var taskRowHTML = '\n<div class="task-row">\n  <div class="task-name">{0}</div>\n  <div class="task-actions">\n    <div id="run" class="task-btn">RUN</div>\n    <div id="task-log" class="task-btn">LOG</div>\n  </div>\n</div>\n';
 
-var logAreaHTML = '\n<div class="back-btn-section">\n  <div id="back-btn" class="back-btn">\n    << BACK\n  </div>\n</div>\n<div class="content-title"><strong>{0}</strong></div>\n<div class="task-tags">\n  <div class="task-tag black">web</div>\n  <div class="task-tag gray">db</div>\n  <div class="task-tag red">cache</div>\n  <div class="task-tag green">gateway</div>\n  <div class="task-tag blue">gobble</div>\n  <div class="task-tag purple">js-gobble</div>\n  <div class="task-tag brown">mined</div>\n</div>\n<div class="log-body">\n  {1}\n</div>\n';
+var logAreaHTML = '\n<div class="back-btn-section">\n  <div id="back-btn" class="back-btn">\n    << BACK\n  </div>\n</div>\n<div class="content-title">\n  <strong>{0}</strong>\n  <div class="enabled check-db-btn">\n    Check DB\n  </div>\n</div>\n<div class="task-tags">\n  <div id="task-tag" class="all task-tag black" name="all">ALL</div>\n  <div id="task-tag" class="task-tag black" name="web">web</div>\n  <div id="task-tag" class="task-tag gray" name="db">db</div>\n  <div id="task-tag" class="task-tag red" name="cache">cache</div>\n  <div id="task-tag" class="task-tag green" name="gateway">gateway</div>\n  <div id="task-tag" class="task-tag blue" name="gobble">gobble</div>\n  <div id="task-tag" class="task-tag purple" name="js-gobble">js-gobble</div>\n  <div id="task-tag" class="task-tag brown" name="mined">mined</div>\n</div>\n<div class="log-body">\n  {1}\n</div>\n';
+
+var logRowHTML = '\n<div class="log-row">\n  <div class="log-created">{0}</div>\n  <div class="{1} log-content">{2}</div>\n</div>\n';
 
 // ip address should be that of gateway server
 var socket = (0, _socket2.default)('http://149.28.25.177:3000');
@@ -210,31 +290,58 @@ document.addEventListener("DOMContentLoaded", function (event) {
   });
 });
 
+var applyTaskLogFilter = false; // when loading logs for the first time, this should be false
 document.addEventListener("click", function (e) {
 
   if (e.target.id == 'run') {
     var taskRowText = e.target.parentNode.parentNode.innerText;
     var textList = taskRowText.split(/(\s+)/);
     var taskName = textList[0];
-    updateLog(taskName + ' clicked');
-  } else if (e.target.id == 'task-log') {
-    var _taskRowText = e.target.parentNode.parentNode.innerText;
-    var _textList = _taskRowText.split(/(\s+)/);
-    var _taskName = _textList[0];
-    updateLog(_taskName + ' log check clicked');
+    updateLog(taskName + ' clicked, task running (check logs)');
 
-    // get content-body section and switch to logAreaHTML
-    var contentBody = document.getElementsByClassName('content-body')[0];
-    contentBody.innerHTML = logAreaHTML.format('logging logging');
-  } else if (e.target.id == 'back-btn') {
-    updateLog('Returning back to tasks list...');
-    loadTasks().then(function (reply) {
-      return createTasksListHTML(reply);
-    }).then(function (reply) {
-      return createTasksList(reply);
+    runTask(taskName).then(function (reply) {
+      console.log(reply);
+    }).catch(function (error) {
+      console.log(error);
     });
-    updateLog('Tasks list loaded');
   }
+
+  // only run this event when applyTaskLogFilter is false, meaning page is loading logs for the first time
+  else if (e.target.id == 'task-log' && applyTaskLogFilter == false) {
+      var _taskRowText = e.target.parentNode.parentNode.innerText;
+      var _textList = _taskRowText.split(/(\s+)/);
+      var _taskName = _textList[0];
+      updateLog(_taskName + ' log check clicked');
+
+      loadLogs(_taskName).then(function (reply) {
+        return createLogsListHTML(reply, 'all');
+      }).then(function (reply) {
+        return createLogsList(reply);
+      });
+
+      applyTaskLogFilter = true; // switch to true once first log load has been done
+    } else if (e.target.id == 'task-tag') {
+      var _taskName2 = document.getElementsByClassName('content-title')[0];
+      _taskName2 = _taskName2.innerText.split(/(\s+)/)[0];
+
+      var runServerFilter = e.target.getAttribute('name');
+      updateLog('Filter: ' + runServerFilter + ' applied');
+      loadLogs(_taskName2).then(function (reply) {
+        return createLogsListHTML(reply, runServerFilter);
+      }).then(function (reply) {
+        return createLogsList(reply);
+      });
+    } else if (e.target.id == 'back-btn') {
+      updateLog('Returning back to tasks list...');
+      loadTasks().then(function (reply) {
+        return createTasksListHTML(reply);
+      }).then(function (reply) {
+        return createTasksList(reply);
+      });
+      updateLog('Tasks list loaded');
+
+      applyTaskLogFilter = false; // this should be false, because user will have to set logs for the first time again
+    }
 });
 
 /***/ }),
