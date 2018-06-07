@@ -60,12 +60,21 @@ class Puppet {
     let height = this.height
 
     // sets the browser attribute
-    this.browser = await puppeteer.launch({
-      headless: headless_bool,
-      args: ['--no-sandbox'],
-      slowMo: slowMo_time,
-      args: ['--window-size=${width}, ${height}']
-    })
+    if (headless_bool == true) {
+      let puppeteerConfig = {
+        headless: headless_bool,
+        args: ['--no-sandbox'],
+        slowMo: slowMo_time,
+      }
+    } else if (headless_bool = false) {
+      let puppeteerConfig = {
+        headless: headless_bool,
+        args: ['--no-sandbox'],
+        slowMo: slowMo_time,
+        args: ['--window-size=${width}, ${height}']
+      }
+    }
+    this.browser = await puppeteer.launch(puppeteerConfig)
     this.page = await this.browser.newPage()
 
     await this.page.setViewport({ width, height })
@@ -122,7 +131,7 @@ class Puppet {
         let data = JSON.parse(document.querySelector('body').innerText)
         return data
     })
-    
+
     return dateData
   }
 
