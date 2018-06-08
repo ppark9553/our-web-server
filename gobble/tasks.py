@@ -20,6 +20,8 @@ from gateway.cache import RedisClient
 from gateway.logger import GatewayLogger
 from gateway.task_sender import TaskSender
 
+from stockapi.models import Date
+
 # @task(name="sum_two_numbers")
 # def add(x, y):
 #     return x + y
@@ -125,7 +127,7 @@ def mass_date_crawl():
         client.captureException()
 
 @task(name="mass_date_save")
-def mass_date_save():
+def mass_date_save(cache_key, to):
     try: # always capture exceptions with Sentry
         task_name = 'MASS_DATE_SAVE'
         logger = GatewayLogger()
@@ -133,8 +135,14 @@ def mass_date_save():
 
         # log to gateway server
         logger.set_log(task_name, 'P', 'gobble server received task: {}'.format(task_name))
-        local('node /home/arbiter/js-gobble/{}.js'.format(task_name))
-        logger.set_log(task_name, 'P', 'running "node /home/arbiter/js-gobble/{}.js"'.format(task_name))
+        r = RedisClient()
+        res = r.get_list(cache_key)
+        date_list = []
+        for date in res:
+            date_inst = Date(date=date)
+            date_list.append(date_inst)
+        Date.objects.bulk_create(date_list)
+        logger.set_log(task_name, 'P', 'saved mass_date data to Django DB')
         return True
     except:
         client.captureException()

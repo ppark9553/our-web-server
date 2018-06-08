@@ -19,7 +19,7 @@ class GatewayAction(models.Model):
 class GatewayState(models.Model):
     date = models.CharField(max_length=10)
     created = models.DateTimeField(auto_now_add=True)
-    task_name = models.CharField(max_length=20)
+    task_name = models.CharField(max_length=50)
     state = models.CharField(max_length=1, choices=STATE_TYPES)
     log = models.TextField(blank=True,
                            null=True)

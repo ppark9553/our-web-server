@@ -27,6 +27,7 @@ from gobble.tasks import (
     get_wonseok_test,
     save_wonseok_test,
     mass_date_crawl,
+    mass_date_save,
 )
 
 
@@ -72,16 +73,9 @@ class GatewayReducer(object):
             client.captureException()
 
     def mass_date_save(self, save_at, cached_key):
-        hostname = CONFIG['ip-address'][save_at]
-        print('Hostname: {}'.format(hostname))
-        r = redis.Redis(host=hostname, port=6379)
-        print('Connected to Redis')
-        mass_dates = r.lrange(cached_key, 0, -1)
-        inst_list = []
-        for date_data in mass_dates:
-            date = date_data.decode('utf-8')
-            date_inst = Date(date=date)
-            inst_list.append(date_inst)
-        Date.objects.bulk_create(inst_list)
-        print('Date instances bulk created success')
-        return True
+        try:
+            cache_key = self.action['cache_key']
+            to = self.action['to']
+            mass_date_save.delay(cache_key, to)
+        except:
+            client.captureException()

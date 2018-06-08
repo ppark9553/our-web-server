@@ -310,4 +310,27 @@ body {
   .task-row > .task-actions > .task-btn {
     width: 10rem;
   }
+  .back-btn {
+    margin-bottom: 1.7rem;
+  }
+  .log-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .log-row {
+    width: 85%;
+    border-bottom: solid 1px #888888;
+    padding: 0.4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .log-content {
+    margin-top: 0.5rem;
+    margin-left: 1rem;
+  }
 }

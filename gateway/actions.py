@@ -71,11 +71,8 @@ class GatewayActionOBJ(object):
             self.ACTION = {
                 'type': 'MASS_DATE_SAVE',
                 'reduce': 'mass_date_save',
-                'reducing-app': 'gateway',
-                'cached-data': 'True',
-                'save': 'from:db',
                 'cache-key': 'mass_date',
-                'parameter-type': type([])
+                'to': 'db'
             }
 
         else:
