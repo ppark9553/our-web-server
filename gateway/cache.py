@@ -34,7 +34,7 @@ class RedisClient:
         response = self.redis_client.rpush(data[0], *data[1:])
         return response # returns 1 or 0
 
-    def get_list(self, key, type):
+    def get_list(self, key, type='str'):
         response = self.redis_client.lrange(key, 0, -1)
         temp = response
         if type == 'int':
