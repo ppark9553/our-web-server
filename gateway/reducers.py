@@ -74,7 +74,7 @@ class GatewayReducer(object):
 
     def mass_date_save(self):
         try:
-            cache_key = self.action['cache_key']
+            cache_key = self.action['cache-key']
             to = self.action['to']
             mass_date_save.delay(cache_key, to)
         except:

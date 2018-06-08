@@ -18,7 +18,8 @@ class TaskSender {
   }
 
   async sendTask(nextTask) {
-    taskURL = this.taskURL + nextTask
+    let taskURL = this.taskURL + nextTask
+    console.log(taskURL)
     await this._getTask(taskURL)
     .then( response => {
       if (response.data.status == 'DONE') {
@@ -36,6 +37,7 @@ class TaskSender {
 
   async _getTask(taskURL) {
     // named getData because sending request as GET request
+    console.log(taskURL)
     let getData = await axios.get(taskURL)
     return getData
   }
