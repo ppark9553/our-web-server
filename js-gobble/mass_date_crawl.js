@@ -47,7 +47,7 @@ const main = async () => {
   await c.end()
   await logger.setLog(taskName, 'P', 'dates data saved to cache')
 
-  await taskSender.sendTaks('MASS_DATE_SAVE')
+  await taskSender.sendTask('MASS_DATE_SAVE')
   await logger.setLog(taskName, 'P', 'sent MASS_DATE_SAVE action to gateway server')
 
   // log end process
