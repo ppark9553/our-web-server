@@ -72,7 +72,7 @@ class GatewayReducer(object):
         except:
             client.captureException()
 
-    def mass_date_save(self, save_at, cached_key):
+    def mass_date_save(self):
         try:
             cache_key = self.action['cache_key']
             to = self.action['to']
