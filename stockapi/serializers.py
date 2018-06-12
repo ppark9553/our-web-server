@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from stockapi.models import (
     Date,
+    MarketCapital,
     Ticker,
     OHLCV,
 )
@@ -11,6 +12,21 @@ class DateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Date
         fields = ('date',)
+
+
+class MarketCapitalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MarketCapital
+        fields = ('date',
+                  'code',
+                  'name',
+                  'comm_cls_prc',
+                  'comm_stk_qty',
+                  'pref_stk_qty',
+                  'comm_stk_qty_af',
+                  'pref_stk_qty_af',
+                  'mkt_cap_comm',
+                  'mkt_cap',)
 
 
 class TickerSerializer(serializers.ModelSerializer):

@@ -22,7 +22,7 @@ const main = async () => {
   // process
   let fn = new Fnguide.Puppet(taskName)
   await fn.logInitialized()
-  await fn.startBrowser(true, 100)
+  await fn.startBrowser(false, 100)
   .then( response => { console.log(response) })
   .catch( error => { console.log(error) })
   await fn.login()

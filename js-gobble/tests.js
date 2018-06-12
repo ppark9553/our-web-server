@@ -24,26 +24,41 @@ async function testLogger() {
 
 // fnguide test
 async function testFnguide() {
+  // let's try crawling market_cap data
   totalTests += 1
+
   let fn = new Fnguide.Puppet('fnguide_test')
   await fn.logInitialized()
+  console.log(fn.id)
+  console.log(fn.pw)
+  console.log(fn.width)
+  console.log(fn.height)
+  console.log(fn.todayDate)
   console.log('1. fn initialized')
-  await fn.startBrowser(false, 100)
-  console.log('2. started browser')
+
+  await fn.logInitialized()
+  console.log('2. log initialized complete')
+
+  let status = await fn.startBrowser(false, 100)
+  if (status == true) {
+    console.log('3. started browser')
+  }
+
   await fn.login()
-  console.log('3. logged in')
-  let dateData = await fn.massDateCrawl()
-  console.log('4. date data received')
-  let p = new Processor.Processor(dateData)
-  let datesData = await p.processMassDate()
-  console.log('5. processed data')
-  let c = new Cache.RedisClient()
-  await c.delKey('mass_date')
-  await c.saveList(datesData)
-  await c.end()
-  console.log('6. saved data to cache')
-  await fn.done()
-  console.log('6. closing browser')
+  console.log('4. logged in')
+
+  // let dateData = await fn.massDateCrawl()
+  // console.log('4. date data received')
+  // let p = new Processor.Processor(dateData)
+  // let datesData = await p.processMassDate()
+  // console.log('5. processed data')
+  // let c = new Cache.RedisClient()
+  // await c.delKey('mass_date')
+  // await c.saveList(datesData)
+  // await c.end()
+  // console.log('6. saved data to cache')
+  // await fn.done()
+  // console.log('6. closing browser')
 
   testPassed += 1
 }
@@ -165,10 +180,10 @@ async function testCache() {
 const runTests = async () => {
   // await testLogger()
   // console.log('-----------------')
-  // await testFnguide()
-  // console.log('-----------------')
-  await testCache()
+  await testFnguide()
   console.log('-----------------')
+  // await testCache()
+  // console.log('-----------------')
   console.log('Total tests: ' + totalTests)
   console.log('Test passed: ' + testPassed)
 }

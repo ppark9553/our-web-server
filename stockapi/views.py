@@ -3,11 +3,13 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 
 from stockapi.models import (
     Date,
+    MarketCapital,
     Ticker,
     OHLCV,
 )
 from stockapi.serializers import (
     DateSerializer,
+    MarketCapitalSerializer,
     TickerSerializer,
     OHLCVSerializer,
 )
@@ -19,6 +21,23 @@ class DateAPIView(generics.ListAPIView):
     queryset = Date.objects.all().order_by('-date')
     serializer_class = DateSerializer
     pagination_class = StandardResultPagination
+
+
+class MarketCapitalAPIView(generics.ListAPIView):
+    queryset = MarketCapital.objects.all()
+    serializer_class = MarketCapitalSerializer
+    pagination_class = StandardResultPagination
+    filter_backends = [SearchFilter, OrderingFilter]
+
+    def get_queryset(self, *args, **kwargs):
+        queryset = MarketCapital.objects.all().order_by('id')
+        date_by = self.request.GET.get('date')
+        code_by = self.request.GET.get('code')
+        if date_by:
+            queryset = queryset.filter(date=date_by)
+        if code:
+            queryset = queryset.filter(code=code_by)
+        return queryset
 
 
 class TickerAPIView(generics.ListAPIView):

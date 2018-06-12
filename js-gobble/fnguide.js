@@ -24,7 +24,7 @@ const URL = {
   'MKTCAP_PAGE': 'http://www.fnguide.com/fgdd/StkItemDateCap#tab=D&market=0',
   'API': {
     'date': 'http://www.fnguide.com/api/Fgdd/StkIndMByTimeGrdData?IN_MULTI_VALUE=CJA005930%2CCII.001&IN_START_DT=20000101&IN_END_DT={0}&IN_DATE_TYPE=D&IN_ADJ_YN=Y',
-    'market_cap': 'http://www.fnguide.com/api/Fgdd/StkItemDateCapGrdDataDate?IN_MKT_TYPE=0&IN_SEARCH_DT={0}',
+    'market_cap': 'http://fnguide.com/api/Fgdd/StkItemDateCapGrdDataDate?IN_MKT_TYPE=0&IN_SEARCH_DT={0}',
     'sd': 'http://www.fnguide.com/Api/Fgdd/StkJInvTrdTrendGrdDataDate?IN_MKT_TYPE=0&IN_TRD_DT={0}&IN_UNIT_GB=2',
     'short': 'http://www.fnguide.com/Api/Fgdd/StkLendingGrdDataDateC?IN_MKT_GB=0&IN_STD_DT={0}&IN_DATA_GB=D',
     'financial': 'http://www.fnguide.com/api/Fgdd/StkDateShareIndxGrdDataDate?IN_SEARCH_DT={0}&IN_MKT_TYPE=0&IN_CONSOLIDATED=1',
@@ -58,7 +58,7 @@ class Puppet {
     await this.logger.setLog(this.taskName, 'P', 'FnGuide puppet starting...')
   }
 
-  async startBrowser(headless_bool=true, slowMo_time=100) {
+  async startBrowser(headless_bool, slowMo_time=100) {
     // set attribute values to local variables for ease of use
     let width = this.width
     let height = this.height
@@ -70,7 +70,7 @@ class Puppet {
         args: ['--no-sandbox'],
         slowMo: slowMo_time,
       }
-    } else if (headless_bool = false) {
+    } else if (headless_bool == false) {
       var puppeteerConfig = {
         headless: headless_bool,
         args: ['--no-sandbox'],
@@ -83,6 +83,8 @@ class Puppet {
 
     await this.page.setViewport({ width, height })
     await this.logger.setLog(this.taskName, 'P', 'Puppeteer browser ready to gobble data')
+
+    return true
   }
 
   async login() {
@@ -106,7 +108,7 @@ class Puppet {
     const logoutOtherIPUserBtnExists = await page.$eval(
       logoutOtherIPUserBtnSelector,
       el => (el ? true : false)
-    )
+    ).catch( error => { console.log(error) })
     if (logoutOtherIPUserBtnExists) {
       await page.click(logoutOtherIPUserBtnSelector)
     }
@@ -115,8 +117,13 @@ class Puppet {
     // force wait for 5 seconds before waitForSelector
     // initially waited for userIDSelector but didn't work
     // so now waiting for FnguideLogoSelector
-    await page.waitForSelector(FnguideLogoSelector)
-    // await page.waitForSelector(userIDSelector)
+    // console.log('page waiting 5 secs')
+    // await page.waitFor(5000)
+    // .then( () => {
+    //   page.waitForSelector(FnguideLogoSelector).then().catch()
+    // })
+    // console.log('page waited 5 secs')
+    await page.waitForSelector(FnguideLogoSelector, { timeout: 5000 })
 
     await this.logger.setLog(this.taskName, 'P', 'User logged in, ready to gobble')
   }

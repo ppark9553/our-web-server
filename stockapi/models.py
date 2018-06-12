@@ -37,6 +37,22 @@ class Date(models.Model):
         return self.date
 
 
+class MarketCapital(models.Model):
+    date = models.CharField(max_length=10)
+    code = models.CharField(max_length=20)
+    name = models.CharField(max_length=50)
+    comm_cls_prc = models.IntegerField() # 종가
+    comm_stk_qty = models.IntegerField() # 보통주 상장주식수
+    pref_stk_qty = models.IntegerField() # 우선주 상장주식수
+    comm_stk_qty_af = models.IntegerField() # 보통주 상장예정주식수
+    pref_stk_qty_af = models.IntegerField() # 우선주 상장예정주식수
+    mkt_cap_comm = models.IntegerField() # 보통주 시가총액
+    mkt_cap = models.IntegerField() # 시가총액
+
+    def __str__(self):
+        return '{} {}'.format(self.date, self.code)
+
+
 class Ticker(models.Model):
     '''
     - description: KOSPI & KOSDAQ & Index tickers updated daily
