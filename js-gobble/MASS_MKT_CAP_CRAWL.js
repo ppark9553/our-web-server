@@ -40,7 +40,10 @@ const main = async () => {
   // browser load complete, and logged in
   await logger.setLog(taskName, 'p', 'retrieving all dates crawler needs to crawl')
   let datesData = await api.getDates()
-  console.log(datesData)
+  console.log(datesData.data)
+  // for (let date of datesData) {
+  //   console.log(date)
+  // }
 
   // log end process
   await logger.setLog(taskName, 'P', 'ran MASS_DATE_CRAWL.js successfully')

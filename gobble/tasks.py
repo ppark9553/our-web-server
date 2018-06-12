@@ -143,6 +143,20 @@ def mass_date_save(cache_key, to):
             date_list.append(date_inst)
         Date.objects.bulk_create(date_list)
         logger.set_log(task_name, 'P', 'saved mass_date data to Django DB')
+
+        # delete duplicates if existent
+        unique_dates = Date.objects.distinct('date')
+        deleted = Date.objects.exclude(pk__in=unique_dates).delete()
+        if deleted != 0:
+            logger.set_log(task_name, 'P', 'deleted duplicate dates in DB')
+
+        # delete cache key after done to prevent duplicates in cache server
+        cache_deleted = r.del_key(cache_key)
+        if cache_deleted:
+            logger.set_log(task_name, 'P', 'deleted cache key in cache server')
+        else:
+            logger.set_log(task_name, 'F', 'failed to delete cache key')
+            
         return True
     except:
         client.captureException()
