@@ -146,7 +146,7 @@ class Puppet {
     return dateData
   }
 
-  async massMktCapCrawl() {
+  async massMktCapCrawl(date) {
     let page = this.page
 
     // set headers to fool Fnguide
@@ -155,9 +155,19 @@ class Puppet {
       'X-Requested-With': 'XMLHttpRequest'
     })
 
-    // get all the dates you need to crawl with axios
-    let datesData = await axios.get('http://' + GATEWAY_IP + '/stock-api/date/')
-    console.log(datesData)
+    let mktCapURL = URL.API.market_cap.format(date)
+    // enforce wait for random seconds between 20 to 35 seconds
+    let waitTime = Math.floor((Math.random() * 15) + 20) * 1000
+    await page.waitFor(waitTime)
+    .then( () => {
+      page.goto(mktCapURL).then().catch()
+    })
+    const mktCapData = await page.evaluate(() => {
+        let data = JSON.parse(document.querySelector('body').innerText)
+        return data
+    })
+
+    return dateData
   }
 
   async done() {
