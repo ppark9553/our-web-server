@@ -14,6 +14,20 @@ class GatewayActionSerializer(serializers.ModelSerializer):
                   'reduce',
                   'other',)
 
+    def create(self, validated_data):
+        type = validated_data['type']
+        reduce = validated_data['reduce']
+        other = validated_data['other']
+        action_obj = GatewayAction(
+            type=type,
+            reduce=reduce,
+            other=other
+        )
+        print(type)
+        print(reduce)
+        print(other)
+        return action_obj
+
 
 class GatewayStateSerializer(serializers.ModelSerializer):
     class Meta:

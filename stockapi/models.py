@@ -53,6 +53,33 @@ class MarketCapital(models.Model):
         return '{} {}'.format(self.date, self.code)
 
 
+class BuySell(models.Model):
+    date = models.CharField(max_length=10)
+    code = models.CharField(max_length=20)
+    name = models.CharField(max_length=50)
+    forgn_b = models.IntegerField()
+    forgn_s = models.IntegerField()
+    forgn_n = models.IntegerField()
+    private_b = models.IntegerField()
+    private_s = models.IntegerField()
+    private_n = models.IntegerField()
+    inst_b = models.IntegerField()
+    inst_s = models.IntegerField()
+    inst_n = models.IntegerField()
+    trust_b = models.IntegerField()
+    trust_s = models.IntegerField()
+    trust_n = models.IntegerField()
+    pension_b = models.IntegerField()
+    pension_s = models.IntegerField()
+    pension_n = models.IntegerField()
+    etc_inst_b = models.IntegerField()
+    etc_inst_s = models.IntegerField()
+    etc_inst_n = models.IntegerField()
+
+    def __str__(self):
+        return '{} {}'.format(self.date, self.code)
+
+
 class Ticker(models.Model):
     '''
     - description: KOSPI & KOSDAQ & Index tickers updated daily

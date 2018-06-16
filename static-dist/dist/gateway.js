@@ -256,7 +256,7 @@ var updateLog = function updateLog(log) {
 };
 
 // plugin task rows
-var taskListHTML = '\n<div class="content-title"><strong>Tasks List</strong></div>\n<div class="task-body">{0}</div>\n</div>\n';
+var taskListHTML = '\n<div class="content-title">\n  <strong>Tasks List</strong>\n  <div id="add-task" class="add-task-btn">ADD TASK</div>\n</div>\n<!-- The Modal -->\n<div id="myModal" class="modal">\n  <!-- Modal content -->\n  <div class="modal-content">\n    <div class="modal-header">\n      <span id="close-modal" class="close">&times;</span>\n      <h2>Add new task</h2>\n    </div>\n    <div class="modal-body">\n      <p>Some text in the Modal Body</p>\n      <p>Some other text...</p>\n    </div>\n    <div class="modal-footer">\n      <h3>Modal Footer</h3>\n    </div>\n  </div>\n</div>\n<div class="task-body">{0}</div>\n</div>\n';
 
 // plugin task name
 var taskRowHTML = '\n<div class="task-row">\n  <div class="task-name">{0}</div>\n  <div class="task-actions">\n    <div id="run" class="task-btn">RUN</div>\n    <div id="task-log" class="task-btn">LOG</div>\n  </div>\n</div>\n';
@@ -304,6 +304,12 @@ document.addEventListener("click", function (e) {
     }).catch(function (error) {
       console.log(error);
     });
+  } else if (e.target.id == 'add-task') {
+    var modal = document.getElementById('myModal');
+    modal.style.display = "block";
+  } else if (e.target.id == 'close-modal') {
+    var _modal = document.getElementById('myModal');
+    _modal.style.display = "none";
   }
 
   // only run this event when applyTaskLogFilter is false, meaning page is loading logs for the first time
@@ -343,6 +349,15 @@ document.addEventListener("click", function (e) {
       applyTaskLogFilter = false; // this should be false, because user will have to set logs for the first time again
     }
 });
+
+///// modal js code /////
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function (event) {
+  var modal = document.getElementById('myModal');
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+};
 
 /***/ }),
 

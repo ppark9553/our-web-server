@@ -106,6 +106,9 @@ if DEBUG == True:
             'PASSWORD': DB_PW,
             'HOST': CONFIG['ip-address']['db'],
             'PORT': '',
+            'TEST': {
+                'NAME': 'test_arbiter', # run "ALTER ROLE arbiter CREATEDB;" in psql
+            },
         }
     }
 else:

@@ -105,7 +105,27 @@ let updateLog = log => {
 
 // plugin task rows
 let taskListHTML = `
-<div class="content-title"><strong>Tasks List</strong></div>
+<div class="content-title">
+  <strong>Tasks List</strong>
+  <div id="add-task" class="add-task-btn">ADD TASK</div>
+</div>
+<!-- The Modal -->
+<div id="myModal" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <div class="modal-header">
+      <span id="close-modal" class="close">&times;</span>
+      <h2>Add new task</h2>
+    </div>
+    <div class="modal-body">
+      <p>Some text in the Modal Body</p>
+      <p>Some other text...</p>
+    </div>
+    <div class="modal-footer">
+      <h3>Modal Footer</h3>
+    </div>
+  </div>
+</div>
 <div class="task-body">{0}</div>
 </div>
 `
@@ -192,6 +212,16 @@ document.addEventListener("click", e => {
       .catch( error => { console.log(error) })
     }
 
+    else if (e.target.id == 'add-task') {
+      let modal = document.getElementById('myModal')
+      modal.style.display = "block"
+    }
+
+    else if (e.target.id == 'close-modal') {
+      let modal = document.getElementById('myModal')
+      modal.style.display = "none"
+    }
+
     // only run this event when applyTaskLogFilter is false, meaning page is loading logs for the first time
     else if ((e.target.id == 'task-log') && (applyTaskLogFilter == false)) {
       let taskRowText = e.target.parentNode.parentNode.innerText
@@ -227,3 +257,12 @@ document.addEventListener("click", e => {
       applyTaskLogFilter = false // this should be false, because user will have to set logs for the first time again
     }
 })
+
+///// modal js code /////
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  let modal = document.getElementById('myModal')
+  if (event.target == modal) {
+    modal.style.display = "none"
+  }
+}

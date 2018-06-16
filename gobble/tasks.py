@@ -19,6 +19,7 @@ from gateway.models import GatewayState, SoulLog
 from gateway.cache import RedisClient
 from gateway.logger import GatewayLogger
 from gateway.task_sender import TaskSender
+from gateway.controllers import gateway_reducer
 
 from stockapi.models import Date
 
@@ -156,7 +157,14 @@ def mass_date_save(cache_key, to):
             logger.set_log(task_name, 'P', 'deleted cache key in cache server')
         else:
             logger.set_log(task_name, 'F', 'failed to delete cache key')
-            
+
         return True
     except:
         client.captureException()
+
+
+
+### changing actions/reducers format
+@task(name="test_action")
+def test_action():
+    print('hello hello all the way from test_action in gobble.tasks')

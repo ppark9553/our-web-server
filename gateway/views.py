@@ -25,8 +25,7 @@ from gateway.serializers import (
     GatewayStateSerializer,
     SoulLogSerializer,
 )
-from gateway.actions import GatewayActionOBJ
-from gateway.reducers import GatewayReducer
+from gateway.controllers import GatewayActionOBJ
 from gateway.logger import GatewayLogger
 from gateway.task_sender import TaskSender
 
@@ -35,50 +34,6 @@ from utils.paginations import (
     StandardResultPagination,
     OHLCVPagination,
 )
-
-
-class DateAPIGatewayView(generics.ListCreateAPIView):
-    queryset = Date.objects.all().order_by('-date')
-    serializer_class = DateSerializer
-    pagination_class = StandardResultPagination
-
-
-class TickerAPIGatewayView(generics.ListCreateAPIView):
-    queryset = Ticker.objects.all()
-    serializer_class = TickerSerializer
-    pagination_class = StandardResultPagination
-    filter_backends = [SearchFilter, OrderingFilter]
-
-    def get_queryset(self, *args, **kwargs):
-        queryset = Ticker.objects.all().order_by('id')
-        date_by = self.request.GET.get('date')
-        code_by = self.request.GET.get('code')
-        if date_by:
-            queryset = queryset.filter(date=date_by)
-        if code:
-            queryset = queryset.filter(code=code_by)
-        return queryset
-
-
-class OHLCVAPIGatewayView(generics.ListCreateAPIView):
-    queryset = OHLCV.objects.all()
-    serializer_class = OHLCVSerializer
-    pagination_class = OHLCVPagination
-    filter_backends = [SearchFilter, OrderingFilter]
-
-    def get_queryset(self, *args, **kwargs):
-        queryset = OHLCV.objects.all().order_by('id')
-        date_by = self.request.GET.get('date')
-        start = self.request.GET.get('start')
-        end = self.request.GET.get('end')
-        code_by = self.request.GET.get('code')
-        if date_by:
-            queryset = queryset.filter(date=date_by)
-        if start and end and not date_by:
-            queryset = queryset.filter(date__gte=start).filter(date__lte=end)
-        if code_by:
-            queryset = queryset.filter(code=code_by)
-        return queryset
 
 
 ### gateway API's should be ListCreateAPIView because Node.js app
@@ -91,16 +46,15 @@ class GatewayActionAPIView(generics.ListCreateAPIView):
 
     def get_queryset(self, *args, **kwargs):
         queryset = GatewayAction.objects.all().order_by('id')
-        date_by = self.request.GET.get('date')
-        task_by = self.request.GET.get('task_name')
-        status_by = self.request.GET.get('status')
-        if date_by:
-            queryset = queryset.filter(date=date_by)
-        if task_by:
-            queryset = queryset.filter(task_name=task_by)
-        if status_by:
-            queryset = queryset.filter(status=status_by)
+        type_by = self.request.GET.get('type')
+        if type_by:
+            queryset = queryset.filter(type=type_by)
         return queryset
+
+
+class GatewayActionDetailsAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = GatewayAction.objects.all()
+    serializer_class = GatewayActionSerializer
 
 
 class GatewayStateAPIView(generics.ListCreateAPIView):
@@ -152,7 +106,7 @@ class GatewayStoreView(View):
             # check for action_type availability
             action_inst = GatewayActionOBJ(action_type)
 
-            if action_inst.ACTION['type'] != 'None':
+            if action_inst.action_exists():
                 logger.set_log(action_type, 'P', 'store received action type')
 
                 # initialize action class by passing in the action type retrieved from URL
@@ -166,6 +120,6 @@ class GatewayStoreView(View):
                     logger.set_log(action_type, 'F', 'action failed to reduce')
                     return JsonResponse({'status': 'FAIL'}, json_dumps_params={'ensure_ascii': True})
 
-            elif action_inst.ACTION['type'] == 'None':
+            elif not action_inst.action_exists():
                 logger.set_log(action_type, 'F', 'no such action exists error')
                 return JsonResponse({'status': 'NO ACTION: {}'.format(action_type)}, json_dumps_params={'ensure_ascii': True})

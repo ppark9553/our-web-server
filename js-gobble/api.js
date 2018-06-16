@@ -21,18 +21,22 @@ class API {
   }
 
   async retrieveAllDates() {
-    let datesData = await this.getDates(1, false)
-    let nextURL = datesData.data.next
-    let datesDataResult = datesData.data.results
-    let allDates = []
+    // this method is used so crawlers know on what date they should crawl data
+    let allDates = [] // save all dates here
+    let nextURL = this.datesAPI + 1 // first request URL
+    // empty variables
+    let datesData = ''
+    let datesDataResult = ''
+    // start looping
     while (nextURL != null) {
+      console.log(nextURL)
+      datesData = await this.getDates(0, nextURL)
+      nextURL = datesData.data.next
+      datesDataResult = datesData.data.results
       for (let dateData of datesDataResult) {
         let dateDataPoint = dateData.date
         allDates.push(dateDataPoint)
       }
-      let datesData = await this.getDates(0, nextURL)
-      nextURL = datesData.data.next
-      datesDataResult = datesData.data.results
     }
     return allDates
   }

@@ -15,13 +15,13 @@ const main = async () => {
   // 7. save json data to cache
   // 8. send data save task to gateway server
 
-  let taskName = 'MASS_MKT_CAP_CRAWL'
+  let taskName = 'MASS_SD_CRAWL'
   let logger = new Logger.Logger()
   let taskSender = new TaskSender.TaskSender(taskName)
   let api = new API.API()
 
   // log start process
-  await logger.setLog(taskName, 'P', 'starting MASS_DATE_CRAWL.js script')
+  await logger.setLog(taskName, 'P', 'starting MASS_SD_CRAWL.js script')
 
   // process
   let fn = new Fnguide.Puppet(taskName)
@@ -38,18 +38,37 @@ const main = async () => {
     fn.login()
   })
   // browser load complete, and logged in
-  let mktCapData = await fn.massMktCapCrawl('20180612')
-  console.log(mktCapData)
-  // let datesData = await api.retrieveAllDates()
-  // console.log(datesData)
-  // for (let date of datesData) {
-  //   let mktCapData = await fn.massMktCapCrawl(date)
-  //   console.log(mktCapData)
-  //   break
-  // }
+
+  // retrieve dates first
+  let datesData = await api.retrieveAllDates()
+  for (let date of datesData) {
+    // loop through all the dates and start crawling data
+    let sdData = await fn.massSDCrawl(date)
+    let p = new Processor.Processor(sdData)
+    let allSdData = await p.processMassSD(date)
+    console.log(allSdData)
+
+    // connect to cache and save data
+    let c = new Cache.RedisClient()
+    await c.auth()
+    let keyExists = await c.keyExists('mass_sd') // first delete key if already existent
+    if (keyExists == 1) {
+      await c.delKey('mass_sd')
+    }
+    await c.setList(allSdData)
+    console.log('cache set complete')
+    // after cache set complete, set task tracker cache key/value
+    // this is so Django app can know how to save cached data correctly
+    let taskKeyExists = await c.keyExists('')
+
+    // after set cache, poll django for save to DB complete event
+    // once Django app has saved all the cached data, start with the next date
+
+  }
+  await fn.done()
 
   // log end process
-  await logger.setLog(taskName, 'P', 'ran MASS_DATE_CRAWL.js successfully')
+  await logger.setLog(taskName, 'P', 'ran MASS_SD_CRAWL.js successfully')
 }
 
 // run the main function

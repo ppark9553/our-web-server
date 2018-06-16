@@ -3,6 +3,7 @@ from rest_framework import serializers
 from stockapi.models import (
     Date,
     MarketCapital,
+    BuySell,
     Ticker,
     OHLCV,
 )
@@ -27,6 +28,32 @@ class MarketCapitalSerializer(serializers.ModelSerializer):
                   'pref_stk_qty_af',
                   'mkt_cap_comm',
                   'mkt_cap',)
+
+
+class BuySellSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BuySell
+        fields = ('date',
+                  'code',
+                  'name',
+                  'forgn_b',
+                  'forgn_s',
+                  'forgn_n',
+                  'private_b',
+                  'private_s',
+                  'private_n',
+                  'inst_b',
+                  'inst_s',
+                  'inst_n',
+                  'trust_b',
+                  'trust_s',
+                  'trust_n',
+                  'pension_b',
+                  'pension_s',
+                  'pension_n',
+                  'etc_inst_b',
+                  'etc_inst_s',
+                  'etc_inst_n',)
 
 
 class TickerSerializer(serializers.ModelSerializer):

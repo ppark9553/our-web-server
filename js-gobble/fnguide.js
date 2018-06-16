@@ -24,7 +24,7 @@ const URL = {
   'MKTCAP_PAGE': 'http://www.fnguide.com/fgdd/StkItemDateCap#tab=D&market=0',
   'API': {
     'date': 'http://www.fnguide.com/api/Fgdd/StkIndMByTimeGrdData?IN_MULTI_VALUE=CJA005930%2CCII.001&IN_START_DT=20000101&IN_END_DT={0}&IN_DATE_TYPE=D&IN_ADJ_YN=Y',
-    'market_cap': 'http://fnguide.com/api/Fgdd/StkItemDateCapGrdDataDate?IN_MKT_TYPE=0&IN_SEARCH_DT={0}',
+    'market_cap': 'http://fnguide.com/api/Fgdd/StkItemDateCapGrdDataDate?IN_MKT_TYPE=1&IN_SEARCH_DT={0}',
     'sd': 'http://www.fnguide.com/Api/Fgdd/StkJInvTrdTrendGrdDataDate?IN_MKT_TYPE=0&IN_TRD_DT={0}&IN_UNIT_GB=2',
     'short': 'http://www.fnguide.com/Api/Fgdd/StkLendingGrdDataDateC?IN_MKT_GB=0&IN_STD_DT={0}&IN_DATA_GB=D',
     'financial': 'http://www.fnguide.com/api/Fgdd/StkDateShareIndxGrdDataDate?IN_SEARCH_DT={0}&IN_MKT_TYPE=0&IN_CONSOLIDATED=1',
@@ -118,12 +118,12 @@ class Puppet {
     // initially waited for userIDSelector but didn't work
     // so now waiting for FnguideLogoSelector
     // console.log('page waiting 5 secs')
-    // await page.waitFor(5000)
-    // .then( () => {
-    //   page.waitForSelector(FnguideLogoSelector).then().catch()
-    // })
+    await page.waitFor(5000)
+    .then( () => {
+      page.waitForSelector(FnguideLogoSelector).then().catch()
+    })
     // console.log('page waited 5 secs')
-    await page.waitForSelector(FnguideLogoSelector, { timeout: 5000 })
+    // await page.waitForSelector(FnguideLogoSelector, { timeout: 5000 })
 
     await this.logger.setLog(this.taskName, 'P', 'User logged in, ready to gobble')
   }
@@ -149,25 +149,61 @@ class Puppet {
   async massMktCapCrawl(date) {
     let page = this.page
 
-    // set headers to fool Fnguide
-    await page.setExtraHTTPHeaders({
-      'Referer': 'http://fnguide.com/fgdd/StkItemDateCap',
-      'X-Requested-With': 'XMLHttpRequest'
+    page.on('request', request => {
+      if (request.resourceType === 'XHR')
+        console.log(request)
     })
 
-    let mktCapURL = URL.API.market_cap.format(date)
+    await page.goto('http://www.fnguide.com/fgdd/StkItemDateCap#tab=D&market=0')
+
+
+    // let mktCapURL = URL.API.market_cap.format(date)
+    // console.log(mktCapURL)
+    // // // enforce wait for random seconds between 20 to 35 seconds
+    // // let waitTime = Math.floor((Math.random() * 15) + 20) * 1000
+    // // await page.waitFor(waitTime)
+    // // .then( () => { console.log(`waited ${waitTime} ms`) })
+    //
+    // // set headers to fool Fnguide
+    // await page.setExtraHTTPHeaders({
+    //   'Referer': 'http://fnguide.com/fgdd/StkItemDateCap',
+    //   'X-Requested-With': 'XMLHttpRequest'
+    // })
+    // await page.goto(mktCapURL)
+    // .then( () => { console.log('fetched JSON data') })
+    // const mktCapData = await page.evaluate(() => {
+    //     let data = JSON.parse(document.querySelector('body').innerText)
+    //     return data
+    // })
+    //
+    // return mktCapData
+  }
+
+  async massSDCrawl(date) {
+    let page = this.page
+
+    let sdURL = URL.API.sd.format(date)
+    console.log(sdURL)
+
     // enforce wait for random seconds between 20 to 35 seconds
     let waitTime = Math.floor((Math.random() * 15) + 20) * 1000
     await page.waitFor(waitTime)
-    .then( () => {
-      page.goto(mktCapURL).then().catch()
+    .then( () => { console.log(`waited ${waitTime} ms`) })
+
+    // set headers to fool Fnguide
+    await page.setExtraHTTPHeaders({
+      'Referer': 'http://www.fnguide.com/fgdd/StkJInvTrdTrend',
+      'X-Requested-With': 'XMLHttpRequest'
     })
-    const mktCapData = await page.evaluate(() => {
+
+    await page.goto(sdURL)
+    .then( () => { console.log('fetched JSON data') })
+    const sdData = await page.evaluate(() => {
         let data = JSON.parse(document.querySelector('body').innerText)
         return data
     })
 
-    return dateData
+    return sdData
   }
 
   async done() {
