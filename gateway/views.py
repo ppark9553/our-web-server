@@ -25,7 +25,7 @@ from gateway.serializers import (
     GatewayStateSerializer,
     SoulLogSerializer,
 )
-from gateway.controllers import GatewayActionOBJ
+from gateway.controllers import GatewayActionOBJ, GatewayReducer
 from gateway.logger import GatewayLogger
 from gateway.task_sender import TaskSender
 
