@@ -106,7 +106,7 @@ def gateway_reducer(reducer_function):
 class GatewayActionOBJ:
     # check whether passed in action is available/defined
     def __init__(self, action_type):
-        this.action_type = action_type
+        self.action_type = action_type
         if self.action_exists(action_type):
             self.ACTION = ACTIONS[action_type]
         else:
