@@ -111,8 +111,7 @@ class GatewayStoreView(View):
                 logger.set_log(action_type, 'P', 'store received action type')
 
                 # initialize action class by passing in the action type retrieved from URL
-                action_obj = action_inst.ACTION
-                reducer_inst = GatewayReducer(action_obj) # pass in the action object to reducer
+                reducer_inst = GatewayReducer(action_inst) # pass in the action object to reducer
                 reducer_status = reducer_inst.reduce()
                 if reducer_status == True:
                     logger.set_log(action_type, 'P', 'action successfully reduced')
