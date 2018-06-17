@@ -132,7 +132,9 @@ class GatewayReducer:
     def reduce(self):
         # as of this moment, only gateway reducers can be ran
         if self.action['reducing-app'] == 'gateway':
-            reducer = import_string('gateway.reducers.{}'.format(self.reducer_name))
+            reducer_path = 'gateway.reducers.{}'.format(self.reducer_name)
+            print(reducer_path)
+            reducer = import_string(reducer_path)
             reducer()
             return True
         else:
