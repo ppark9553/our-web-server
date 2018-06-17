@@ -107,7 +107,7 @@ class GatewayActionOBJ:
     # check whether passed in action is available/defined
     def __init__(self, action_type):
         self.action_type = action_type
-        if self.action_exists(action_type):
+        if self.action_exists():
             self.ACTION = ACTIONS[action_type]
         else:
             self.ACTION = None
