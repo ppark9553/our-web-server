@@ -127,7 +127,7 @@ class GatewayReducer:
 
         self.action = action_obj.ACTION # action dictionary
         self.reducing_app = self.action['reducing-app']
-        self.reducer_name = action_obj.action_type # string value
+        self.reducer_name = action_obj.action_type.lower() # string value
 
     def reduce(self):
         # as of this moment, only gateway reducers can be ran
