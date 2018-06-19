@@ -1,0 +1,22 @@
+***** MASS_SD_CRAWL *****
+1. send task request: /hidden-api/task/?type=MASS_SD_CRAWL (DONE)
+2. gateway server receives task, and reduces the task action type (DONE)
+3. the reducer: gateway.reducers.mass_sd_crawl is ran (DONE)
+4. the reducer runs Node.js app from inside with Fabric (DONE)
+5. the Node.js app: MASS_SD_CRAWL.js runs a loop within,
+   it checks for all the dates to request data from Fnguide
+   running the loop through all the dates, the script sends a request
+   to Fnguide as a logged in user.
+6. The JS script, after its first request, polls the Redis Cache for a key value update
+   (the key is: mass_sd_state --> this is a key telling JS that it can resume requesting API again)
+7. JS script updates the key: mass_sd_date after its data request
+8. JS script sends a new task to the gateway server:
+   /hidden-api/task/?type=MASS_SD_SAVE
+9. On receive, the gateway server retrieves the key: 'mass_sd_date'
+10. It directly saves the data associated with 'mass_sd' to the Django DB
+11. Once it has done saving all the data, gateway server deletes the key 'mass_sd'
+    and changes the key value of 'mass_sd_state' to 'crawl'
+12. Since JS script was hanging, polling the cache server for an update on 'mass_sd_state' key,
+    it finally notices that the value has changed to 'crawl'
+13. The JS script resumes crawling and repeats the above process over and over until
+    the whole set of dates are finally requested and saved to DB

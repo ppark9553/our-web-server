@@ -101,7 +101,6 @@ class GatewayStoreView(View):
             logger.set_log(action_type, 'P', 'requested task server not gateway, forwarding request to gateway server')
             task_sender = TaskSender(action_type)
             task_sender = task_sender.send_task(action_type)
-            print('sent task')
             return JsonResponse({'status': 'FORWARDED'}, json_dumps_params={'ensure_ascii': True})
         else:
             # check for action_type availability

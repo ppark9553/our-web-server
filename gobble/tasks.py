@@ -128,7 +128,7 @@ def mass_date_crawl():
         client.captureException()
 
 @task(name="mass_date_save")
-def mass_date_save(cache_key, to):
+def mass_date_save(cache_key):
     try: # always capture exceptions with Sentry
         task_name = 'MASS_DATE_SAVE'
         logger = GatewayLogger()
@@ -163,8 +163,23 @@ def mass_date_save(cache_key, to):
         client.captureException()
 
 
-
 ### changing actions/reducers format
 @task(name="test_action")
 def test_action():
     print('hello hello all the way from test_action in gobble.tasks')
+
+@task(name="mass_sd_crawl")
+def mass_sd_crawl():
+    task_name = 'MASS_SD_CRAWL'
+    logger = GatewayLogger()
+    task_sender = TaskSender(task_name)
+
+    # log to gateway server
+    logger.set_log(task_name, 'P', 'gobble server received task: {}'.format(task_name))
+    local('node /home/arbiter/js-gobble/{}.js'.format(task_name))
+    logger.set_log(task_name, 'P', 'running "node /home/arbiter/js-gobble/{}.js"'.format(task_name))
+    return True
+
+@task(name="mass_sd_save")
+def mass_sd_save():
+    print('saving sd')

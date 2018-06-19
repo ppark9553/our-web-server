@@ -57,14 +57,39 @@ const main = async () => {
     }
     await c.setList(allSdData)
     console.log('cache set complete')
-    // after cache set complete, set task tracker cache key/value
-    // this is so Django app can know how to save cached data correctly
-    let taskKeyExists = await c.keyExists('')
+
+    // after setting mass_sd to cache, set the mass_sd_date key value
+    let dateKeyExists = await c.keyExists('mass_sd_date')
+    if (dateKeyExists == 1) {
+      await c.delKey('mass_sd_date')
+    }
+    await c.setKey('mass_sd_date', date)
+    console.log('set date cache key complete')
+
+    // send new task to gateway server: MASS_SD_SAVE
+    await taskSender.sendTask('MASS_SD_SAVE')
 
     // after set cache, poll django for save to DB complete event
     // once Django app has saved all the cached data, start with the next date
 
-  }
+    // first loop until key exists
+    // this is because when this program is ran for the first tiem,
+    // the key will not exist
+    let savedCompleteKeyExists = await c.keyExists('mass_sd_state')
+    while (savedCompleteKeyExists != 1) {
+      savedCompleKeyExists = await c.keyExists('mass_sd_state')
+    }
+    // proceed with polling when the key exists
+    if (savedCompleKeyExists == 1) {
+      // check that the state's value is crawl and not save
+      // if the state is 'save', that means that Django is still in the process of saving data
+      let savedComplete = await c.getKey('mass_sd_state')
+      while (savedComplete != 'crawl') {
+        savedComplete = await c.getKey('mass_sd_state')
+      }
+    } // once you are out of this block, the polling is complete
+    
+  } // loop ends here //
   await fn.done()
 
   // log end process
