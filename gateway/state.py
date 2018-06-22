@@ -7,8 +7,8 @@ class GatewayStateMachine:
     # a singleton implementation of gateway state machine
     class __GatewayStateMachine:
 
-        def __init__(self, arg):
-            self.val = arg
+        def __init__(self, state):
+            self.current_state = state
 
         def __str__(self):
             return repr(self) + self.val

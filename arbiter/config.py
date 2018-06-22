@@ -51,7 +51,7 @@ CONFIG = {
         'SUPERVISOR_CELERYBEAT': 'celerybeat.conf',
         'REDIS_CONF': 'redis.conf',
 
-        'SENTRY_URL': 'https://3f326c3cb431414786e1fdda145a0e27:b39968af865641d6b2098b26a932ee9b@sentry.io/1218310'
+        'SENTRY_URL': 'https://19daa7122e0a4b6395ab8d15da36c8f3:d520ab25a8ed4c9aa4e8828b65f527fa@sentry.io/1228775'
     },
 
     'ip-address': {

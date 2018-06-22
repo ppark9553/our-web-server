@@ -11,6 +11,7 @@ application = get_wsgi_application()
 
 ### scripts ###
 from tools.Cleaner import Cleaner
+from tools.Migrate import Migrate
 
 if sys.argv[1] == 'cleanmigrations':
     c = Cleaner(start_path)
@@ -19,3 +20,6 @@ if sys.argv[1] == 'cleanmigrations':
     if os.path.exists(db):
         os.remove(db)
         print('Removed database')
+
+elif sys.argv[1] == 'migrate':
+    m = Migrate()

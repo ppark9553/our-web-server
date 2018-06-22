@@ -7,7 +7,7 @@ const GATEWAY_IP = CONFIG.ip.gateway
 class API {
 
   constructor() {
-    this.datesAPI = 'http://' + GATEWAY_IP + '/hidden-api/date/?page='
+    this.datesAPI = 'http://' + GATEWAY_IP + '/stock-api/date/?page='
   }
 
   async getDates(pageNum, url=false) {

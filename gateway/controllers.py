@@ -37,8 +37,8 @@ class Controller:
             if 'param-types' not in action_dict.keys():
                 raise NoParamTypesError('Need to define parameter types in key: "param-types"')
 
-            params = action_dict['params']
-            param_types = action_dict['param-types']
+            params = action_dict['params'] # dictionary
+            param_types = action_dict['param-types'] # list
 
             ### RAISE ERROR ###
             # parameters should be transformed to variables
